@@ -1,0 +1,10 @@
+    /**
+     * DummyDescription
+     *
+     * @return dummyType
+     */
+    public function getDummyNameAttribute()
+    {
+        //return $this->attributes['dummy_name'];
+        return $this->getAttributeValueWithoutMutator('dummy_name');
+    }

@@ -1,0 +1,7 @@
+/**
+ * Class DummyClass
+ *
+ * @package DummyNamespace
+{{phpdoc}}
+ * @mixin \Eloquent
+ */

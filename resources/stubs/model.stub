@@ -1,0 +1,17 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyExtendsNamespace;
+
+/**
+ * Class DummyClass
+ *
+ * @package DummyNamespace
+{{phpdoc}}
+ * @mixin \Eloquent
+ */
+class DummyClass extends DummyExtendsClass
+{
+
+}

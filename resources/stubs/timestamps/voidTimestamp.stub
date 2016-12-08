@@ -1,0 +1,12 @@
+    /**
+     * Set the value of the "dummyName at" attribute.
+     *
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function setDummyNameAt($value)
+    {
+        //$this->{static::DUMMY_NAME_AT} = $value;
+
+        return $this;
+    }

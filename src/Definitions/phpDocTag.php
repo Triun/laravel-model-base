@@ -1,0 +1,52 @@
+<?php
+
+
+namespace Triun\ModelBase\Definitions;
+
+
+class phpDocTag
+{
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    public $tag;
+
+    /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $description;
+
+    /**
+     * phpDocTag constructor.
+     *
+     * @param string $name
+     * @param string $tag
+     * @param string $type
+     * @param string $description
+     */
+    public function __construct($name, $tag = null, $type = null, $description = null)
+    {
+        $this->name          = $name;
+        $this->tag           = $tag;
+        $this->type          = $type;
+        $this->description   = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+}

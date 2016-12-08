@@ -1,0 +1,10 @@
+    /**
+     * DummyDescription
+     *
+     * @param dummyType $value
+     */
+    public function setDummyNameAttribute($value)
+    {
+        //$this->attributes['dummy_name'] = $value;
+        $this->setAttributeWithoutMutator('dummy_name', $value);
+    }
