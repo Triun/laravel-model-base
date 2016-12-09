@@ -8,7 +8,7 @@ Generate Eloquent Model Base for Laravel.
 composer require triun/laravel-model-base:dev-master
 ```
 
-Or edit composer.json and add
+Or edit composer.json, add
 
 ```json
 {
@@ -16,6 +16,26 @@ Or edit composer.json and add
         "triun/laravel-model-base": "dev-master"
     }
 }
+```
+
+And run
+
+```bash
+composer update
+```
+
+Enable the service provider adding it to config/app.php
+
+```php
+<?php
+return [
+    // ...
+    'providers' => [
+        // ...
+        Triun\ModelBase\ModelBaseServiceProvider::class,
+     ],
+     // ...
+];
 ```
 
 ## Usage
