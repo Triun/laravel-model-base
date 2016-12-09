@@ -34,7 +34,7 @@ class SkeletonUtil extends ConnectionUtilBase
         // New empty Skeleton
         $skeleton = new Skeleton;
 
-        $skeleton->className = SkeletonUtil::parseName($className);
+        $skeleton->className = self::parseName($className);
 
         if ($extends !== null) {
             $this->extend($skeleton, $extends);
