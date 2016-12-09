@@ -198,16 +198,9 @@ class ModelBaseConfig
      *
      * @return string
      */
-    public function getClassName($tableName)
+    public function getBaseClassName($tableName)
     {
-        $namespace  = $this->get('namespace');
-        $prefix     = $this->get('prefix');
-        $suffix     = $this->get('suffix');
-        $renames    = $this->get('renames');
-
-        $name = is_array($renames) && isset($renames[$tableName])? $renames[$tableName] : studly_case(str_singular($tableName));
-
-        return $namespace.'\\'.$prefix.$name.$suffix;
+        return $this->getClassName($tableName, $this->get('namespace'), $this->get('prefix'), $this->get('suffix'), $this->get('renames'));
     }
 
     /**
@@ -217,12 +210,22 @@ class ModelBaseConfig
      */
     public function getModelClassName($tableName)
     {
-        $namespace  = $this->get('model.namespace');
-        $prefix     = $this->get('model.prefix');
-        $suffix     = $this->get('model.suffix');
-        $renames    = $this->get('renames');
+        return $this->getClassName($tableName, $this->get('model.namespace'), $this->get('model.prefix'), $this->get('model.suffix'), $this->get('renames'));
+    }
 
-        $name = is_array($renames) && isset($renames[$tableName])? $renames[$tableName] : studly_case(str_singular($tableName));
+    /**
+     * @param string $tableName
+     * @param string $namespace
+     * @param string $prefix
+     * @param string $suffix
+     * @param string[] $renames
+     *
+     * @return string
+     */
+    protected function getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
+    {
+        $name = is_array($renames) && isset($renames[$tableName])? trim($renames[$tableName]) : str_singular($tableName);
+        $name = studly_case($name);
 
         return $namespace.'\\'.$prefix.$name.$suffix;
     }

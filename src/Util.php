@@ -198,7 +198,7 @@ class Util
     {
         return $this->skeleton_util()->make(
             $table,
-            $this->config()->getClassName($table->getName()),
+            $this->config()->getBaseClassName($table->getName()),
             $this->config()->get('extends'),
             $this->config()->modifiers()
         );
