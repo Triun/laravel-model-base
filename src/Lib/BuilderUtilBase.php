@@ -66,7 +66,7 @@ abstract class BuilderUtilBase extends UtilBase
         $name = str_replace(App::getNamespace(), '', $className);
 
         // TODO: Composer loader compatibility.
-        return App::path().'/'.str_replace('\\', '/', $name).'.php';
+        return App::path().DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $name).'.php';
     }
 
     /**
