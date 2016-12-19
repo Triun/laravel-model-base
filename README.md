@@ -14,45 +14,45 @@ Laravel-Model-Base is a Laravel command to perform repetitive tasks while creati
 
 The main goal of the model base it's generate eloquent configurations based on the database table architecture, meaning that it could not be any business logic implemented, or any other logic not comming from the database itself. If you are interested in adding extra properties, methods, interfaces or traits, you can do so in the model itself.
 
-This generator can be customised by the config parameters, but it can also be extended by the [modificators](#modificators). 
+This generator can be customised by the config parameters, but it can also be extended by the [modifiers](#modifiers). 
 
 The model will be optionally generated too, but in this case, it will never be able to be overwritten by this tool.
 
 ## Installation
 
+Require this package with composer using the following command:
+
+```bash
+composer require triun/laravel-model-base:dev-master
+```
+
+After updating composer, add the service provider to the providers array in config/app.php
+
+```php
+Triun\ModelBase\ModelBaseServiceProvider::class,
+```
+
+### Development only installation
+
+To install this package on only development systems, add the `--dev` flag to your composer command:
+
 ```bash
 composer require --dev triun/laravel-model-base:dev-master
 ```
 
-Or edit composer.json
+Instead of adding the service provider in the `config/app.php` file, you should add the following code to your `app/Providers/AppServiceProvider.php` file, within the `register()` method:
 
-```json
+```php
+public function register()
 {
-    "require-dev": {
-        "triun/laravel-model-base": "dev-master"
+    if ($this->app->environment() !== 'production') {
+        $this->app->register(\Triun\ModelBase\ModelBaseServiceProvider::class);
     }
+    // ...
 }
 ```
 
-And run
-
-```bash
-composer update
-```
-
-Enable the service provider adding it to config/app.php
-
-```php
-<?php
-return [
-    // ...
-    'providers' => [
-        // ...
-        Triun\ModelBase\ModelBaseServiceProvider::class,
-     ],
-     // ...
-];
-```
+This will allow your application to load the Laravel IDE Helper on non-production environments.
 
 ## Usage
 
@@ -72,27 +72,35 @@ Note: if the connection is not defined, it would get the default one.
 
 ## Customize
 
-In order to publish the configuration file into your app, use
+You can publish the configuration file into your app with:
 
 ```bash
-php artisan vendor:publish
+php artisan vendor:publish --provider="Triun\ModelBase\ModelBaseServiceProvider" --tag=config
 ```
 
 // TODO
 
-## Modificators
+Besides the configuration file, you can also add or create your own [modifiers](#modifiers).
 
-If you want to add behaviours to the generator, you can do so using the skeleton modificators.
+## Modifiers
 
-### Modifictors Packages
+If you want to add behaviours to the generator, you can do so using the skeleton modifiers.
 
-Those are some packages which you can use to add 
+### Modifiers Packages
+
+Those are some modifiers packages:
 
 // TODO
 
-### Add modificators
+### Add modifiers
 
-How to create a modificator.
+If you already have any modifier package, you can load it by adding it in the `config/model-base.php` file, in the 'modifiers' array.
+
+// TODO
+
+### Create your own modifiers
+
+How to create a modifier.
 
 // TODO
 
