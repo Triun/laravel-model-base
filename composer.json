@@ -20,7 +20,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "illuminate/database": "^5.2"
+        "illuminate/database": "^5.2",
+        "squizlabs/php_codesniffer": "2.*"
     },
     "suggest": {
         "doctrine/dbal": "Load information from the database about models for phpdocs (~2.3)"

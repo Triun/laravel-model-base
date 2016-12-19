@@ -74,8 +74,8 @@ class MakeCommand extends GeneratorCommand
         return array_merge(
             parent::getOptions(),
             [
-//                ['force', "f", InputOption::VALUE_NONE, 'Force override'],
-//                ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
+                // ['force', "f", InputOption::VALUE_NONE, 'Force override'],
+                // ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
                 ['connection', 'c', InputOption::VALUE_OPTIONAL, 'The connection we want to use'],
             ]
         );

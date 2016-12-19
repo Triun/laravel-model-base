@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase;
-
 
 use DB;
 use Exception;
@@ -31,14 +29,14 @@ class Util
      *
      * @var \Illuminate\Database\Connection
      */
-    protected $_conn;
+    protected $conn;
 
     /**
      * Configuration Settings.
      *
      * @return \Triun\ModelBase\ModelBaseConfig
      */
-    protected $_config;
+    protected $config;
 
     /**
      * The output interface implementation.
@@ -55,11 +53,11 @@ class Util
      */
     public function __construct($connection = null, Command $command = null)
     {
-        $this->_conn = $this->normalizeConnection($connection);
+        $this->conn = $this->normalizeConnection($connection);
 
         $this->verifyRequirements();
 
-        $this->_config = new ModelBaseConfig($this->_conn);
+        $this->config = new ModelBaseConfig($this->conn);
 
         $this->command = $command;
     }
@@ -75,8 +73,7 @@ class Util
         // class_exists('Doctrine\DBAL\Connection')
         if (! interface_exists('Doctrine\DBAL\Driver')) {
             throw new Exception(__CLASS__.' requires Doctrine DBAL; install "doctrine/dbal".');
-        }
-        elseif (! $this->_conn->isDoctrineAvailable()) {
+        } elseif (! $this->conn->isDoctrineAvailable()) {
             throw new Exception('Laravel connection is unable to access Doctrine.');
         }
     }
@@ -109,7 +106,7 @@ class Util
      */
     public function connection()
     {
-        return $this->_conn;
+        return $this->conn;
     }
 
     /**
@@ -119,31 +116,31 @@ class Util
      */
     public function config()
     {
-        return $this->_config;
+        return $this->config;
     }
 
     /**
      * @return \Triun\ModelBase\Utils\SchemaUtil
      */
-    public function schema_util()
+    public function schemaUtil()
     {
-        return new SchemaUtil($this->_conn, $this->_config);
+        return new SchemaUtil($this->conn, $this->config);
     }
 
     /**
      * @return \Triun\ModelBase\Utils\SkeletonUtil
      */
-    public function skeleton_util()
+    public function skeletonUtil()
     {
-        return new SkeletonUtil($this->_conn, $this->_config);
+        return new SkeletonUtil($this->conn, $this->config);
     }
 
     /**
      * @return \Triun\ModelBase\Utils\BuilderUtil
      */
-    public function builder_util()
+    public function builderUtil()
     {
-        return new BuilderUtil($this->_config, $this->command);
+        return new BuilderUtil($this->config, $this->command);
     }
 
     /**
@@ -184,7 +181,7 @@ class Util
      */
     protected function table($tableName)
     {
-        return $this->schema_util()->table($tableName);
+        return $this->schemaUtil()->table($tableName);
     }
 
     /**
@@ -196,7 +193,7 @@ class Util
      */
     protected function skeleton($table)
     {
-        return $this->skeleton_util()->make(
+        return $this->skeletonUtil()->make(
             $table,
             $this->config()->getBaseClassName($table->getName()),
             $this->config()->get('extends'),
@@ -212,9 +209,9 @@ class Util
      *
      * @return Skeleton
      */
-    protected function model_skeleton(Table $table, Skeleton $skeleton)
+    protected function modelSkeleton(Table $table, Skeleton $skeleton)
     {
-        return $this->skeleton_util()->make(
+        return $this->skeletonUtil()->make(
             $table,
             $this->config()->getModelClassName($table->getName()),
             $skeleton,
@@ -234,7 +231,7 @@ class Util
      */
     protected function build(Skeleton $skeleton, &$path)
     {
-        return $this->builder_util()->build($skeleton, $this->_config->get('override', 'confirm'), $path);
+        return $this->builderUtil()->build($skeleton, $this->config->get('override', 'confirm'), $path);
     }
 
     /**
@@ -247,7 +244,7 @@ class Util
      */
     protected function buildModel(Skeleton $skeleton, &$path)
     {
-        return $this->builder_util()->build($skeleton, false, $path);
+        return $this->builderUtil()->build($skeleton, false, $path);
     }
 
     /**
@@ -269,8 +266,8 @@ class Util
 
         $size = $this->build($skeleton, $modelBasePath);
 
-        if ($size >= 0 && $this->_config->get('model.save', true)) {
-            $modelSkeleton = $this->model_skeleton($table, $skeleton);
+        if ($size >= 0 && $this->config->get('model.save', true)) {
+            $modelSkeleton = $this->modelSkeleton($table, $skeleton);
             $modelSize = $this->buildModel($modelSkeleton, $modelPath);
         }
 

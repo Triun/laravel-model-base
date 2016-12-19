@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase;
-
 
 use Illuminate\Support\ServiceProvider;
 use Triun\ModelBase\Console\MakeCommand;
@@ -76,5 +74,4 @@ class ModelBaseServiceProvider extends ServiceProvider
             'command.make.model-base-bulk',
         ];
     }
-
 }

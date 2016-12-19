@@ -111,7 +111,8 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getBody(Skeleton $skeleton)
     {
-        return implode(PHP_EOL.PHP_EOL,
+        return implode(
+            PHP_EOL.PHP_EOL,
             array_merge(
                 [$this->getTraits($skeleton->traits())],
                 array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
@@ -193,7 +194,7 @@ class BuilderUtil extends BuilderUtilBase
     }
 }
 
-if ( !function_exists('var_export54') ) {
+if (!function_exists('var_export54')) {
 
     /**
      * @param mixed  $value
@@ -207,13 +208,12 @@ if ( !function_exists('var_export54') ) {
     {
         switch (gettype($value)) {
             case 'array':
-
                 if (count($value) === 0) {
                     return '[]';
                 }
 
                 $indent = str_repeat($TAB, $tabs);
-                $assoc = count( array_diff( array_keys($value), array_keys( array_keys( $value )) )) > 0;
+                $assoc = count(array_diff(array_keys($value), array_keys(array_keys($value)))) > 0;
 
                 // Tabular keys
                 $pad_length = 0;

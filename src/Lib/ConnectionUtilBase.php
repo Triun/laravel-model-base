@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Lib;
 
 use Illuminate\Database\Connection;
@@ -13,7 +12,7 @@ abstract class ConnectionUtilBase extends UtilBase
      *
      * @var \Illuminate\Database\Connection
      */
-    protected $_conn;
+    protected $conn;
 
     /**
      * ModelBaseUtil constructor.
@@ -23,7 +22,7 @@ abstract class ConnectionUtilBase extends UtilBase
      */
     public function __construct(Connection $connection, ModelBaseConfig $config)
     {
-        $this->_conn = $connection;
+        $this->conn = $connection;
 
         parent::__construct($config);
     }
@@ -35,6 +34,6 @@ abstract class ConnectionUtilBase extends UtilBase
      */
     public function connection()
     {
-        return $this->_conn;
+        return $this->conn;
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\Lib\ModifierBase;

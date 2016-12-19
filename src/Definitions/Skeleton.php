@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase\Definitions;
-
 
 use Exception;
 
@@ -55,7 +53,7 @@ class Skeleton
     /**
      * Class PhpDoc tags
      *
-     * @var phpDocTag[]
+     * @var PhpDocTag[]
      */
     protected $phpDocTags = [];
 
@@ -119,7 +117,7 @@ class Skeleton
     }
 
     /**
-     * @return \Triun\ModelBase\Definitions\phpDocTag[]
+     * @return \Triun\ModelBase\Definitions\PhpDocTag[]
      */
     public function phpDocTags()
     {
@@ -210,7 +208,7 @@ class Skeleton
      */
     public function constant($key)
     {
-        if ( !$this->hasConstant($key) ) {
+        if (!$this->hasConstant($key)) {
             throw new Exception("Constant $key not defined");
         }
         return $this->constants[$key];
@@ -226,7 +224,7 @@ class Skeleton
      */
     public function property($key)
     {
-        if ( !$this->hasProperty($key) ) {
+        if (!$this->hasProperty($key)) {
             throw new Exception("Property $key not defined");
         }
         return $this->properties[$key];
@@ -242,7 +240,7 @@ class Skeleton
      */
     public function method($key)
     {
-        if ( !$this->hasMethod($key) ) {
+        if (!$this->hasMethod($key)) {
             throw new Exception("Method $key not defined");
         }
         return $this->methods[$key];
@@ -268,9 +266,9 @@ class Skeleton
     /**
      * Add phpDoc Tag.
      *
-     * @param  \Triun\ModelBase\Definitions\phpDocTag $value
+     * @param  \Triun\ModelBase\Definitions\PhpDocTag $value
      */
-    public function addPhpDocTag(phpDocTag $value)
+    public function addPhpDocTag(PhpDocTag $value)
     {
         $this->phpDocTags[$value->getName()] = $value;
     }

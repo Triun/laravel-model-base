@@ -105,7 +105,7 @@ class MakeBulkCommand extends GeneratorCommand
      */
     protected function loadTables()
     {
-        $schemaUtil = $this->util->schema_util();
+        $schemaUtil = $this->util->schemaUtil();
 
         // Exceptions
         $except = $schemaUtil->getTableExceptions();
@@ -124,8 +124,8 @@ class MakeBulkCommand extends GeneratorCommand
         return array_merge(
             parent::getOptions(),
             [
-//                ['force', "f", InputOption::VALUE_NONE, 'Force override'],
-//                ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
+                // ['force', "f", InputOption::VALUE_NONE, 'Force override'],
+                // ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
                 ['connection', 'c', InputOption::VALUE_OPTIONAL, 'The connection we want to use'],
                 //['except', null, InputOption::VALUE_OPTIONAL, 'The tables we want to exclude, as comma separated'],
             ]
@@ -154,8 +154,7 @@ class MakeBulkCommand extends GeneratorCommand
         $output = $this->getOutput();
         if ($output->isVerbose()) {
             $output->section($string);
-        }
-        else {
+        } else {
             $output->writeln($string.':');
         }
     }

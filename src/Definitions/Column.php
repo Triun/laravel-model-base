@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase\Definitions;
-
 
 use Doctrine\DBAL\Schema\Column as DoctrineColumn;
 

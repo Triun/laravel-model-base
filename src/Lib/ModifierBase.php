@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase\Lib;
-
 
 use File;
 use Triun\ModelBase\Definitions\Table;
@@ -44,7 +42,7 @@ abstract class ModifierBase
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
      */
-    abstract function apply(Skeleton $skeleton);
+    abstract public function apply(Skeleton $skeleton);
 
     /**
      * @return \Triun\ModelBase\Utils\SkeletonUtil

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\MutatorSkipeable;
@@ -23,12 +22,13 @@ class CamelToSnakeModifier extends ModifierBase
     public function apply(Skeleton $skeleton)
     {
         // Only if snakeAttributes is true.
-        if ( !$skeleton->property('snakeAttributes')->value ) {
+        if (!$skeleton->property('snakeAttributes')->value) {
             return;
         }
 
         foreach ($this->table()->getColumns() as $column) {
-            $name = $column->getName(); // It may get the namespace... in that case, use $column->toArray()['name'] instead.
+            $name = $column->getName();
+            // It may get the namespace... in that case, use $column->toArray()['name'] instead.
             if ($name !== strtolower($name)) {
                 $this->addSnakeMuttators($skeleton, $column);
             }
@@ -62,7 +62,7 @@ class CamelToSnakeModifier extends ModifierBase
                 'dummy_name'        => $name,
             ]));
 
-            if ( !$this->trait_added ) {
+            if (!$this->trait_added) {
                 $skeleton->addTrait(MutatorSkipeable::class);
             }
         }

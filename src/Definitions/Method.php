@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase\Definitions;
-
 
 class Method
 {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Doctrine\DBAL\Types\Type;
@@ -93,8 +92,7 @@ class RulesModifier extends ModifierBase
             case Type::DATETIMETZ:
                 if ($platform['db_type'] === 'timestamp') {
                     $rules[] = 'integer';
-                }
-                else {
+                } else {
                     $rules[] = 'date_format:Y-m-d H:i:s';
                 }
                 break;
@@ -109,7 +107,6 @@ class RulesModifier extends ModifierBase
             case Type::BINARY:
             case Type::BLOB:
             case Type::GUID:
-
             case Type::STRING:
             case Type::TEXT:
             default: // strings
@@ -126,6 +123,6 @@ class RulesModifier extends ModifierBase
 //            $rules[] = 'phone:AUTO,IE';
 //        }
 
-        return implode('|',$rules);
+        return implode('|', $rules);
     }
 }

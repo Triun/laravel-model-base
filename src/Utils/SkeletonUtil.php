@@ -1,21 +1,19 @@
 <?php
 
-
 namespace Triun\ModelBase\Utils;
 
-
-use Doctrine\DBAL\Schema\Table;
 use Exception;
-use Illuminate\Support\Str;
 use Reflection;
 use ReflectionClass;
 use ReflectionProperty;
-use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Lib\ConnectionUtilBase;
-use Triun\ModelBase\Definitions\Constant;
+use Illuminate\Support\Str;
+use Doctrine\DBAL\Schema\Table;
 use Triun\ModelBase\Definitions\Method;
 use Triun\ModelBase\Definitions\Property;
+use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
+use Triun\ModelBase\Lib\ConnectionUtilBase;
 
 class SkeletonUtil extends ConnectionUtilBase
 {
@@ -213,8 +211,7 @@ class SkeletonUtil extends ConnectionUtilBase
         $skeleton->extends = self::parseName($extendClassName);
 
         // Constants
-        foreach ($reflectionClass->getConstants() as $name => $value)
-        {
+        foreach ($reflectionClass->getConstants() as $name => $value) {
             $item = new Constant();
             $item->name         = $name;
             $item->docComment   = ''; // TODO: Add constants comments (http://stackoverflow.com/questions/22103019/php-reflection-get-constants-doc-comment)
@@ -225,8 +222,7 @@ class SkeletonUtil extends ConnectionUtilBase
 
         // Properties
         $defaults = $reflectionClass->getDefaultProperties();
-        foreach ($reflectionClass->getProperties() as $reflectionProperty)
-        {
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             // Do not add private properties
             if (!$reflectionProperty->isPrivate()) {
                 $modifiers = $reflectionProperty->getModifiers();
@@ -242,8 +238,7 @@ class SkeletonUtil extends ConnectionUtilBase
         }
 
         // Methods
-        foreach ($reflectionClass->getMethods() as $reflectionMethod)
-        {
+        foreach ($reflectionClass->getMethods() as $reflectionMethod) {
             // Do not add private properties
             if (!$reflectionMethod->isPrivate()) {
                 $modifiers = $reflectionMethod->getModifiers();

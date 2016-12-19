@@ -2,7 +2,6 @@
 
 namespace Triun\ModelBase;
 
-
 /**
  * Class MutatorSkipeable
  * @package Triun\ModelBase

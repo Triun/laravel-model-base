@@ -84,8 +84,8 @@ class ModelBaseConfig
             $this->loadConfig(static::CONFIG_FILE),
             $this->loadConfig(static::CONFIG_FILE.'.drivers.'.$connection->getDriverName()),
             $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName()),
-//            $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-//            $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
             $params
         );
     }
@@ -163,10 +163,9 @@ class ModelBaseConfig
         }
 
         foreach ($rules as $rule) {
-
             $rule = str_replace(' ', '', $rule);
 
-            if ( !$case_sensitive ) {
+            if (!$case_sensitive) {
                 $rule = strtolower($rule);
                 $value = strtolower($value);
             }
@@ -200,7 +199,13 @@ class ModelBaseConfig
      */
     public function getBaseClassName($tableName)
     {
-        return $this->getClassName($tableName, $this->get('namespace'), $this->get('prefix'), $this->get('suffix'), $this->get('renames'));
+        return $this->getClassName(
+            $tableName,
+            $this->get('namespace'),
+            $this->get('prefix'),
+            $this->get('suffix'),
+            $this->get('renames')
+        );
     }
 
     /**
@@ -210,7 +215,13 @@ class ModelBaseConfig
      */
     public function getModelClassName($tableName)
     {
-        return $this->getClassName($tableName, $this->get('model.namespace'), $this->get('model.prefix'), $this->get('model.suffix'), $this->get('renames'));
+        return $this->getClassName(
+            $tableName,
+            $this->get('model.namespace'),
+            $this->get('model.prefix'),
+            $this->get('model.suffix'),
+            $this->get('renames')
+        );
     }
 
     /**
@@ -224,7 +235,9 @@ class ModelBaseConfig
      */
     protected function getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
     {
-        $name = is_array($renames) && isset($renames[$tableName])? trim($renames[$tableName]) : str_singular($tableName);
+        $name = is_array($renames) && isset($renames[$tableName])?
+            trim($renames[$tableName]) :
+            str_singular($tableName);
         $name = studly_case($name);
 
         return $namespace.'\\'.$prefix.$name.$suffix;

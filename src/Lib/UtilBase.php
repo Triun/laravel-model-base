@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Lib;
 
 use Triun\ModelBase\ModelBaseConfig;
@@ -12,7 +11,7 @@ abstract class UtilBase
      *
      * @var \Triun\ModelBase\ModelBaseConfig
      */
-    protected $_config;
+    protected $config;
 
     /**
      * ModelBaseUtil constructor.
@@ -21,7 +20,7 @@ abstract class UtilBase
      */
     public function __construct(ModelBaseConfig $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
 
         $this->init();
     }
@@ -44,7 +43,7 @@ abstract class UtilBase
      */
     public function config($key = null, $default = null)
     {
-        return $key === null ? $this->_config : $this->_config->get($key, $default);
+        return $key === null ? $this->config : $this->config->get($key, $default);
     }
 
     /**
@@ -62,6 +61,6 @@ abstract class UtilBase
      */
     public function match($rules, $value, $case_sensitive = false)
     {
-        return $this->_config->match($rules, $value, $case_sensitive);
+        return $this->config->match($rules, $value, $case_sensitive);
     }
 }

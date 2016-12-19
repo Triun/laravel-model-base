@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Triun\ModelBase\Definitions;
 
-
-class phpDocTag
+class PhpDocTag
 {
     /**
      * @var string
@@ -27,7 +25,7 @@ class phpDocTag
     public $description;
 
     /**
-     * phpDocTag constructor.
+     * PhpDocTag constructor.
      *
      * @param string $name
      * @param string $tag

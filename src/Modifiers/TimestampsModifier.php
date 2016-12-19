@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Doctrine\DBAL\Types\Type;
@@ -31,7 +30,6 @@ class TimestampsModifier extends ModifierBase
 
         // Create void mutators to avoid errors
         if ($skeleton->property('timestamps')->value === true) {
-
             $stub = $this->voidTimestamp();
 
             if (!$this->hasColumn($CREATED_AT)) {
@@ -62,7 +60,7 @@ class TimestampsModifier extends ModifierBase
 
         if (is_array($force)) {
             foreach ($force as $name) {
-                if ( $this->hasColumn($name) && $this->columnIsTimestamp($name) ) {
+                if ($this->hasColumn($name) && $this->columnIsTimestamp($name)) {
                     return $name;
                 }
             }
@@ -72,7 +70,7 @@ class TimestampsModifier extends ModifierBase
 
         $name = $const->default;
 
-        if ( $this->hasColumn($name) && $this->columnIsTimestamp($name) ) {
+        if ($this->hasColumn($name) && $this->columnIsTimestamp($name)) {
             return $name;
         }
 
@@ -82,7 +80,7 @@ class TimestampsModifier extends ModifierBase
 
         if (is_array($alternative)) {
             foreach ($alternative as $name) {
-                if ( $this->hasColumn($name) && $this->columnIsTimestamp($name) ) {
+                if ($this->hasColumn($name) && $this->columnIsTimestamp($name)) {
                     return $name;
                 }
             }

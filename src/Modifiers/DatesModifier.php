@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\Lib\ModifierBase;
@@ -19,7 +18,7 @@ class DatesModifier extends ModifierBase
         // Set date format if set.
         $this->setProperty($skeleton, 'dateFormat', $this->config('dateFormat'));
 
-        if ( $this->config('dates', true) !== true ) {
+        if ($this->config('dates', true) !== true) {
             return;
         }
 
@@ -46,7 +45,7 @@ class DatesModifier extends ModifierBase
     protected function addToDates($name, Property $dates)
     {
         // Add to dates array
-        if ( array_search($name, $dates->value) === false ) {
+        if (array_search($name, $dates->value) === false) {
             $dates->value[] = $name;
         }
     }

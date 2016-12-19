@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\Lib\ModifierBase;
@@ -90,7 +89,7 @@ class AttributesModifier extends ModifierBase
      */
     public function fillable(Skeleton $skeleton)
     {
-        if ( array_search($this->table()->getName(), $this->config('fillable.tables', [])) === false) {
+        if (array_search($this->table()->getName(), $this->config('fillable.tables', [])) === false) {
             return;
         }
 

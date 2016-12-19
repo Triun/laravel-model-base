@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Triun\ModelBase\Lib;
-
 
 use App;
 use File;
@@ -90,7 +88,7 @@ abstract class BuilderUtilBase extends UtilBase
      * @return bool|int The method returns the number of bytes that were written to the file, or false on failure.
      * @throws Exception
      */
-    protected function save($path, $name, $content, $override = false, $skeleton)
+    protected function save($path, $name, $content, $override, $skeleton)
     {
         $exists = File::exists($path);
 
@@ -109,7 +107,7 @@ abstract class BuilderUtilBase extends UtilBase
             }
 
             // Override permissions
-            if ( !$this->safe($path, $override)) {
+            if (!$this->safe($path, $override)) {
                 $this->muted("{$name} cancelled");
                 $this->verifyExtension($skeleton);
                 return false;
@@ -137,7 +135,7 @@ abstract class BuilderUtilBase extends UtilBase
      */
     protected function safe($path, $override = Util::CONFIRM)
     {
-        if ( !File::exists($path) ) {
+        if (!File::exists($path)) {
             return true;
         }
 
@@ -159,8 +157,7 @@ abstract class BuilderUtilBase extends UtilBase
 
         if ($extensionName === $skeleton->extends) {
             $this->trace("{$skeleton->className} extends {$skeleton->extends}.");
-        }
-        else {
+        } else {
             $this->error("{$skeleton->className} DOES NOT extend {$skeleton->extends}, but $extensionName.");
         }
     }
@@ -179,7 +176,7 @@ abstract class BuilderUtilBase extends UtilBase
         //$this->command->line(Diff::toString($diff));
 
         foreach ($diff as $line) {
-            switch ($line[1]){
+            switch ($line[1]) {
                 case Diff::DELETED:
                     $this->command->line('<fg=red>- ' . $line[0].'</>');
                     break;
@@ -257,8 +254,7 @@ abstract class BuilderUtilBase extends UtilBase
         $output = $this->command->getOutput();
         if ($output->isVerbose()) {
             $output->success($string);
-        }
-        else {
+        } else {
             $this->command->info($string);
         }
     }
@@ -275,8 +271,7 @@ abstract class BuilderUtilBase extends UtilBase
         $output = $this->command->getOutput();
         if ($output->isVerbose()) {
             $output->error($string);
-        }
-        else {
+        } else {
             $this->command->error($string);
         }
     }

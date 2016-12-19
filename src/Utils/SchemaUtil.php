@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Utils;
 
 use Exception;
@@ -15,22 +14,22 @@ class SchemaUtil extends ConnectionUtilBase
     /**
      * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
      */
-    protected $_schema;
+    protected $schema;
 
     /**
      * @var callback[]|callable[]
      */
-    protected static $_table_callbacks = [];
+    protected static $table_callbacks = [];
 
     /**
      * @var callback[]|callable[]
      */
-    protected static $_column_callbacks = [];
+    protected static $column_callbacks = [];
 
     /**
      * @var callback[]|callable[]
      */
-    protected static $_cast_callbacks = [];
+    protected static $cast_callbacks = [];
 
     /**
      * @param callback|callable $callback
@@ -43,7 +42,7 @@ class SchemaUtil extends ConnectionUtilBase
             throw new Exception('Table Callback not callable');
         }
 
-        self::$_table_callbacks[] = $callback;
+        self::$table_callbacks[] = $callback;
     }
 
     /**
@@ -57,7 +56,7 @@ class SchemaUtil extends ConnectionUtilBase
             throw new Exception('Column Callback not callable');
         }
 
-        self::$_column_callbacks[] = $callback;
+        self::$column_callbacks[] = $callback;
     }
 
     /**
@@ -71,7 +70,7 @@ class SchemaUtil extends ConnectionUtilBase
             throw new Exception('Cast Callback not callable');
         }
 
-        self::$_cast_callbacks[] = $callback;
+        self::$cast_callbacks[] = $callback;
     }
 
     /**
@@ -81,12 +80,12 @@ class SchemaUtil extends ConnectionUtilBase
      */
     protected function schema()
     {
-        if ($this->_schema === null) {
-            $this->_schema = $this->_conn->getDoctrineSchemaManager();
-            $this->platformMapping($this->_schema);
+        if ($this->schema === null) {
+            $this->schema = $this->conn->getDoctrineSchemaManager();
+            $this->platformMapping($this->schema);
         }
 
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -100,8 +99,10 @@ class SchemaUtil extends ConnectionUtilBase
         $databasePlatform->registerDoctrineTypeMapping('enum', 'string');
 
         $platformName = $databasePlatform->getName();
-        $customTypes = $this->config("doctrine.dbal.driver_mapping_types.{$platformName}",
-            $this->config('doctrine.dbal.mapping_types', []));
+        $customTypes = $this->config(
+            "doctrine.dbal.driver_mapping_types.{$platformName}",
+            $this->config('doctrine.dbal.mapping_types', [])
+        );
         foreach ($customTypes as $yourTypeName => $doctrineTypeName) {
             $databasePlatform->registerDoctrineTypeMapping($yourTypeName, $doctrineTypeName);
         }
@@ -130,7 +131,7 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         $tables = [];
-        foreach ($this->_conn->select('SHOW TABLES') as $row) {
+        foreach ($this->conn->select('SHOW TABLES') as $row) {
             $row = (array) $row;
             $table = array_shift($row);
             if (array_search($table, $except) === false) {
@@ -147,7 +148,7 @@ class SchemaUtil extends ConnectionUtilBase
      */
     public function hasTable($tableName)
     {
-        return $this->_conn->getSchemaBuilder()->hasTable($tableName);
+        return $this->conn->getSchemaBuilder()->hasTable($tableName);
         //return $this->_conn->affectingStatement("SHOW TABLES LIKE ?", [$tableName]);
     }
 
@@ -184,7 +185,7 @@ class SchemaUtil extends ConnectionUtilBase
         $table = new Table($tableName, $columns, $indexes, $foreignKeys, false, array());
 
         // Table callbacks
-        foreach (self::$_table_callbacks as $callback) {
+        foreach (self::$table_callbacks as $callback) {
             call_user_func($callback, $table, $this);
         }
 
@@ -202,7 +203,7 @@ class SchemaUtil extends ConnectionUtilBase
         $doctrineColumns = $this->schema()->listTableColumns($tableName);
 
         if (count($doctrineColumns) == 0 && !$this->hasTable($tableName)) {
-            throw new InvalidArgumentException("Table $tableName not found in {$this->_conn->getName()} connection.");
+            throw new InvalidArgumentException("Table $tableName not found in {$this->conn->getName()} connection.");
         }
 
         $this->tableColumnsFixes($doctrineColumns, $tableName);
@@ -210,10 +211,9 @@ class SchemaUtil extends ConnectionUtilBase
         $columns = [];
 
         foreach ($doctrineColumns as $key => $doctrineColumn) {
-
             $column = new Column($doctrineColumn->getName(), $doctrineColumn->getType(), $doctrineColumn->toArray());
 
-            $column->snakeName      = $this->snake_case($column->getName());
+            $column->snakeName      = $this->snakeCase($column->getName());
             $column->studName       = studly_case($column->getName());
             $column->publicName     = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
             $column->dbType         = $column->getType()->getName();
@@ -222,7 +222,7 @@ class SchemaUtil extends ConnectionUtilBase
             $column->phpDocType     = $this->convertToPhpDoc($column);
 
             // Columns callbacks
-            foreach (self::$_column_callbacks as $callback) {
+            foreach (self::$column_callbacks as $callback) {
                 call_user_func($callback, $column, $this, $tableName);
             }
 
@@ -248,14 +248,13 @@ class SchemaUtil extends ConnectionUtilBase
         $real_length = $this->config('doctrine.dbal.real_length', true);
         $real_tinyint = $this->config('doctrine.dbal.real_tinyint', true);
 
-        if ( $real_length !== true && $real_tinyint !== true ) {
+        if ($real_length !== true && $real_tinyint !== true) {
             return;
         }
 
         $platformColumns = $this->getPlatformColumns($tableName);
 
         foreach ($columns as $column) {
-
             if (!isset($platformColumns[$column->getName()])) {
                 throw new Exception("Column {$column->getName()} not found in ".implode(', ', $platformColumns));
             }
@@ -263,15 +262,16 @@ class SchemaUtil extends ConnectionUtilBase
             $raw = $platformColumns[$column->getName()];
 
             // Set the real length
-            if ( $real_length === true ) {
+            if ($real_length === true) {
                 if ($column->getLength() !== $raw['length']) {
-                    //echo "{$column->getName()} length updated from " . var_export($column->getLength(), true) . " to " . var_export($raw['length'], true) . "." . PHP_EOL;
+                    // echo "{$column->getName()} length updated from " . var_export($column->getLength(), true) .
+                    //     " to " . var_export($raw['length'], true) . "." . PHP_EOL;
                     $column->setLength($raw['length']);
                 }
             }
 
             // Use Small Int if it's a Boolean with more than 1 bit.
-            if ( $real_tinyint === true ) {
+            if ($real_tinyint === true) {
                 if ($column->getType()->getName() === Type::BOOLEAN && $raw['length'] > 1) {
                     //echo "{$column->getName()} updated from boolean to smallint" . PHP_EOL;
                     $column->setType(Type::getType(Type::SMALLINT));
@@ -290,14 +290,14 @@ class SchemaUtil extends ConnectionUtilBase
         $sql = $this->schema()->getDatabasePlatform()->getListTableColumnsSQL($tableName);
 
         $platformColumns = [];
-        foreach ($this->_conn->getDoctrineConnection()->fetchAll($sql) as $tableColumn) {
+        foreach ($this->conn->getDoctrineConnection()->fetchAll($sql) as $tableColumn) {
             $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
 
             $dbType = strtolower($tableColumn['type']);
             $tableColumn['db_type'] = $dbType;
             $tableColumn['type'] = strtok($dbType, '(), ');
 
-            if ( !isset($tableColumn['length']) ) {
+            if (!isset($tableColumn['length'])) {
                 $length = strtok('(), ');
                 $tableColumn['length'] = $length === false ? null : (int) $length;
             }
@@ -313,7 +313,7 @@ class SchemaUtil extends ConnectionUtilBase
      *
      * @return string
      */
-    public function snake_case($name)
+    public function snakeCase($name)
     {
         static $rename;
 
@@ -321,7 +321,7 @@ class SchemaUtil extends ConnectionUtilBase
             $rename = $this->config('camel_to_snake', []);
         }
 
-        if ( isset($rename[$name]) ) {
+        if (isset($rename[$name])) {
             return strtolower($rename[$name]);
         }
 
@@ -343,23 +343,24 @@ class SchemaUtil extends ConnectionUtilBase
             if (!isset($cast['cast_type'])) {
                 throw new Exception("Cast type not defined");
             }
-            if (!$this->match($cast['field'],$column->getName())) {
+            if (!$this->match($cast['field'], $column->getName())) {
                 continue;
             }
-            if (isset($cast['db_type']) && !$this->match($cast['db_type'],$columnType)) {
+            if (isset($cast['db_type']) && !$this->match($cast['db_type'], $columnType)) {
                 continue;
             }
             if (isset($cast['table']) && !$this->match($cast['table'], $tableName)) {
                 continue;
             }
-            if (isset($cast['connection']) && !$this->match($cast['connection'],$this->connection()->getName())) {
+            if (isset($cast['connection']) && !$this->match($cast['connection'], $this->connection()->getName())) {
                 continue;
             }
 
             return $cast['cast_type'];
         }
 
-        // Cast Types: integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp
+        // Cast Types:
+        // integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp
         // TODO: Add timestamp checking.
         switch ($columnType) {
             case Type::STRING:
@@ -406,7 +407,7 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         // Cast callbacks
-        foreach (self::$_cast_callbacks as $callback) {
+        foreach (self::$cast_callbacks as $callback) {
             call_user_func($callback, $column, $tableName, $this->connection(), $castType);
         }
 
@@ -420,13 +421,14 @@ class SchemaUtil extends ConnectionUtilBase
      */
     public function isDate(Column $column)
     {
-        if ( $this->config('dates', true) !== true ) {
+        if ($this->config('dates', true) !== true) {
             return false;
         }
 
         $columnType = $column->getType()->getName();
 
-        // Cast Types: integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp
+        // Cast Types:
+        // integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp
         switch ($columnType) {
             case Type::DATE:
             case Type::DATETIME:
