@@ -214,7 +214,9 @@ class SkeletonUtil extends ConnectionUtilBase
         foreach ($reflectionClass->getConstants() as $name => $value) {
             $item = new Constant();
             $item->name         = $name;
-            $item->docComment   = ''; // TODO: Add constants comments (http://stackoverflow.com/questions/22103019/php-reflection-get-constants-doc-comment)
+            $item->docComment   = '';
+            // TODO: Add constants comments
+            // (http://stackoverflow.com/questions/22103019/php-reflection-get-constants-doc-comment)
             $item->default = $item->value = $value;
 
             $skeleton->addConstant($item);

@@ -195,7 +195,6 @@ class BuilderUtil extends BuilderUtilBase
 }
 
 if (!function_exists('var_export54')) {
-
     /**
      * @param mixed  $value
      * @param int    $tabs
