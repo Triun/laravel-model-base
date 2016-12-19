@@ -104,6 +104,18 @@ How to create a modifier.
 
 // TODO
 
+## Documentation
+
+The documentation for Laravel-Model-Base is available on the [Github wiki](https://github.com/Triun/laravel-model-base/wiki).
+
+## Issues
+   
+Bug reports and feature requests can be submitted on the [Github Issue Tracker](https://github.com/Triun/laravel-model-base/issues).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for information.
+
 ## License
 
 The Laravel Model Base is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
