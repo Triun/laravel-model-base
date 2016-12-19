@@ -1,5 +1,11 @@
 # laravel-model-base
 
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Build Status][ico-travis]][link-travis]
+[![Latest Unstable Version][ico-unstable]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
+[![Software License][ico-license]](LICENSE.md)
+
 Generate Eloquent Model Base for Laravel.
 
 ## Installation
@@ -81,3 +87,14 @@ How to create a modificator.
 // TODO
 
 
+[ico-version]: https://img.shields.io/packagist/v/triun/laravel-model-base.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://travis-ci.org/Triun/laravel-model-base.svg?branch=master.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/triun/laravel-model-base.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/triun/laravel-model-base.svg?style=flat-square
+[ico-unstable]: https://poser.pugx.org/triun/laravel-model-base/v/unstable
+
+[link-packagist]: https://packagist.org/packages/triun/laravel-model-base
+[link-travis]: https://travis-ci.org/Triun/laravel-model-base
+[link-downloads]: https://packagist.org/packages/triun/laravel-model-base
+[link-author]: https://github.com/triun
