@@ -1,8 +1,9 @@
 # Laravel Model Base
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Build Status][ico-travis]][link-travis]
+[![Pre Release Version on Packagist][ico-pre-release]][link-packagist]
 [![Latest Unstable Version][ico-unstable]][link-packagist]
+[![Build Status][ico-travis]][link-travis]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Software License][ico-license]](LICENSE.md)
 
@@ -121,7 +122,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information.
 The Laravel Model Base is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 
-[ico-version]: https://img.shields.io/packagist/v/triun/laravel-model-base.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/triun/laravel-model-base.svg
+[ico-pre-release]: https://img.shields.io/packagist/vpre/triun/laravel-model-base.svg
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-travis]: https://travis-ci.org/Triun/laravel-model-base.svg?branch=master
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/triun/laravel-model-base.svg?style=flat-square
