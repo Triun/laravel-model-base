@@ -19,7 +19,7 @@ cache:
 
 matrix:
   include:
-    - php: 5.5
+    - php: '5.5'
       env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 
 before_script:
@@ -27,4 +27,4 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=psr2 src/
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-text

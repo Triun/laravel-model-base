@@ -123,7 +123,7 @@ The Laravel Model Base is open-sourced software licensed under the [MIT license]
 
 [ico-version]: https://img.shields.io/packagist/v/triun/laravel-model-base.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://travis-ci.org/Triun/laravel-model-base.svg?branch=master.svg?style=flat-square
+[ico-travis]: https://travis-ci.org/Triun/laravel-model-base.svg?branch=master
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/triun/laravel-model-base.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/triun/laravel-model-base.svg?style=flat-square
 [ico-unstable]: https://poser.pugx.org/triun/laravel-model-base/v/unstable
