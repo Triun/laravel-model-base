@@ -23,9 +23,6 @@
         "illuminate/database": "^5.2",
         "squizlabs/php_codesniffer": "2.*"
     },
-    "suggest": {
-        "doctrine/dbal": "Load information from the database about models for phpdocs (~2.3)"
-    },
     "autoload": {
         "psr-4": {
             "Triun\\ModelBase\\": "src/"
