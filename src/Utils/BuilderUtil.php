@@ -21,26 +21,28 @@ class BuilderUtil extends BuilderUtilBase
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      * @param bool|string                           $override
      * @param string                                $path
+     * @param string                                $stub
      *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
      */
-    public function build(Skeleton $skeleton, $override = Util::CONFIRM, &$path = null)
+    public function build(Skeleton $skeleton, $override = Util::CONFIRM, &$path = null, $stub = 'class.stub')
     {
         $path = $this->getSkeletonPath($skeleton);
 
-        $content = $this->getContents($skeleton);
+        $content = $this->getContents($skeleton, $stub);
 
         return $this->save($path, $skeleton->className, $content, $override, $skeleton);
     }
 
     /**
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
+     * @param string $stub
      *
      * @return string
      */
-    protected function getContents(Skeleton $skeleton)
+    protected function getContents(Skeleton $skeleton, $stub)
     {
-        $content =  File::get($this->getStub());
+        $content =  File::get($this->getStub($stub));
 
         $replace = [
             //'dummy_cmd' => $this->name,
