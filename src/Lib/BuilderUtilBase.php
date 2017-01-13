@@ -236,7 +236,7 @@ abstract class BuilderUtilBase extends UtilBase
                     'dummy_name'    => str_pad($name, $info->max_name_length),
                     'dummy_description' => $item->description,
                 ];
-                $result[] = str_replace(array_keys($replace), array_values($replace), $stub);
+                $result[] = rtrim(str_replace(array_keys($replace), array_values($replace), $stub));
             }
         }
         return $result;
