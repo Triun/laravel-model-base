@@ -5,16 +5,15 @@ namespace Triun\ModelBase;
 
 use Config;
 use Illuminate\Support\Arr;
-use Triun\ModelBase\Modifiers\AttributesModifier;
-use Triun\ModelBase\Modifiers\CamelToSnakeModifier;
-use Triun\ModelBase\Modifiers\ClassBaseModifier;
 use Triun\ModelBase\Modifiers\ConnectionModifier;
-use Triun\ModelBase\Modifiers\DatesModifier;
-use Triun\ModelBase\Modifiers\PhpDocModifier;
-use Triun\ModelBase\Modifiers\RulesModifier;
 use Triun\ModelBase\Modifiers\TableModifier;
 use Triun\ModelBase\Modifiers\TimestampsModifier;
-use Triun\ModelBase\Utils\SkeletonUtil;
+use Triun\ModelBase\Modifiers\DatesModifier;
+use Triun\ModelBase\Modifiers\SoftDeletesModifier;
+use Triun\ModelBase\Modifiers\AttributesModifier;
+use Triun\ModelBase\Modifiers\RulesModifier;
+use Triun\ModelBase\Modifiers\CamelToSnakeModifier;
+use Triun\ModelBase\Modifiers\PhpDocModifier;
 
 /**
  * Class ModelBaseConfig
@@ -44,6 +43,9 @@ class ModelBaseConfig
         // Dates
         DatesModifier::class,
 
+        // Soft Deletes
+        SoftDeletesModifier::class,
+
         // Attributes
         AttributesModifier::class,
 
@@ -56,7 +58,6 @@ class ModelBaseConfig
         // PhpDoc tags
         PhpDocModifier::class,
 
-        // Soft Deletes
         // Relations
         // Input transformations
     ];

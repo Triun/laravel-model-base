@@ -134,14 +134,14 @@ return [
     | - snakeAttributes: whether or not we want to normalize attributes as snake case.
     | - dates: whether or not we want to use Carbon objects for dates.
     | - dateFormat: Eloquent date format. Default null.
-    | - softDeletes: whether or not we want to implement eloquent soft deleted in the models.
+    | - softDeletes: whether or not we want to implement eloquent soft deleted in the models (see DELETED_AT config).
     |
     */
 
     'snakeAttributes'   => true,
     'dates'             => true,
     'dateFormat'        => null,
-    'softDeletes'       => true, // Not implemented
+    'softDeletes'       => true, // See DELETED_AT configuration.
 
     /*
     |--------------------------------------------------------------------------
@@ -208,6 +208,27 @@ return [
             'force' => [],
             'alternative' => [],
         ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Soft Deletes - DELETED_AT
+    |--------------------------------------------------------------------------
+    |
+    | With DELETED_AT configuration we can specify alternative values for the constants.
+    |
+    | With 'force', we will try to find any of the items in the array, and will use the first occurrence that we find.
+    |
+    | With 'alternative', we will try to find the default value 'deleted_at', and only if we don't find
+    | it, we will try to use the first occurrence in 'alternative' array.
+    |
+    | @see https://laravel.com/docs/5.3/eloquent#soft-deleting
+    |
+    */
+
+    'DELETED_AT' => [
+        'force' => [],
+        'alternative' => [],
     ],
 
     /*
