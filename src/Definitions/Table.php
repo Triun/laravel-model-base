@@ -8,11 +8,11 @@ use Doctrine\DBAL\Schema\Table as DoctrineTable;
 class Table extends DoctrineTable
 {
     /**
-     * @return Column[]
+     * @return \Triun\ModelBase\Definitions\Column[]
      */
     public function getColumns()
     {
-        parent::getColumns();
+        return parent::getColumns();
     }
 
     /**
@@ -20,12 +20,12 @@ class Table extends DoctrineTable
      *
      * @param string $columnName The column name.
      *
-     * @return Column
+     * @return \Triun\ModelBase\Definitions\Column
      *
      * @throws SchemaException If the column does not exist.
      */
     public function getColumn($columnName)
     {
-        parent::getColumn($columnName);
+        return parent::getColumn($columnName);
     }
 }
