@@ -8,7 +8,11 @@ use Triun\ModelBase\Definitions\Skeleton;
 
 class TimestampsModifier extends ModifierBase
 {
-
+    /**
+     * Stub template.
+     *
+     * @var string
+     */
     protected $voidTimestamp_stub = 'timestamps/voidTimestamp.stub';
 
     /**
@@ -50,6 +54,14 @@ class TimestampsModifier extends ModifierBase
         }
     }
 
+    /**
+     * Generate a timestamp in the skeleton with the replace values given by $field.
+     *
+     * @param Skeleton $skeleton
+     * @param          $field
+     *
+     * @return mixed|null
+     */
     protected function generateTimestamp(Skeleton $skeleton, $field)
     {
         $const = $skeleton->constant($field);
@@ -89,16 +101,35 @@ class TimestampsModifier extends ModifierBase
         return null;
     }
 
+    /**
+     * Check if the column exists.
+     *
+     * @param $name
+     *
+     * @return bool
+     */
     protected function hasColumn($name)
     {
         return $this->table()->hasColumn($name);
     }
 
+    /**
+     * Check if the column is a timestamp.
+     *
+     * @param $name
+     *
+     * @return bool
+     */
     protected function columnIsTimestamp($name)
     {
         return $this->table()->getColumn($name)->getType()->getName() === Type::DATETIME;
     }
 
+    /**
+     * Retrieve the template.
+     *
+     * @return string
+     */
     protected function voidTimestamp()
     {
         return $this->getFile($this->getStub($this->voidTimestamp_stub));
