@@ -18,7 +18,7 @@ class DatesModifier extends ModifierBase
         // Set date format if set.
         $this->setProperty($skeleton, 'dateFormat', $this->config('dateFormat'));
 
-        // Check if dates is anabled in the config file
+        // Check if dates is enabled in the config file
         if ($this->config('dates', true) !== true) {
             return;
         }
