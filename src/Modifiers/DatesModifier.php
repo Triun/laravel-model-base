@@ -18,10 +18,12 @@ class DatesModifier extends ModifierBase
         // Set date format if set.
         $this->setProperty($skeleton, 'dateFormat', $this->config('dateFormat'));
 
+        // Check if dates is anabled in the config file
         if ($this->config('dates', true) !== true) {
             return;
         }
 
+        // Retrieve dates property from the skeleton to edit it.
         $dates = $skeleton->property('dates');
 
         foreach ($this->table()->getColumns() as $column) {

@@ -192,7 +192,7 @@ return [
     |
     | With timestamps configuration we can specify alternative values for the CREATED_AT and UPDATED_AT constants.
     |
-    | With 'force', we will try to find any of the items in the array, and will use the first occurence that we find.
+    | With 'force', we will try to find any of the items in the array, and will use the first occurrence that we find.
     |
     | With 'alternative', we will try to find the default value 'created_at' or 'updated_at', and only if we don't find
     | it, we will try to use the first occurrence in 'alternative' array.
