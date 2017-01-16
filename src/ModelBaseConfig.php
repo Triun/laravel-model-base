@@ -61,6 +61,7 @@ class ModelBaseConfig
 
         // Relations
         // Input transformations
+        // ValueObjects
     ];
 
     /**
