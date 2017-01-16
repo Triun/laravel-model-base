@@ -37,9 +37,18 @@ matrix:
   include:
     - php: '5.5'
       env:
-        - DB=mysql 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-        - DB=pgsql 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-        - DB=sqlite 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+        - DB=mysql
+        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+  include:
+    - php: '5.5'
+      env:
+        - DB=pgsql
+        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+  include:
+    - php: '5.5'
+      env:
+        - DB=sqlite
+        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
   allow_failures:
     - php: 7.0
     - php: 7.1
