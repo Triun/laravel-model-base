@@ -58,7 +58,7 @@ class BuilderUtil extends BuilderUtilBase
 
             '{{uses}}'              => implode(PHP_EOL, $this->getUses($skeleton)),
 
-            '{{implements}}'        => count($skeleton->interfaces()) > 0 ? ' implements '.implode(', ', $skeleton->interfaces()) : '',
+            '{{implements}}'        => $this->getImplements($skeleton),
 
             '{{body}}'              => $this->getBody($skeleton),
         ];
@@ -104,6 +104,16 @@ class BuilderUtil extends BuilderUtilBase
         return array_map(function ($value) {
             return "use $value;";
         }, $array);
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
+     *
+     * @return string
+     */
+    protected function getImplements(Skeleton $skeleton)
+    {
+        return count($skeleton->interfaces()) > 0 ? ' implements '.implode(', ', $skeleton->interfaces()) : '';
     }
 
     /**
