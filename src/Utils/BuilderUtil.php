@@ -47,20 +47,20 @@ class BuilderUtil extends BuilderUtilBase
         $replace = [
             //'dummy_cmd' => $this->name,
 
-            '{{phpdoc}}'        => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
+            '{{phpdoc}}'            => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
 
-            'DummyNamespace' => $this->getNamespace($skeleton->className),
-            'DummyRootNamespace' => App::getNamespace(),
-            'DummyClass' => class_basename($skeleton->className),
+            'DummyNamespace'        => $this->getNamespace($skeleton->className),
+            'DummyRootNamespace'    => App::getNamespace(),
+            'DummyClass'            => class_basename($skeleton->className),
 
             'DummyExtendsNamespace' => '\\'.$skeleton->extends,
-            'DummyExtendsClass' => class_basename($skeleton->extends),
+            'DummyExtendsClass'     => class_basename($skeleton->extends),
 
-            '{{uses}}'          => implode(PHP_EOL, $this->getUses($skeleton)),
+            '{{uses}}'              => implode(PHP_EOL, $this->getUses($skeleton)),
 
-            '{{implements}}'    => '', // TODO implements
+            '{{implements}}'        => count($skeleton->interfaces()) > 0 ? ' implements '.implode(', ', $skeleton->interfaces()) : '',
 
-            '{{body}}'     => $this->getBody($skeleton),
+            '{{body}}'              => $this->getBody($skeleton),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);
@@ -93,7 +93,7 @@ class BuilderUtil extends BuilderUtilBase
         $array[] = $skeleton->extends;
 
         // Add the implements
-        //$array = array_merge($array, $skeleton->implements);
+        $array = array_merge($array, array_values($skeleton->interfaces()));
 
         // Add the traits
         $array = array_merge($array, array_values($skeleton->traits()));
