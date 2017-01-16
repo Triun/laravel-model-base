@@ -25,7 +25,9 @@ class ModelBaseServiceProvider extends ServiceProvider
 //        $viewPath = __DIR__.'/../resources/views';
 //        $this->loadViewsFrom($viewPath, 'model-base');
 
-        $configPath = realpath(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php');
+        $configPath = realpath(dirname(__DIR__)
+            . DIRECTORY_SEPARATOR . 'config'
+            . DIRECTORY_SEPARATOR . 'model-base.php');
 
         $this->publishes([$configPath => config_path('model-base.php')], 'config');
 
