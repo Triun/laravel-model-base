@@ -28,6 +28,7 @@ cache:
 env:
   - DB=mysql
   - DB=pgsql
+  - DB=sqlite
 
 matrix:
   exclude:
