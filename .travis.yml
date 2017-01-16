@@ -27,6 +27,7 @@ cache:
 # optionally specify a list of environments, for example to test different RDBMS
 env:
   - DB=mysql
+#  - DB=pgsql
   - DB=sqlite
 
 matrix:
@@ -38,10 +39,10 @@ matrix:
       env:
         - DB=mysql
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-    - php: '5.5'
-      env:
-        - DB=pgsql
-        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+#    - php: '5.5'
+#      env:
+#        - DB=pgsql
+#        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
     - php: '5.5'
       env:
         - DB=sqlite
