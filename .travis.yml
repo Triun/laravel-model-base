@@ -27,7 +27,6 @@ cache:
 # optionally specify a list of environments, for example to test different RDBMS
 env:
   - DB=mysql
-  - DB=pgsql
   - DB=sqlite
 
 matrix:
