@@ -39,12 +39,10 @@ matrix:
       env:
         - DB=mysql
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-  include:
     - php: '5.5'
       env:
         - DB=pgsql
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-  include:
     - php: '5.5'
       env:
         - DB=sqlite
