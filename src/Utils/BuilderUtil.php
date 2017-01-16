@@ -113,7 +113,11 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getImplements(Skeleton $skeleton)
     {
-        return count($skeleton->interfaces()) > 0 ? ' implements '.implode(', ', $skeleton->interfaces()) : '';
+        if (count($skeleton->interfaces()) > 0) {
+            return ' implements ' . implode(', ', array_map('class_basename', $skeleton->interfaces()));
+        }
+
+        return '';
     }
 
     /**
