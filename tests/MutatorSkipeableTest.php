@@ -200,7 +200,10 @@ class MutatorSkipeableTest extends TestCase
 
         $carbon = \Carbon\Carbon::now();
 
-        $datetime = $carbon->toDateTimeString();
+        $format = $model->run_getDateFormat();
+//        $datetime = $carbon->toDateTimeString();
+        $datetime = $carbon->format($format);
+        $carbon = new Carbon\Carbon($datetime); // In 7.1 it gets microseconds (ex; 2017-01-16T09:35:07.720258+0800)
 
         $model->run_setAttributeWithoutMutator('updated_at', $carbon);
 
@@ -262,6 +265,14 @@ class Post extends \Illuminate\Database\Eloquent\Model
     protected $casts = [
         'metadata' => 'array',
     ];
+
+    /**
+     * @return string
+     */
+    public function run_getDateFormat()
+    {
+        return $this->getDateFormat();
+    }
 
     /**
      * Set a given attribute on the model, without using the mutator.
