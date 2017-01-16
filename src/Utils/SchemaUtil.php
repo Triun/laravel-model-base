@@ -113,7 +113,8 @@ class SchemaUtil extends ConnectionUtilBase
      */
     public function getTableExceptions()
     {
-        return config('model-base.bulk.except', ['migrations']);
+//        return config('model-base.bulk.except', ['migrations']);
+        return $this->config()->get('bulk.except', ['migrations']);
     }
 
     /**

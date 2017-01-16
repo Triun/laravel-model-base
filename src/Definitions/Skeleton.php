@@ -36,7 +36,7 @@ class Skeleton
      *
      * @var string[]
      */
-    public $implements = [];
+    public $interfaces = [];
 
     /**
      * Which traits uses.
@@ -111,6 +111,14 @@ class Skeleton
     /**
      * @return string[]
      */
+    public function interfaces()
+    {
+        return $this->interfaces;
+    }
+
+    /**
+     * @return string[]
+     */
     public function traits()
     {
         return $this->traits;
@@ -146,6 +154,16 @@ class Skeleton
     public function methods()
     {
         return $this->methods;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasInterface($key)
+    {
+        return isset($this->interfaces[$key]);
     }
 
     /**
@@ -244,6 +262,18 @@ class Skeleton
             throw new Exception("Method $key not defined");
         }
         return $this->methods[$key];
+    }
+
+    /**
+     * Add Interface to be implemented.
+     *
+     * @param  string $interface
+     *
+     * @throws \Exception
+     */
+    public function addInterface($interface)
+    {
+        $this->interfaces[$interface] = $interface;
     }
 
     /**

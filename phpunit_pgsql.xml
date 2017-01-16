@@ -24,7 +24,16 @@
     <php>
         <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_ENV" value="testing"/>
-        <env name="DB_CONNECTION" value="mysql_test"/>
+        <env name="APP_DEBUG" value="true"/>
+
+        <env name="DB_CONNECTION" value="test"/>
+        <env name="DB_TEST_DRIVER" value="mysql"/>
+        <env name="DB_TEST_HOST" value="127.0.0.1"/>
+        <env name="DB_TEST_PORT" value="3306"/>
+        <env name="DB_TEST_DATABASE" value="laravel_model_base_test"/>
+        <env name="DB_TEST_USERNAME" value="postgres"/>
+        <env name="DB_TEST_PASSWORD" value=""/>
+
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
