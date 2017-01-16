@@ -25,14 +25,11 @@ class ModelBaseServiceProvider extends ServiceProvider
 //        $viewPath = __DIR__.'/../resources/views';
 //        $this->loadViewsFrom($viewPath, 'model-base');
 
-        $configPath = __DIR__ . '/../config/model-base.php';
-        if (function_exists('config_path')) {
-            $publishPath = config_path('model-base.php');
-        } else {
-            //$publishPath = $this->app->basePath().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'model-base.php';
-            $publishPath = base_path('config'.DIRECTORY_SEPARATOR.'model-base.php');
-        }
-        $this->publishes([$configPath => $publishPath], 'config');
+        $configPath = realpath(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php');
+
+        $this->publishes([$configPath => config_path('model-base.php')], 'config');
+
+        $this->mergeConfigFrom($configPath, 'model-base');
     }
 
     /**

@@ -3,8 +3,9 @@
 
 namespace Triun\ModelBase;
 
-use Config;
 use Illuminate\Support\Arr;
+use \Illuminate\Support\Facades\Config;
+
 use Triun\ModelBase\Modifiers\ConnectionModifier;
 use Triun\ModelBase\Modifiers\TableModifier;
 use Triun\ModelBase\Modifiers\TimestampsModifier;
@@ -77,17 +78,15 @@ class ModelBaseConfig
      * ModelBaseConfig constructor.
      *
      * @param \Illuminate\Database\Connection|string|null $connection
-     * @param array $params
      */
-    public function __construct($connection, $params = [])
+    public function __construct($connection)
     {
         $this->items = array_merge(
             $this->loadConfig(static::CONFIG_FILE),
             $this->loadConfig(static::CONFIG_FILE.'.drivers.'.$connection->getDriverName()),
-            $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName()),
+            $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName())
             // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
             // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
-            $params
         );
     }
 
