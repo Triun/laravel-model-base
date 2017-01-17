@@ -304,8 +304,8 @@ class SkeletonUtil extends ConnectionUtilBase
             .static::getFileContent(
                 $method->getFileName(),
                 $method->getStartLine() - 1,
-                $method->getEndLine())
-        ;
+                $method->getEndLine()
+            );
     }
 
     /**
