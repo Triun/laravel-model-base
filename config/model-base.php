@@ -267,7 +267,7 @@ return [
     */
 
     'bulk' => [
-        'except' => ['migration'],
+        'except' => ['migration', 'sessions'],
     ],
 
 ];
