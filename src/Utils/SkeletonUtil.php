@@ -274,8 +274,10 @@ class SkeletonUtil extends ConnectionUtilBase
         if (!Str::startsWith($lines[0], '        ')) {
             $padding = 0;
             // Detect how much padding it has
-            while ($lines[0][$padding] === ' ') {
-                $padding++;
+            if (strlen($lines[0]) > 0) {
+                while ($lines[0][$padding] === ' ') {
+                    $padding++;
+                }
             }
             $padding = 8 - $padding;
             // Add the left padding
