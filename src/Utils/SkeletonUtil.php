@@ -158,8 +158,8 @@ class SkeletonUtil extends ConnectionUtilBase
      * Set method value.
      *
      * @param  \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param  string  $name
-     * @param  mixed  $value
+     * @param  string                                $name
+     * @param  string                                $value
      *
      * @return $this
      */
@@ -245,15 +245,87 @@ class SkeletonUtil extends ConnectionUtilBase
             if (!$reflectionMethod->isPrivate()) {
                 $modifiers = $reflectionMethod->getModifiers();
                 $item = new Method();
+                $item->file         = $reflectionMethod->getFileName();
+                $item->line         = [$reflectionMethod->getStartLine(), $reflectionMethod->getEndLine()];
                 $item->name         = $reflectionMethod->getName();
                 $item->modifiers_id = $modifiers;
                 $item->modifiers    = Reflection::getModifierNames($modifiers);
                 $item->docComment   = $reflectionMethod->getDocComment();
-                $item->default = $item->value = (string) $reflectionMethod; //$reflectionProperty->getValue();
+                //$method->default = $item->value = (string) $reflectionMethod;
 
                 $skeleton->addMethod($item);
             }
         }
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Method $method
+     * @param  string                             $code
+     */
+    public static function appendToMethod(Method $method, $code)
+    {
+        if ($method->value === null) {
+            static::loadMethodValue($method);
+        }
+
+        // Format code with padding...
+        $lines = explode(PHP_EOL, $code);
+
+        if (!Str::startsWith($lines[0], '        ')) {
+            $padding = 0;
+            // Detect how much padding it has
+            while ($lines[0][$padding] === ' ') {
+                $padding++;
+            }
+            $padding = 8 - $padding;
+            // Add the left padding
+            for ($i = 0; $i < count($lines); $i++) {
+                $lines[$i] = str_repeat(' ', $padding).$lines[$i];
+            }
+
+            $code = implode(PHP_EOL, $lines);
+        }
+
+        // Append to value
+        $closePos = strrpos($method->value, '}');
+        $lastLine = strrpos(substr($method->value, 0, $closePos), "\n");
+        $method->value = substr($method->value, 0, $lastLine).PHP_EOL.$code.substr($method->value, $lastLine);
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Method $method
+     */
+    public static function loadMethodValue(Method $method)
+    {
+        // The \ReflectionMethod class doesn't return the content of the function, so we have to get it from
+        // the original file.
+        $method->default = $method->value = '    '
+            .$method->getDocComment() .PHP_EOL
+            .static::getFileContent(
+                $method->getFileName(),
+                $method->getStartLine() - 1,
+                $method->getEndLine())
+        ;
+    }
+
+    /**
+     * @param string  $file
+     * @param integer $startLine
+     * @param integer $endLine
+     *
+     * @return string
+     */
+    public static function getFileContent($file, $startLine, $endLine)
+    {
+        static $cached = [];
+
+        $file = realpath($file);
+
+        if (!isset($cached[$file])) {
+            $cached[$file] = file($file);
+        }
+
+        return implode('', array_slice($cached[$file], $startLine, $endLine - $startLine));
     }
 
     /**
