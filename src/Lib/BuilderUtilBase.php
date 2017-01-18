@@ -108,7 +108,7 @@ abstract class BuilderUtilBase extends UtilBase
 
             // Override permissions
             if (!$this->safe($path, $override)) {
-                $this->muted("{$name} cancelled");
+                $this->warning("{$name} cancelled");
                 $this->verifyExtension($skeleton);
                 return false;
             }
@@ -246,16 +246,17 @@ abstract class BuilderUtilBase extends UtilBase
      * Write a string as success output.
      *
      * @param  string  $string
+     * @param  int     $verbosity
      * @return void
      */
-    public function success($string)
+    public function success($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
-        if ($output->isVerbose()) {
+        if ($output->isVerbose() && $output->getVerbosity() >= $verbosity) {
             $output->success($string);
         } else {
-            $this->command->info($string);
+            $this->command->info($string, $verbosity);
         }
     }
 
@@ -263,16 +264,17 @@ abstract class BuilderUtilBase extends UtilBase
      * Write a string as error output.
      *
      * @param  string  $string
+     * @param  int     $verbosity
      * @return void
      */
-    public function error($string)
+    public function error($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
-        if ($output->isVerbose()) {
+        if ($output->isVerbose() && $output->getVerbosity() >= $verbosity) {
             $output->error($string);
         } else {
-            $this->command->error($string);
+            $this->command->error($string, $verbosity);
         }
     }
 
@@ -280,14 +282,47 @@ abstract class BuilderUtilBase extends UtilBase
      * Write a string as trace output.
      *
      * @param  string  $string
+     * @param  int     $verbosity
      * @return void
      */
-    public function trace($string)
+    public function trace($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    {
+        if ($this->command->getOutput()->isVerbose()) {
+            $this->muted($string, $verbosity);
+        }
+    }
+
+    /**
+     * Write a string as warning output.
+     *
+     * @param  string  $string
+     * @param  int     $verbosity
+     * @return void
+     */
+    public function warning($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
-        if ($output->isVerbose()) {
-            $this->muted($string);
+        if ($output->isVerbose() && $output->getVerbosity() >= $verbosity) {
+            $output->warning($string);
+        } else {
+            $this->command->warn($string, $verbosity);
+        }
+        // $this->command->getOutput()->writeln('<fg=yellow;options=bold>'.$string.'</>'); // black bg
+    }
+
+    /**
+     * Write a string as info output.
+     *
+     * @param  string  $string
+     * @param  int     $verbosity
+     * @return void
+     * @link https://symfony.com/doc/current/console/coloring.html
+     */
+    public function info($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    {
+        if ($this->command->getOutput()->getVerbosity() >= $verbosity) {
+            $this->command->getOutput()->writeln('<fg=cyan;options=bold>'.$string.'</>'); // black bg
         }
     }
 
@@ -295,11 +330,14 @@ abstract class BuilderUtilBase extends UtilBase
      * Write a string as muted output.
      *
      * @param  string  $string
+     * @param  int     $verbosity
      * @return void
      * @link https://symfony.com/doc/current/console/coloring.html
      */
-    public function muted($string)
+    public function muted($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
     {
-        $this->command->getOutput()->writeln('<fg=white;options=bold>'.$string.'</>');
+        $this->command->line($string, null, $verbosity);
+        // $this->command->getOutput()->writeln('<fg=white;options=bold>'.$string.'</>'); // white bg
+        // $this->command->getOutput()->writeln('<fg=black;options=bold>'.$string.'</>'); // black bg
     }
 }
