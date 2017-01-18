@@ -5,8 +5,6 @@ namespace Triun\ModelBase\Utils;
 
 use App;
 use File;
-use Exception;
-use ReflectionClass;
 use Triun\ModelBase\Util;
 use Illuminate\Support\Str;
 use Triun\ModelBase\Lib\BuilderUtilBase;
@@ -87,23 +85,9 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getUses(Skeleton $skeleton)
     {
-        $array = [];
-
-        // Add the extended
-        $array[] = $skeleton->extends;
-
-        // Add the implements
-        $array = array_merge($array, array_values($skeleton->interfaces()));
-
-        // Add the traits
-        $array = array_merge($array, array_values($skeleton->traits()));
-
-        // Add other uses
-        //$array = array_merge($array, $skeleton->uses);
-
         return array_map(function ($value) {
             return "use $value;";
-        }, $array);
+        }, $skeleton->uses());
     }
 
     /**
@@ -114,7 +98,7 @@ class BuilderUtil extends BuilderUtilBase
     protected function getImplements(Skeleton $skeleton)
     {
         if (count($skeleton->interfaces()) > 0) {
-            return ' implements ' . implode(', ', array_map('class_basename', $skeleton->interfaces()));
+            return ' implements ' . implode(', ', $skeleton->interfaces());
         }
 
         return '';
@@ -149,7 +133,7 @@ class BuilderUtil extends BuilderUtilBase
             return '';
         }
 
-        return static::TAB.'use '.implode(', ', array_map('class_basename', $traits)).';';
+        return static::TAB.'use '.implode(', ', $traits).';';
     }
 
     /**
