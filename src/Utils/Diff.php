@@ -16,8 +16,8 @@ use Exception;
 class Diff
 {
     const UNMODIFIED = 0;
-    const DELETED    = 1;
-    const INSERTED   = 2;
+    const INSERTED   = 1;
+    const DELETED    = 2;
 
     /**
      * Returns the diff for two strings. The return value is an array, each of
@@ -52,13 +52,13 @@ class Diff
 
         // skip any common prefix
         while ($start <= $end1 && $start <= $end2
-        && $sequence1[$start] == $sequence2[$start]) {
+            && $sequence1[$start] == $sequence2[$start]) {
             $start ++;
         }
 
         // skip any common suffix
         while ($end1 >= $start && $end2 >= $start
-        && $sequence1[$end1] == $sequence2[$end2]) {
+            && $sequence1[$end1] == $sequence2[$end2]) {
             $end1 --;
             $end2 --;
         }
@@ -68,7 +68,7 @@ class Diff
 
         // generate the partial diff
         $partialDiff =
-        self::generatePartialDiff($table, $sequence1, $sequence2, $start);
+            self::generatePartialDiff($table, $sequence1, $sequence2, $start);
 
         // generate the full diff
         $diff = [];
@@ -79,8 +79,8 @@ class Diff
             $diff[] = array_pop($partialDiff);
         }
         for ($index = $end1 + 1;
-        $index < ($compareCharacters ? strlen($sequence1) : count($sequence1));
-        $index ++) {
+             $index < ($compareCharacters ? strlen($sequence1) : count($sequence1));
+             $index ++) {
             $diff[] = [$sequence1[$index], self::UNMODIFIED];
         }
 
@@ -135,11 +135,11 @@ class Diff
             for ($index2 = 1; $index2 <= $length2; $index2 ++) {
                 // store the longest common subsequence length
                 if ($sequence1[$index1 + $start - 1]
-                  == $sequence2[$index2 + $start - 1]) {
+                    == $sequence2[$index2 + $start - 1]) {
                     $table[$index1][$index2] = $table[$index1 - 1][$index2 - 1] + 1;
                 } else {
                     $table[$index1][$index2] =
-                      max($table[$index1 - 1][$index2], $table[$index1][$index2 - 1]);
+                        max($table[$index1 - 1][$index2], $table[$index1][$index2 - 1]);
                 }
             }
         }
@@ -258,9 +258,9 @@ class Diff
                     throw new Exception('Undefined type ('.$line[1].').');
             }
             $html .=
-              '<' . $element . '>'
-              . htmlspecialchars($line[0])
-              . '</' . $element . '>';
+                '<' . $element . '>'
+                . htmlspecialchars($line[0])
+                . '</' . $element . '>';
 
             // extend the HTML with the separator
             $html .= $separator;
@@ -293,47 +293,47 @@ class Diff
                 // display the content on the left and right
                 case self::UNMODIFIED:
                     $leftCell =
-                      self::getCellContent(
-                          $diff,
-                          $indentation,
-                          $separator,
-                          $index,
-                          self::UNMODIFIED
-                      );
+                        self::getCellContent(
+                            $diff,
+                            $indentation,
+                            $separator,
+                            $index,
+                            self::UNMODIFIED
+                        );
                     $rightCell = $leftCell;
                     break;
 
                 // display the deleted on the left and inserted content on the right
                 case self::DELETED:
                     $leftCell =
-                      self::getCellContent(
-                          $diff,
-                          $indentation,
-                          $separator,
-                          $index,
-                          self::DELETED
-                      );
+                        self::getCellContent(
+                            $diff,
+                            $indentation,
+                            $separator,
+                            $index,
+                            self::DELETED
+                        );
                     $rightCell =
-                      self::getCellContent(
-                          $diff,
-                          $indentation,
-                          $separator,
-                          $index,
-                          self::INSERTED
-                      );
+                        self::getCellContent(
+                            $diff,
+                            $indentation,
+                            $separator,
+                            $index,
+                            self::INSERTED
+                        );
                     break;
 
                 // display the inserted content on the right
                 case self::INSERTED:
                     $leftCell = '';
                     $rightCell =
-                      self::getCellContent(
-                          $diff,
-                          $indentation,
-                          $separator,
-                          $index,
-                          self::INSERTED
-                      );
+                        self::getCellContent(
+                            $diff,
+                            $indentation,
+                            $separator,
+                            $index,
+                            self::INSERTED
+                        );
                     break;
 
                 default:
@@ -342,26 +342,26 @@ class Diff
 
             // extend the HTML with the new row
             $html .=
-              $indentation
-              . "  <tr>\n"
-              . $indentation
-              . '    <td class="diff'
-              . ($leftCell == $rightCell
-              ? 'Unmodified'
-              : ($leftCell == '' ? 'Blank' : 'Deleted'))
-              . '">'
-              . $leftCell
-              . "</td>\n"
-              . $indentation
-              . '    <td class="diff'
-              . ($leftCell == $rightCell
-                  ? 'Unmodified'
-                  : ($rightCell == '' ? 'Blank' : 'Inserted'))
-              . '">'
-              . $rightCell
-              . "</td>\n"
-              . $indentation
-              . "  </tr>\n";
+                $indentation
+                . "  <tr>\n"
+                . $indentation
+                . '    <td class="diff'
+                . ($leftCell == $rightCell
+                    ? 'Unmodified'
+                    : ($leftCell == '' ? 'Blank' : 'Deleted'))
+                . '">'
+                . $leftCell
+                . "</td>\n"
+                . $indentation
+                . '    <td class="diff'
+                . ($leftCell == $rightCell
+                    ? 'Unmodified'
+                    : ($rightCell == '' ? 'Blank' : 'Inserted'))
+                . '">'
+                . $rightCell
+                . "</td>\n"
+                . $indentation
+                . "  </tr>\n";
         }
 
         return $html . $indentation . "</table>\n";
@@ -386,10 +386,10 @@ class Diff
         // loop over the matching lines, adding them to the HTML
         while ($index < count($diff) && $diff[$index][1] == $type) {
             $html .=
-              '<span>'
-              . htmlspecialchars($diff[$index][0])
-              . '</span>'
-              . $separator;
+                '<span>'
+                . htmlspecialchars($diff[$index][0])
+                . '</span>'
+                . $separator;
             $index ++;
         }
 

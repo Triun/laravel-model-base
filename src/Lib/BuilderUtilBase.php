@@ -97,18 +97,22 @@ abstract class BuilderUtilBase extends UtilBase
             $actual = File::get($path);
             if ($actual === $content) {
                 $this->muted("{$name} identical");
-                return 0;
+                return Diff::UNMODIFIED;
             }
 
+            $this->command->line($path.' updates:', null, OutputStyle::VERBOSITY_VERBOSE);
+            $compare = $this->compare($actual, $content);
             if ($this->command->getOutput()->isVerbose()) {
-                $this->command->line($path.' updates:');
-                $this->compare($actual, $content);
                 $this->command->getOutput()->newLine();
             }
 
             // Override permissions
             if (!$this->safe($path, $override)) {
-                $this->warning("{$name} cancelled");
+                if ($compare & Diff::INSERTED) {
+                    $this->error("{$name} cancelled. There are pending updates to be implemented...");
+                } else {
+                    $this->info("{$name} difiers, but not update required");
+                }
                 $this->verifyExtension($skeleton);
                 return false;
             }
@@ -168,8 +172,10 @@ abstract class BuilderUtilBase extends UtilBase
      */
     protected function compare($string1, $string2)
     {
+        $result = Diff::UNMODIFIED;
+
         if ($string1 === $string2) {
-            return;
+            return $result;
         }
 
         $diff = Diff::compare($string1, $string2);
@@ -177,17 +183,21 @@ abstract class BuilderUtilBase extends UtilBase
 
         foreach ($diff as $line) {
             switch ($line[1]) {
-                case Diff::DELETED:
-                    $this->command->line('<fg=red>- ' . $line[0].'</>');
-                    break;
                 case Diff::INSERTED:
-                    $this->command->info('<fg=green>+ ' . $line[0].'</>');
+                    $this->command->info('<fg=green>+ ' . $line[0].'</>', OutputStyle::VERBOSITY_VERBOSE);
+                    $result |= Diff::INSERTED;
+                    break;
+                case Diff::DELETED:
+                    $this->command->line('<fg=red>- ' . $line[0].'</>', null, OutputStyle::VERBOSITY_VERY_VERBOSE);
+                    $result |= Diff::DELETED;
                     break;
                 case Diff::UNMODIFIED:
                 default:
-                    $this->command->line('  ' . $line[0], null, OutputStyle::VERBOSITY_VERY_VERBOSE);
+                    $this->command->line('  ' . $line[0], null, OutputStyle::VERBOSITY_DEBUG);
             }
         }
+
+        return $result;
     }
 
     /**
