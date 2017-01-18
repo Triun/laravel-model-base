@@ -128,7 +128,7 @@ class SoftDeletesModifier extends ModifierBase
      */
     protected function columnIsTimestamp($columnName)
     {
-        echo '+ deleted_at is '.$this->table()->getColumn($columnName)->getType()->getName().PHP_EOL;
+        // echo '+ deleted_at is '.$this->table()->getColumn($columnName)->getType()->getName().PHP_EOL;
         return $this->table()->getColumn($columnName)->getType()->getName() === Type::DATETIME;
     }
 
