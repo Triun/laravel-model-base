@@ -72,9 +72,10 @@ class RulesModifier extends ModifierBase
             case Type::INTEGER:
             case Type::BIGINT:
                 $rules[] = 'integer';
-                if ($column->getLength() > 0) {
+                // TODO: removed int max limit until it's fixed.
+                /*if ($column->getLength() > 0) {
                     $rules[] = 'max:' . (pow(10, $column->getLength()) - 1);
-                }
+                }*/
                 break;
             case Type::FLOAT:
 //            case Type::DOUBLE:
