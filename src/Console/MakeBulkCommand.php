@@ -61,6 +61,8 @@ class MakeBulkCommand extends GeneratorCommand
         // Prerequisites for the command to work.
         $this->prerequisites();
 
+        ini_set('memory_limit', '512M');
+
         // Connection
         $connection = DB::connection($this->option('connection'));
         $this->output->title('Bulk Model Base generation for '.$connection->getName());
