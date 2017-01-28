@@ -132,7 +132,7 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         $tables = [];
-        foreach ($this->conn->select('SHOW TABLES') as $row) {
+        foreach ($this->conn->getDoctrineSchemaManager()->listTableNames() as $row) {
             $row = (array) $row;
             $table = array_shift($row);
             if (array_search($table, $except) === false) {
