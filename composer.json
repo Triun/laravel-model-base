@@ -28,6 +28,9 @@
         "laravel/framework": "^5.2",
         "orchestra/testbench": "~3.2"
     },
+    "suggest": {
+        "triun/laravel-model-validable": "Model validation and rules generator modifier"
+    },
     "autoload": {
         "psr-4": {
             "Triun\\ModelBase\\": "src/"
