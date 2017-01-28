@@ -15,6 +15,10 @@ use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Lib\ConnectionUtilBase;
 
+/**
+ * Class SkeletonUtil
+ * @package Triun\ModelBase\Utils
+ */
 class SkeletonUtil extends ConnectionUtilBase
 {
     /**
@@ -67,13 +71,14 @@ class SkeletonUtil extends ConnectionUtilBase
      *
      * @return \Triun\ModelBase\Definitions\Property
      */
-    public function makeProperty($name, $modifiers_id = ReflectionProperty::IS_PUBLIC)
+    public function makeProperty($name, $modifiers_id = ReflectionProperty::IS_PUBLIC, $docComment = null)
     {
         $item = new Property;
 
         $item->name = $name;
         $item->modifiers_id = $modifiers_id;
         $item->modifiers = Reflection::getModifierNames($modifiers_id);
+        $item->docComment = $docComment;
 
         return $item;
     }
@@ -129,13 +134,20 @@ class SkeletonUtil extends ConnectionUtilBase
      * Set property value.
      *
      * @param  \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param  string $name
-     * @param  mixed  $value
+     * @param  string                                $name
+     * @param  mixed                                 $value
+     * @param int                                    $modifiers_id
+     * @param null                                   $docComment
      *
      * @return $this
      */
-    public function setProperty($skeleton, $name, $value)
-    {
+    public function setProperty(
+        $skeleton,
+        $name,
+        $value,
+        $modifiers_id = ReflectionProperty::IS_PUBLIC,
+        $docComment = null
+    ) {
         // If it is already a Property, just save it.
         if ($value instanceof Property) {
             $skeleton->addProperty($value);
@@ -145,7 +157,7 @@ class SkeletonUtil extends ConnectionUtilBase
 
         // If doesn't exists, create a new one.
         if (!$skeleton->hasProperty($name)) {
-            $skeleton->addProperty($this->makeProperty($name));
+            $skeleton->addProperty($this->makeProperty($name, $modifiers_id, $docComment));
         }
 
         // Save the value.
@@ -167,14 +179,12 @@ class SkeletonUtil extends ConnectionUtilBase
     {
         // If it is already a Method, just save it.
         if ($value instanceof Method) {
-            $skeleton->addMethod($value);
-
-            return $this;
+            $value = $this->makeMethod($name);
         }
 
         // If doesn't exists, create a new one.
         if (!$skeleton->hasMethod($name)) {
-            $skeleton->addMethod($this->makeMethod($name));
+            $skeleton->addMethod($value);
         }
 
         // Save the value.
@@ -191,8 +201,12 @@ class SkeletonUtil extends ConnectionUtilBase
      *
      * @throws Exception
      */
-    public static function extend(Skeleton $skeleton, $extendClassName)
+    public static function extend(Skeleton $skeleton, $extendClassName, $overwrite = false)
     {
+        if ($skeleton->extends !== null && !$overwrite) {
+            throw new Exception("The skeleton {$skeleton->className} already extends {$skeleton->extends}");
+        }
+
         if ($extendClassName instanceof Skeleton) {
             $extendClassName = $extendClassName->className;
         }
@@ -201,14 +215,24 @@ class SkeletonUtil extends ConnectionUtilBase
             throw new Exception("The class $extendClassName doesn't exists");
         }
 
-        $reflectionClass = new ReflectionClass($extendClassName);
+        // Save what are we extending it from
+        $skeleton->extends = self::parseName($extendClassName);
 
         /*if ($reflectionClass->isSubclassOf('Illuminate\Database\Eloquent\Model')) {
             //
         }*/
 
-        // Save what are we extending it from
-        $skeleton->extends = self::parseName($extendClassName);
+        return static::loadReflection($skeleton, $extendClassName);
+    }
+
+    /**
+     * @param Skeleton $skeleton
+     * @param string   $className
+     */
+    public static function loadReflection(Skeleton $skeleton, $className)
+    {
+        // Generate reflextion class...
+        $reflectionClass = new ReflectionClass($className);
 
         // Constants
         foreach ($reflectionClass->getConstants() as $name => $value) {
@@ -344,15 +368,4 @@ class SkeletonUtil extends ConnectionUtilBase
 
         return trim($name, '\\');
     }
-
-    /**
-     * Get the full namespace name for a given class.
-     *
-     * @param  string  $name
-     * @return string
-     */
-//    protected function getNamespace($name)
-//    {
-//        return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
-//    }
 }

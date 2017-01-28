@@ -3,6 +3,7 @@
 namespace Triun\ModelBase\Definitions;
 
 use InvalidArgumentException;
+use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Exception\SkeletonUseAliasException;
 use Triun\ModelBase\Exception\SkeletonUseNameException;
 
@@ -321,6 +322,7 @@ class Skeleton
         if (!$this->hasProperty($key)) {
             throw new InvalidArgumentException("Property $key not defined");
         }
+
         return $this->properties[$key];
     }
 
@@ -337,14 +339,17 @@ class Skeleton
         if (!$this->hasMethod($key)) {
             throw new InvalidArgumentException("Method $key not defined");
         }
+
         return $this->methods[$key];
     }
 
     /**
      * Add Use.
      *
-     * @param  string       $className
-     * @param  string|null  $alias
+     * @param  string      $className
+     * @param  string|null $alias
+     *
+     * @return $this
      */
     public function addUse($className, $alias = null)
     {
@@ -357,13 +362,20 @@ class Skeleton
     /**
      * Add Interface to be implemented.
      *
-     * @param  string       $interfaceName
-     * @param  string|null  $alias
+     * @param  string      $interfaceName
+     * @param  string|null $alias
+     *
+     * @return $this
      */
     public function addInterface($interfaceName, $alias = null)
     {
-        // $this->interfaces[$interfaceName] = $alias?: basename($interfaceName);
+        if (!interface_exists($interfaceName)) {
+            throw new InvalidArgumentException("$interfaceName is not a valid interface");
+        }
+
         $this->appendClass($this->interfaces, $interfaceName, $alias, 'interface');
+
+        SkeletonUtil::loadReflection($this, $interfaceName);
 
         return $this;
     }
@@ -371,18 +383,20 @@ class Skeleton
     /**
      * Add Trait.
      *
-     * @param  string       $traitName
-     * @param  string|null  $alias
+     * @param  string      $traitName
+     * @param  string|null $alias
+     *
+     * @return $this
      */
     public function addTrait($traitName, $alias = null)
     {
-//        if ( array_search($traitName, get_declared_traits()) === false ) {
-//            //dump(get_declared_traits());
-//            throw new InvalidArgumentException("$traitName is not a valid trait");
-//        }
+        if (!trait_exists($traitName)) {
+            throw new InvalidArgumentException("$traitName is not a valid trait");
+        }
 
-        //$this->traits[$traitName] = $alias?: basename($traitName);
         $this->appendClass($this->traits, $traitName, $alias, 'trait');
+
+        SkeletonUtil::loadReflection($this, $traitName);
 
         return $this;
     }
@@ -390,12 +404,14 @@ class Skeleton
     /**
      * Add Class to class collection.
      *
-     * @param  array        $class
-     * @param  string       $name
-     * @param  string|null  $alias
-     * @param  string       $type
+     * @param  array       $array
+     * @param  string      $name
+     * @param  string|null $alias
+     * @param  string      $type
+     *
+     * @return $this
      */
-    protected function appendClass(&$array, $name, $alias = null, $type = 'class')
+    protected function appendClass(array &$array, $name, $alias = null, $type = 'class')
     {
         if (strstr($name, ' as ')) {
             $name = explode(' as ', $name);
@@ -418,9 +434,15 @@ class Skeleton
      * Add phpDoc Tag.
      *
      * @param  \Triun\ModelBase\Definitions\PhpDocTag $value
+     *
+     * @return $this
      */
     public function addPhpDocTag(PhpDocTag $value)
     {
+        if (isset($this->properties[$value->getName()])) {
+            throw new InvalidArgumentException("The property {$value->getName()} already exists");
+        }
+
         $this->phpDocTags[$value->getName()] = $value;
 
         return $this;
@@ -430,9 +452,15 @@ class Skeleton
      * Set Constant.
      *
      * @param  \Triun\ModelBase\Definitions\Constant $value
+     *
+     * @return $this
      */
     public function addConstant(Constant $value)
     {
+        if (isset($this->constants[$value->name])) {
+            throw new InvalidArgumentException("The constant {$value->name} already exists");
+        }
+
         $this->constants[$value->name] = $value;
 
         return $this;
@@ -442,9 +470,15 @@ class Skeleton
      * Set Property.
      *
      * @param  \Triun\ModelBase\Definitions\Property $value
+     *
+     * @return $this
      */
     public function addProperty(Property $value)
     {
+        if (isset($this->properties[$value->name])) {
+            throw new InvalidArgumentException("The property {$value->name} already exists");
+        }
+
         $this->properties[$value->name] = $value;
 
         return $this;
@@ -454,9 +488,38 @@ class Skeleton
      * Set Method.
      *
      * @param  \Triun\ModelBase\Definitions\Method $value
+     *
+     * @return $this
      */
     public function addMethod(Method $value)
     {
+        if (isset($this->methods[$value->name])) {
+            $item = $this->methods[$value->name];
+
+            if ($item->isDirty()) {
+                //dump($item->value);
+                //dump($value->value);
+                throw new InvalidArgumentException(
+                    "The method {$value->name} already exists. Please, update it instead of try to create it again."
+                );
+            }
+
+            if (($value->modifiers_id !== null && $item->modifiers_id != $value->modifiers_id)
+                || ($item->modifiers === null && $item->modifiers != $value->modifiers)) {
+                // TODO: review this error message
+                throw new InvalidArgumentException(
+                    "{$this->className} and {$value->file} define the same method ({$value->name})"
+                    . " in the composition of {$this->className}."
+                    . " However, the definition differs and is considered incompatible."
+                );
+
+                // App\ModelsBases\Master\AddressBase and HW\Validation\ModelValidable define
+                // the same property ($rules) in the composition of App\ModelsBases\Master\AddressBase.
+                // However, the definition differs and isconsidered incompatible.
+                // Class was composed in /var/www/app/app/ModelsBases/Master/AddressBase.php on line 308
+            }
+        }
+
         $this->methods[$value->name] = $value;
 
         return $this;
@@ -465,7 +528,9 @@ class Skeleton
     /**
      * Unset Constant.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
+     * @return $this
      */
     public function removeConstant($key)
     {
@@ -477,11 +542,13 @@ class Skeleton
     /**
      * Unset Property.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
+     * @return $this
      */
     public function removeProperty($key)
     {
-        unset($this->properties[$key]);
+        unset($this->methods[$key]);
 
         return $this;
     }
@@ -489,7 +556,9 @@ class Skeleton
     /**
      * Unset Method.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
+     * @return $this
      */
     public function removeMethod($key)
     {

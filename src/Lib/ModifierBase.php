@@ -3,6 +3,7 @@
 namespace Triun\ModelBase\Lib;
 
 use File;
+use ReflectionProperty;
 use Triun\ModelBase\Definitions\Table;
 use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Definitions\Skeleton;
@@ -120,15 +121,22 @@ abstract class ModifierBase
     /**
      * Set property value.
      *
-     * @param  Skeleton $skeleton
-     * @param  string $name
-     * @param  mixed  $value
+     * @param  Skeleton   $skeleton
+     * @param  string     $name
+     * @param  mixed      $value
+     * @param int         $modifiers_id
+     * @param string|null $docComment
      *
      * @return $this
      */
-    protected function setProperty($skeleton, $name, $value)
-    {
-        $this->util->setProperty($skeleton, $name, $value);
+    protected function setProperty(
+        $skeleton,
+        $name,
+        $value,
+        $modifiers_id = ReflectionProperty::IS_PUBLIC,
+        $docComment = null
+    ) {
+        $this->util->setProperty($skeleton, $name, $value, $modifiers_id, $docComment);
 
         return $this;
     }
