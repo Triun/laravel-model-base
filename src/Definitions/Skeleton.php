@@ -501,7 +501,8 @@ class Skeleton
                 //dump($item->value);
                 //dump($value->value);
                 // TODO: Another way to catch this issue.
-                echo "The method {$value->name} already exists. Please, update it instead of try to create it again.".PHP_EOL;
+                echo "The method {$value->name} already exists."
+                    . " Please, update it instead of try to create it again.".PHP_EOL;
                 /*throw new InvalidArgumentException(
                     "The method {$value->name} already exists. Please, update it instead of try to create it again."
                 );*/
