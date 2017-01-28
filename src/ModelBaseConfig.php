@@ -12,7 +12,6 @@ use Triun\ModelBase\Modifiers\TimestampsModifier;
 use Triun\ModelBase\Modifiers\DatesModifier;
 use Triun\ModelBase\Modifiers\SoftDeletesModifier;
 use Triun\ModelBase\Modifiers\AttributesModifier;
-use Triun\ModelBase\Modifiers\RulesModifier;
 use Triun\ModelBase\Modifiers\CamelToSnakeModifier;
 use Triun\ModelBase\Modifiers\PhpDocModifier;
 
@@ -49,9 +48,6 @@ class ModelBaseConfig
 
         // Attributes
         AttributesModifier::class,
-
-        // Validation Rules
-        RulesModifier::class,
 
         // CamelToSnake Attributes
         CamelToSnakeModifier::class,
