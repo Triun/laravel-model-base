@@ -2,6 +2,7 @@
 
 namespace Triun\ModelBase\Modifiers;
 
+use ReflectionProperty;
 use Doctrine\DBAL\Types\Type;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Utils\SchemaUtil;
@@ -21,6 +22,13 @@ class RulesModifier extends ModifierBase
      */
     public function apply(Skeleton $skeleton)
     {
+        // Load interface
+        // TODO
+
+        // Load trait
+        // TODO
+
+        // Generate rules
         $schema_util = new SchemaUtil($this->connection(), $this->config());
 
         $this->platform_columns = $schema_util->getPlatformColumns($this->table()->getName());
@@ -33,9 +41,13 @@ class RulesModifier extends ModifierBase
             }
         }
 
-        // TODO: add validable trait?
+        // Assing rules
         if (!$skeleton->hasProperty('rules')) {
-            $this->setProperty($skeleton, 'rules', []);
+            $this->setProperty($skeleton, 'rules', [], ReflectionProperty::IS_PROTECTED, '/**
+     * The rules to be applied in validate().
+     *
+     * @var array
+     */');
         }
 
         $skeleton->property('rules')->setValue($rules);
