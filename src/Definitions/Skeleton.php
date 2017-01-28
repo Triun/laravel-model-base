@@ -375,7 +375,8 @@ class Skeleton
 
         $this->appendClass($this->interfaces, $interfaceName, $alias, 'interface');
 
-        SkeletonUtil::loadReflection($this, $interfaceName);
+        // TODO: Get info but don't load the components or it would give an error when trying to set the value.
+        //SkeletonUtil::loadReflection($this, $interfaceName);
 
         return $this;
     }
