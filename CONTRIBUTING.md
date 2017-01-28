@@ -35,7 +35,7 @@ You can write your own tests and add them to the `test` directory.
 To run the test command:
 
 ```bash
-./vendor/bin/phpunit
+./vendor/bin/phpunit --configuration phpunit_sqlite.xml --coverage-text
 ```
 
 Which should give you no failures or errors.
