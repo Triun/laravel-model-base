@@ -86,7 +86,7 @@ class BuilderUtil extends BuilderUtilBase
     protected function getUses(Skeleton $skeleton)
     {
         return array_map(function ($value) {
-            return 'use '.ltrim('\\', $value).';';
+            return 'use '.ltrim($value, '\\').';';
         }, $skeleton->uses());
     }
 
