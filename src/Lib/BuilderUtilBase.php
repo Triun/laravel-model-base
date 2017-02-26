@@ -241,14 +241,19 @@ abstract class BuilderUtilBase extends UtilBase
         ksort($tags);
 
         // Order by a defined tag order
-        uksort($tags, function ($a, $b) {
-            // if is method, move to the bottom
-            if ($a === 'method') {
-                return -1;
-            }
+        $push = ['method', 'property-write', 'property-read', 'property'];
+        uksort($tags, function ($a, $b) use ($push) {
+            $aIndex = array_search($a, $push);
 
-            // if is property, move to the bottom
-            if ($a === 'property') {
+            // if is in push, move to the bottom
+            if ($aIndex !== false) {
+                $bIndex = array_search($b, $push);
+
+                if ($bIndex !== false && $aIndex < $bIndex) {
+                    // Don't do anything
+                    return 0;
+                }
+
                 return -1;
             }
 
