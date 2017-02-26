@@ -257,6 +257,41 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Auth support
+    |--------------------------------------------------------------------------
+    |
+    | Implements laravel's authentication for a model.
+    |
+    | Uses the same mechanism as the user models comes with by default.
+    |
+    | More info:
+    | https://laravel.com/docs/5.4/authentication
+    | https://github.com/laravel/laravel/blob/master/app/User.php
+    |
+    | - auth: list of tables that should implement the authenticable configuration.
+    |   - auth.Authenticatable: Optional. Whether implement Authenticatable trait and Contract (default yes).
+    |   - auth.CanResetPassword: Optional. Whether implement CanResetPassword trait and Contract (default yes).
+    |   - auth.fillable: Optional. Fillable fields (default ['email', 'password']).
+    |
+    | Example:
+    | 'auth' => [
+    |     'users' => [
+    |         'Authenticatable' => true,
+    |         'CanResetPassword' => false,
+    |         'fillable' => ['email', 'password'],
+    |     ],
+    | ],
+    |
+    */
+
+    'auth' => [
+        'users' => [
+            'CanResetPassword' => false,
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Bulk
     |--------------------------------------------------------------------------
     |

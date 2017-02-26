@@ -57,7 +57,7 @@ abstract class ModifierBase
      * @param string $key
      * @param mixed  $default
      *
-     * @return \Triun\ModelBase\ModelBaseConfig
+     * @return \Triun\ModelBase\ModelBaseConfig|mixed
      */
     protected function config($key = null, $default = null)
     {

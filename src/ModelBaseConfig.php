@@ -4,8 +4,9 @@
 namespace Triun\ModelBase;
 
 use Illuminate\Support\Arr;
-use \Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Config;
 
+use Triun\ModelBase\Modifiers\AuthModifier;
 use Triun\ModelBase\Modifiers\ConnectionModifier;
 use Triun\ModelBase\Modifiers\TableModifier;
 use Triun\ModelBase\Modifiers\TimestampsModifier;
@@ -54,6 +55,9 @@ class ModelBaseConfig
 
         // PhpDoc tags
         PhpDocModifier::class,
+
+        // PhpDoc tags
+        AuthModifier::class,
 
         // Relations
         // Input transformations

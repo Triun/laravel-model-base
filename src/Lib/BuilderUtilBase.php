@@ -109,7 +109,7 @@ abstract class BuilderUtilBase extends UtilBase
             // Override permissions
             if (!$this->safe($path, $override)) {
                 if ($compare & Diff::INSERTED) {
-                    $this->error("{$name} cancelled. There are pending updates to be implemented...");
+                    $this->warning("{$name} cancelled. There are pending updates to be implemented...");
                 } else {
                     $this->info("{$name} difiers, but not update required");
                 }

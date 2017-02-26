@@ -39,7 +39,7 @@ abstract class UtilBase
      * @param string $key
      * @param mixed  $default
      *
-     * @return ModelBaseConfig
+     * @return ModelBaseConfig|mixed
      */
     public function config($key = null, $default = null)
     {
