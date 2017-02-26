@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Type;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Definitions\Property;
+use Triun\ModelBase\Definitions\PhpDocTag;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -25,6 +26,19 @@ class SoftDeletesModifier extends ModifierBase
      * Deleted default column name value.
      */
     const DEFAULT_VALUE = 'deleted_at';
+
+    /**
+     * Scopes added by soft deletes that should be also added to PhpDoc.
+     *
+     * @var array
+     */
+    protected $scopes = [
+        'forceDelete' => 'Add the force delete extension to the builder.',
+        'restore' => 'Add the restore extension to the builder.',
+        'withTrashed' => 'Add the with-trashed extension to the builder.',
+        'withoutTrashed' => 'Add the without-trashed extension to the builder.',
+        'onlyTrashed' => 'Add the only-trashed extension to the builder.',
+    ];
 
     /**
      * Apply the modifications of the class.
@@ -48,6 +62,7 @@ class SoftDeletesModifier extends ModifierBase
             $this->setConstant($skeleton, static::NAME, $columnName);
             // Add to dates array, if not exists.
             $this->addToDates($columnName, $skeleton->property('dates'));
+            $this->addPHPDoc($skeleton);
         }
     }
 
@@ -141,6 +156,21 @@ class SoftDeletesModifier extends ModifierBase
         // Add to dates array
         if (array_search($name, $dates->value) === false) {
             $dates->value[] = $name;
+        }
+    }
+
+    /**
+     * @param Skeleton $skeleton
+     */
+    protected function addPHPDoc(Skeleton $skeleton)
+    {
+        foreach ($this->scopes as $method => $comment) {
+            $skeleton->addPhpDocTag(new PhpDocTag(
+                "{$method}()",
+                'method',
+                'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass',
+                $comment
+            ));
         }
     }
 }
