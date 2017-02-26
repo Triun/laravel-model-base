@@ -8,6 +8,10 @@ use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Definitions\PhpDocTag;
 
+/**
+ * Class PhpDocModifier
+ * @package Triun\ModelBase\Modifiers
+ */
 class PhpDocModifier extends ModifierBase
 {
     /**
@@ -17,6 +21,8 @@ class PhpDocModifier extends ModifierBase
      */
     public function apply(Skeleton $skeleton)
     {
+        $BuilderReflectionClass = new ReflectionClass(Builder::class);
+
         foreach ($this->table()->getColumns() as $column) {
             $skeleton->addPhpDocTag(new PhpDocTag(
                 '$'.$column->snakeName,
@@ -27,21 +33,16 @@ class PhpDocModifier extends ModifierBase
 
             // Avoid existent methods as whereDate or WhereColumn
             $method = "where{$column->studName}";
-            if (!$skeleton->hasMethod($method) && !$this->hasMethod($method, Builder::class)) {
-                $skeleton->addPhpDocTag(new PhpDocTag(
-                    "{$method}(\$value)",
-                    'method',
-                    'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass',
-                    $column->getComment()
-                ));
+            if ($skeleton->hasMethod($method) || $BuilderReflectionClass->hasMethod($method)) {
+                continue;
             }
+
+            $skeleton->addPhpDocTag(new PhpDocTag(
+                "{$method}(\$value)",
+                'method',
+                'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass',
+                $column->getComment()
+            ));
         }
-    }
-
-    public function hasMethod($method, $className)
-    {
-        $reflectionClass = new ReflectionClass($className);
-
-        return $reflectionClass->hasMethod($method);
     }
 }
