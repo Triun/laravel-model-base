@@ -237,6 +237,25 @@ abstract class BuilderUtilBase extends UtilBase
             $tags[$item->tag]->items[$name] = $item;
         }
 
+        // Order by key
+        ksort($tags);
+
+        // Order by a defined tag order
+        uksort($tags, function ($a, $b) {
+            // if is method, move to the bottom
+            if ($a === 'method') {
+                return -1;
+            }
+
+            // if is property, move to the bottom
+            if ($a === 'property') {
+                return -1;
+            }
+
+            // Don't do anything
+            return 0;
+        });
+
         $result = [];
         foreach ($tags as $tag => $info) {
             foreach ($info->items as $name => $item) {

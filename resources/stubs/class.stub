@@ -6,9 +6,10 @@ namespace DummyNamespace;
 
 /**
  * Class DummyClass
- *
  * @package DummyNamespace
+ *
 {{phpdoc}}
+ *
  * @mixin \Eloquent
  */
 abstract class DummyClass extends DummyExtendsClass{{implements}}
