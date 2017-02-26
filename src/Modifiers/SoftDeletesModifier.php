@@ -33,7 +33,8 @@ class SoftDeletesModifier extends ModifierBase
      * @var array
      */
     protected $scopes = [
-        'forceDelete' => 'Add the force delete extension to the builder.',
+        // Cannot make non static method Model->forceDelete() static
+        // 'forceDelete' => 'Add the force delete extension to the builder.',
         'restore' => 'Add the restore extension to the builder.',
         'withTrashed' => 'Add the with-trashed extension to the builder.',
         'withoutTrashed' => 'Add the without-trashed extension to the builder.',
