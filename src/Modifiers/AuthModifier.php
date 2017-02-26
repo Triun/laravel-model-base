@@ -44,7 +44,6 @@ class AuthModifier extends ModifierBase
         $params = $this->params();
 
         if ($params !== null) {
-
             if ($params['Authenticatable']) {
                 $skeleton->addTrait(Authenticatable::class);
                 $skeleton->addInterface(AuthenticatableContract::class, 'AuthenticatableContract');
