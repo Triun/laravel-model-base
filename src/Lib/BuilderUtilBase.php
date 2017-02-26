@@ -249,12 +249,7 @@ abstract class BuilderUtilBase extends UtilBase
             if ($aIndex !== false) {
                 $bIndex = array_search($b, $push);
 
-                if ($bIndex !== false && $aIndex < $bIndex) {
-                    // Don't do anything
-                    return 0;
-                }
-
-                return -1;
+                return $bIndex === false || $aIndex < $bIndex ? +1 : -1;
             }
 
             // Don't do anything
