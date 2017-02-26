@@ -2,15 +2,15 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Doctrine\DBAL\Types\Type;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Definitions\Property;
 
-
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
@@ -30,6 +30,7 @@ class AuthModifier extends ModifierBase
     protected $default = [
         'Authenticatable' => true,
         'CanResetPassword' => true,
+        'Authorizable' => false,
         'fillable' => ['email', 'password'],
     ];
 
@@ -52,6 +53,11 @@ class AuthModifier extends ModifierBase
             if ($params['CanResetPassword']) {
                 $skeleton->addTrait(CanResetPassword::class);
                 $skeleton->addInterface(CanResetPasswordContract::class, 'CanResetPasswordContract');
+            }
+
+            if ($params['Authorizable']) {
+                $skeleton->addTrait(Authorizable::class);
+                $skeleton->addInterface(AuthorizableContract::class, 'AuthorizableContract');
             }
 
             // Add to $fillable array

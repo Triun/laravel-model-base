@@ -267,27 +267,47 @@ return [
     | More info:
     | https://laravel.com/docs/5.4/authentication
     | https://github.com/laravel/laravel/blob/master/app/User.php
+    | https://github.com/laravel/framework/blob/5.2/src/Illuminate/Foundation/Auth/User.php
     |
     | - auth: list of tables that should implement the authenticable configuration.
-    |   - auth.Authenticatable: Optional. Whether implement Authenticatable trait and Contract (default yes).
-    |   - auth.CanResetPassword: Optional. Whether implement CanResetPassword trait and Contract (default yes).
+    |   - auth.Authenticatable: Optional. Whether implement Authenticatable trait and Contract (default true).
+    |   - auth.CanResetPassword: Optional. Whether implement CanResetPassword trait and Contract (default true).
+    |   - auth.Authorizable: Optional. Whether implement Authorizable trait and Contract (default false).
     |   - auth.fillable: Optional. Fillable fields (default ['email', 'password']).
     |
-    | Example:
+    | Example 1:
+    | 'auth' => [
+    |     'users',
+    |     'customers',
+    | ],
+    |
+    | Example 2:
+    | 'auth' => [
+    |     'users' => [
+    |         'CanResetPassword' => false,
+    |         'Authorizable' => true,
+    |     ],
+    | ],
+    |
+    | Example 3:
     | 'auth' => [
     |     'users' => [
     |         'Authenticatable' => true,
     |         'CanResetPassword' => false,
+    |         'Authorizable' => false,
     |         'fillable' => ['email', 'password'],
     |     ],
     | ],
     |
+    | Note:
+    | This tool is not going to make this configuration for you, and doesn't check if the configuration is correct
+    | either. You can update the auth models or tables used by laravel's in config/auth.php.
+    | More info about auth customization: https://laravel.com/docs/5.2/authentication#adding-custom-guards
+    |
     */
 
     'auth' => [
-        'users' => [
-            'CanResetPassword' => false,
-        ],
+        'users',
     ],
 
     /*
