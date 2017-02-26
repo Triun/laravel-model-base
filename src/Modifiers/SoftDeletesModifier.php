@@ -34,11 +34,11 @@ class SoftDeletesModifier extends ModifierBase
      */
     protected $scopes = [
         // Cannot make non static method Model->forceDelete() static
-        // 'forceDelete' => 'Add the force delete extension to the builder.',
-        'restore' => 'Add the restore extension to the builder.',
-        'withTrashed' => 'Add the with-trashed extension to the builder.',
-        'withoutTrashed' => 'Add the without-trashed extension to the builder.',
-        'onlyTrashed' => 'Add the only-trashed extension to the builder.',
+        // 'forceDelete',
+        'restore',
+        'withTrashed',
+        'withoutTrashed',
+        'onlyTrashed',
     ];
 
     /**
@@ -165,12 +165,11 @@ class SoftDeletesModifier extends ModifierBase
      */
     protected function addPHPDoc(Skeleton $skeleton)
     {
-        foreach ($this->scopes as $method => $comment) {
+        foreach ($this->scopes as $method) {
             $skeleton->addPhpDocTag(new PhpDocTag(
                 "{$method}()",
                 'method',
-                'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass',
-                $comment
+                'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass'
             ));
         }
     }
