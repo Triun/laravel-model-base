@@ -86,7 +86,7 @@ class Skeleton
      *
      * @return string
      */
-    protected function getNamespace()
+    public function getNamespace()
     {
         return trim(implode('\\', array_slice(explode('\\', $this->className), 0, -1)), '\\');
     }
