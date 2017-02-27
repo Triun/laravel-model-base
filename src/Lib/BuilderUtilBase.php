@@ -68,17 +68,6 @@ abstract class BuilderUtilBase extends UtilBase
     }
 
     /**
-     * Get the full namespace name for a given class.
-     *
-     * @param  string  $name
-     * @return string
-     */
-    protected function getNamespace($name)
-    {
-        return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
-    }
-
-    /**
      * @param string $path
      * @param string $name
      * @param string $content

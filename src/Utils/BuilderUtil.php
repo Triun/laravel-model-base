@@ -47,7 +47,7 @@ class BuilderUtil extends BuilderUtilBase
 
             '{{phpdoc}}'            => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
 
-            'DummyNamespace'        => $this->getNamespace($skeleton->className),
+            'DummyNamespace'        => $skeleton->getNamespace(),
             'DummyRootNamespace'    => App::getNamespace(),
             'DummyClass'            => class_basename($skeleton->className),
 
@@ -176,21 +176,6 @@ class BuilderUtil extends BuilderUtilBase
     protected function formatMethod(Method $method)
     {
         return $method->value;
-    }
-
-    /**
-     * Parse the name and format according to the root namespace.
-     *
-     * @param  string  $name
-     * @return string
-     */
-    public function parseName($name)
-    {
-        if (Str::contains($name, '/')) {
-            $name = str_replace('/', '\\', $name);
-        }
-
-        return trim($name, '\\');
     }
 }
 
