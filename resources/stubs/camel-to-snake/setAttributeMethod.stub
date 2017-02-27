@@ -2,6 +2,7 @@
      * DummyDescription
      *
      * @param dummyType $value
+     * @see \DummyNamespace\DummyClass::$dummy_snake_name
      */
     public function setDummyNameAttribute($value)
     {

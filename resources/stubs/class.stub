@@ -11,6 +11,8 @@ namespace DummyNamespace;
 {{phpdoc}}
  *
  * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
  */
 abstract class DummyClass extends DummyExtendsClass{{implements}}
 {

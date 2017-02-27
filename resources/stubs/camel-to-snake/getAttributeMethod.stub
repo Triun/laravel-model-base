@@ -2,6 +2,7 @@
      * DummyDescription
      *
      * @return dummyType
+     * @see \DummyNamespace\DummyClass::$dummy_snake_name
      */
     public function getDummyNameAttribute()
     {
