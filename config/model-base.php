@@ -31,7 +31,7 @@ return [
     */
 
     'namespace' => 'App\\ModelsBases',
-    'extends' => 'Eloquent', // \Illuminate\Database\Eloquent\Model::class,
+    'extends' => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
     'renames' => [],
     'prefix' => '',
     'suffix' => 'Base',
