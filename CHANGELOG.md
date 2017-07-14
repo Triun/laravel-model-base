@@ -6,8 +6,8 @@ This project follows [Semantic Versioning](CONTRIBUTING.md).
 
 We do not give estimated times for completion on `Accepted` Proposals.
 
-- [Accepted](https://github.com/hydrane/motive-feed/labels/Accepted)
-- [Rejected](https://github.com/hydrane/motive-feed/labels/Rejected)
+- [Accepted](https://github.com/Triun/laravel-model-base/labels/Accepted)
+- [Rejected](https://github.com/Triun/laravel-model-base/labels/Rejected)
 
 ---
 
@@ -27,4 +27,4 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 
 - Initial release.
 
-[Unreleased]: https://github.com/hydrane/motive-feed/compare/5.2...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/5.2...master
