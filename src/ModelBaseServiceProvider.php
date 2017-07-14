@@ -44,7 +44,8 @@ class ModelBaseServiceProvider extends ServiceProvider
         $configPath = __DIR__ . '/../config/model-base.php';
         $this->mergeConfigFrom($configPath, 'model-base');
 
-        $this->app['command.make.model-base'] = $this->app->share(
+        $this->app->singleton(
+            'command.make.model-base',
             function ($app) {
                 return new MakeCommand($app['files']);
             }
@@ -52,7 +53,8 @@ class ModelBaseServiceProvider extends ServiceProvider
 
         $this->commands('command.make.model-base');
 
-        $this->app['command.make.model-base-bulk'] = $this->app->share(
+        $this->app->singleton(
+            'command.make.model-base-bulk',
             function ($app) {
                 return new MakeBulkCommand($app['files']);
             }
