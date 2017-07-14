@@ -3,8 +3,8 @@
 language: php
 
 php:
-  # aliased to the lowest 5.5.x version
-  - '5.5'
+  # aliased to the lowest 5.6.4 accepted version
+  - '5.6.4'
   # aliased to a recent 5.6.x version
   - '5.6'
   # aliased to a recent 7.x version
@@ -36,15 +36,15 @@ matrix:
     - php: hhvm
       env: DB=pgsql  # PDO driver for pgsql is unsupported by HHVM (3rd party install for support)
   include:
-    - php: '5.5'
+    - php: '5.6.4'
       env:
         - DB=mysql
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-#    - php: '5.5'
+#    - php: '5.6.4'
 #      env:
 #        - DB=pgsql
 #        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-    - php: '5.5'
+    - php: '5.6.4'
       env:
         - DB=sqlite
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
