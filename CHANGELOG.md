@@ -1,0 +1,30 @@
+# Change Log
+
+This project follows [Semantic Versioning](CONTRIBUTING.md).
+
+## Proposals
+
+We do not give estimated times for completion on `Accepted` Proposals.
+
+- [Accepted](https://github.com/hydrane/motive-feed/labels/Accepted)
+- [Rejected](https://github.com/hydrane/motive-feed/labels/Rejected)
+
+---
+
+### [Unreleased]
+
+### v5.2 - 2017-07-014
+
+#### Added
+
+- Working collection of utils, services providers and commands to generate models and model bases.
+- Support for Linux, Laravel 5.2, MySQL and PHP versions `>=5.5.9`, `5.6.x`, `7.0.x` and `7.1.x`.
+It can work with `nightly`, but is not compatible with `hhvm`, as it uses different libraries.
+
+### v1.0.0 - 2016-12-08
+
+`INIT`
+
+- Initial release.
+
+[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v5.2...HEAD
