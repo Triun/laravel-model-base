@@ -38,6 +38,12 @@ return [
     | Note: If multi connections are set, you may want to move the auth to the respective connection instead to the
     | default configuration.
     |
+    | To run a specific connection:
+    |
+    | ```
+    | php artisan make:model-base-bulk --connection=my-connection-1
+    | ```
+    |
     */
     'connections' => [],
 
