@@ -27,4 +27,4 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 
 - Initial release.
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v5.2...HEAD
+[Unreleased]: https://github.com/hydrane/motive-feed/compare/5.2...HEAD
