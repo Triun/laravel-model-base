@@ -214,9 +214,19 @@ class SchemaUtil extends ConnectionUtilBase
         foreach ($doctrineColumns as $key => $doctrineColumn) {
             $column = new Column($doctrineColumn->getName(), $doctrineColumn->getType(), $doctrineColumn->toArray());
 
+            // snake_name and StudyName
             $column->snakeName      = $this->snakeCase($column->getName());
             $column->studName       = studly_case($column->getName());
             $column->publicName     = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
+
+            // Alias
+            $column->alias          = $this->aliasName($column->getName());
+            if ($column->alias !== null) {
+                $column->aliasSnakeName = $this->snakeCase($column->alias);
+                $column->aliasStudName  = studly_case($column->alias);
+                $column->publicName     = $this->config('snakeAttributes') ? $column->aliasSnakeName : $column->alias;
+            }
+
             $column->dbType         = $column->getType()->getName();
             $column->castType       = $this->getLaravelCastType($column, $tableName);
             $column->isDate         = $this->isDate($column);
@@ -318,8 +328,9 @@ class SchemaUtil extends ConnectionUtilBase
     {
         static $rename;
 
+        // Load rename rules
         if ($rename === null) {
-            $rename = $this->config('camel_to_snake', []);
+            $rename = $this->config('column.camel_to_snake', []);
         }
 
         if (isset($rename[$name])) {
@@ -327,6 +338,101 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         return snake_case($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string|null
+     */
+    public function aliasName($name)
+    {
+        static $rules;
+
+        // Load column aliases renaming rules
+        if ($rules === null) {
+            $rules = $this->config('column.aliases', []);
+        }
+
+        // Except
+        // If there is a match, it will skip this alias naming.
+        if (isset($rules['except']) && in_array($name, $rules['except'])) {
+            return null;
+        }
+
+        // Force rename
+        // If there is a match, none of the following renames rules will be processed.
+        if (isset($rules['force']) && isset($rules['force'][$name]) && !empty($rules['force'][$name])) {
+            return strtolower($rules['force'][$name]);
+        }
+
+        $alias = $name;
+
+        // Pre rename
+        // Rename it before the other rules are applied.
+        if (isset($rules['pre']) && isset($rules['pre'][$alias]) && !empty($rules['pre'][$alias])) {
+            $alias = $rules['pre'][$alias];
+        }
+
+        // Remove Prefixes
+        // If the column name start with any of the words in the list, it will remove it.
+        if (isset($rules['prefix'])) {
+            $alias = $this->removePrefix($alias, $rules['prefix']);
+        }
+
+        // Remove Suffixes
+        // If the column name ends with any of the words in the list, it will remove it.
+        if (isset($rules['suffix'])) {
+            $alias = $this->removeSuffix($alias, $rules['suffix']);
+        }
+
+        // Post rename
+        // Rename it after the other rules are applied.
+        if (isset($rules['post']) && isset($rules['post'][$alias]) && !empty($rules['post'][$alias])) {
+            $alias = $rules['post'][$alias];
+        }
+
+        if ($this->snakeCase($alias) === $this->snakeCase($name)) {
+            return null;
+        }
+
+        return $alias;
+    }
+
+    /**
+     * Remove a given substring at the beginning of a given string.
+     *
+     * @param  string  $haystack
+     * @param  string|array  $needles
+     * @return bool
+     */
+    protected function removePrefix($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle != '' && $needle !== $haystack && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+                return substr($haystack, strlen($needle));
+            }
+        }
+
+        return $haystack;
+    }
+
+    /**
+     * Remove a given substring at the end of a given string.
+     *
+     * @param  string  $haystack
+     * @param  string|array  $needles
+     * @return bool
+     */
+    protected function removeSuffix($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle !== $haystack && substr($haystack, -strlen($needle)) === (string) $needle) {
+                return substr($haystack, 0, -strlen($needle));
+            }
+        }
+
+        return $haystack;
     }
 
     /**

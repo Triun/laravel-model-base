@@ -25,12 +25,14 @@ class PhpDocModifier extends ModifierBase
 
         foreach ($this->table()->getColumns() as $column) {
             $skeleton->addPhpDocTag(new PhpDocTag(
-                '$'.$column->snakeName,
+                '$'.$column->publicName,
                 'property',
                 $column->phpDocType,
                 str_pad($column->dbType, 11).' '.$column->getComment()
             ));
 
+            // TODO: See what to do with aliases in where. It won't probably be able to do the where correctly, so we
+            // probably will need to create the function ourselves.
             // Avoid existent methods as whereDate or WhereColumn
             $method = "where{$column->studName}";
             if ($skeleton->hasMethod($method) || $BuilderReflectionClass->hasMethod($method)) {

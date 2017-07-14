@@ -190,22 +190,73 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Camel case to snake case compatibility
+    | Column
     |--------------------------------------------------------------------------
     |
-    | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
-    | $model->column_name could access columnName in the database.
-    |
-    | In order to do manual renaming, you can fill camel_to_snake.
-    |
-    | This could be useful in order to correct snake_names conversion singularities, for example:
-    | IP should be ip, and not i_p.
-    |
-    | Notice that the values of the array will be set as lower case.
+    | Processes applied to the columns.
     |
     */
 
-    'camel_to_snake' => [],
+    'column' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Column Aliases
+        |--------------------------------------------------------------------------
+        |
+        | You may want to add some aliases, maybe because the table name has a standard naming like prefixes.
+        |
+        | With the aliases you can hide the original names (which will remain active by magic methods), and create
+        | aliases instead.
+        |
+        | The execution of this rules are:
+        |
+        | If `except` has a match, it will skip it.
+        |
+        | If `force` has a match, it will set this alias and skip the other rules.
+        |
+        | The rest of the rules will be processed in the following order:
+        |
+        | 1. pre: Rename it before the other rules are applied.
+        | 2. prefix: If the column name start with any of the words in the list, it will remove it.
+        | 3. suffix: If the column name ends with any of the words in the list, it will remove it.
+        | 4. post: Rename it after the other rules are applied.
+        |
+        */
+
+        'aliases' => [
+            // If it match, it will skip it.
+            'except' => [],
+            // If there is a match, none of the following renames rules will be processed.
+            'force' => [],
+            // Rename it before the other rules are applied.
+            'pre' => [],
+            // If the column name start with any of the words in the list, it will remove it.
+            'prefix' => [],
+            // If the column name ends with any of the words in the list, it will remove it.
+            'suffix' => [],
+            // Rename it after the other rules are applied.
+            'post' => [],
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Camel case to snake case compatibility
+        |--------------------------------------------------------------------------
+        |
+        | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
+        | $model->column_name could access columnName in the database.
+        |
+        | In order to do manual renaming, you can fill camel_to_snake.
+        |
+        | This could be useful in order to correct snake_names conversion singularities, for example:
+        | IP should be ip, and not i_p.
+        |
+        | Notice that the values of the array will be set as lower case.
+        |
+        */
+        'camel_to_snake' => [],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -225,6 +276,13 @@ return [
     |          'cast_type'  => 'array',
     |      ],
     |  ],
+    |
+    | You can use multiple values with '|'. Example: 'field_1|field_2'
+    |
+    | You can also use the shell wildcard pattern.
+    | Example: "*gr[ae]y" would match grey, gray, or anything that finish in any of those.
+    | @see \fnmatch
+    | @link http://php.net/manual/en/function.fnmatch.php
     |
     */
 
