@@ -4,6 +4,42 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Connections
+    |--------------------------------------------------------------------------
+    |
+    | Connection specific configurations.
+    |
+    | The configurations set for a specific connection would would be merged with the outside connections
+    | configurations.
+    |
+    | Example:
+    |
+    |   'connections' => [
+    |       'my-connection-1' => [
+    |           'namespace' => 'App\\ModelsBases\\MyConnection1',
+    |           'extends' => \My\Laravel\ModelBase::class,
+    |           'renames' => [
+    |               'deliveriesAddresses'   => 'delivery_address',
+    |               'salesSync'             => 'sale_sync',
+    |           ],
+    |           'prefix' => '',
+    |           'suffix' => 'Base',
+    |           'override' => true,
+    |
+    |           'model' => [
+    |               'namespace' => 'App\\Models\\MyConnection1',
+    |               'prefix' => '',
+    |               'suffix' => '',
+    |               'save' => true,
+    |           ],
+    |       ],
+    |   ],
+    |
+    */
+    'connections' => [],
+
+    /*
+    |--------------------------------------------------------------------------
     | Modifiers
     |--------------------------------------------------------------------------
     |
@@ -304,10 +340,14 @@ return [
     | either. You can update the auth models or tables used by laravel's in config/auth.php.
     | More info about auth customization: https://laravel.com/docs/5.2/authentication#adding-custom-guards
     |
+    | Note:
+    | If you use more than one connection, we recommend to leave this array empty, and add it to the respective
+    | connection.
+    |
     */
 
     'auth' => [
-        'users',
+        'users', // For multi connections: Move this array to the specific connection and left here an empty array.
     ],
 
     /*
