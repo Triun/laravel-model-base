@@ -1,8 +1,9 @@
-# Change Log
+Change Log
+==========
 
 This project follows [Semantic Versioning](CONTRIBUTING.md).
 
-## Proposals
+# Proposals
 
 We do not give estimated times for completion on `Accepted` Proposals.
 
@@ -11,17 +12,27 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-### [Unreleased]
+## [Unreleased]
 
-### v5.2 - 2017-07-014
+### Added
 
-#### Added
+- Support for Laravel 5.4
+- Support for Lumen 5.4 (with some tunning explained in [README.md](README.md))
+- New configurable renaming tools: `pre`, `prefix`, `suffix` and `post`.
+
+## Changed
+
+- In `config/model-base.php`, the key `camel_to_snake` now is `column.rename.force`.
+
+## v5.2 - 2017-07-014
+
+### Added
 
 - Working collection of utils, services providers and commands to generate models and model bases.
 - Support for Linux, Laravel 5.2, MySQL and PHP versions `>=5.5.9`, `5.6.x`, `7.0.x` and `7.1.x`.
 It can work with `nightly`, but is not compatible with `hhvm`, as it uses different libraries.
 
-### v1.0.0 - 2016-12-08
+## v1.0.0 - 2016-12-08
 
 `INIT`
 

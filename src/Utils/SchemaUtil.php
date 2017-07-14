@@ -314,12 +314,22 @@ class SchemaUtil extends ConnectionUtilBase
      *
      * @return string
      */
+    public function renameColumn($name)
+    {
+        return $this->snakeCase($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
     public function snakeCase($name)
     {
-        static $rename;
+        static $rename, $pattern;
 
         if ($rename === null) {
-            $rename = $this->config('camel_to_snake', []);
+            $rename = $this->config('column.rename.force', []);
         }
 
         if (isset($rename[$name])) {

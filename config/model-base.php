@@ -145,20 +145,59 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Camel case to snake case compatibility
+    | Column
     |--------------------------------------------------------------------------
     |
-    | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
-    | $model->column_name could access columnName in the database.
-    |
-    | In order to do manual renaming, you can fill camel_to_snake.
-    |
-    | This could be useful in order to correct snake_names conversion singularities, for example:
-    | IP should be ip, and not i_p.
-    |
-    | Notice that the values of the array will be set as lower case.
+    | Processes applied to the columns.
     |
     */
+
+    'column' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Column Rename
+        |--------------------------------------------------------------------------
+        |
+        | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
+        | $model->column_name could access columnName in the database.
+        |
+        | In order to do manual renaming, you can fill `column.rename.force`.
+        |
+        | This could be useful in order to correct snake_names conversion singularities, for example:
+        | IP should be ip, and not i_p.
+        |
+        | Notice that the values of the array will be set as lower case.
+        |
+        | By default, if  `snakeAttributes` is set to `true`, all the fields will be renamed as snake_case.
+        |
+        | However, we may find some situations where we need some renaming rules.
+        |
+        | The execution of this rules are:
+        |
+        | If `force` has a match, the following rules will not be processed, but if not, the other rules will be
+        | processed in the following order:
+        |
+        | 1. pre: Rename it before the other rules are applied.
+        | 2. prefix: If the column name start with any of the words in the list, it will remove it.
+        | 3. suffix: If the column name ends with any of the words in the list, it will remove it.
+        | 4. post: Rename it after the other rules are applied.
+        |
+        */
+
+        'rename' => [
+            // If there is a match, none of the following renames rules will be processed.
+            'force' => [],
+            // Rename it before the other rules are applied.
+            'pre' => [],
+            // If the column name start with any of the words in the list, it will remove it.
+            'prefix' => [],
+            // If the column name ends with any of the words in the list, it will remove it.
+            'suffix' => [],
+            // Rename it after the other rules are applied.
+            'post' => [],
+        ],
+    ],
 
     'camel_to_snake' => [],
 
@@ -180,6 +219,13 @@ return [
     |          'cast_type'  => 'array',
     |      ],
     |  ],
+    |
+    | You can use multiple values with '|'. Example: 'field_1|field_2'
+    |
+    | You can also use the shell wildcard pattern.
+    | Example: "*gr[ae]y" would match grey, gray, or anything that finish in any of those.
+    | @see \fnmatch
+    | @link http://php.net/manual/en/function.fnmatch.php
     |
     */
 
