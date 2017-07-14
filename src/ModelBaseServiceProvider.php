@@ -29,7 +29,10 @@ class ModelBaseServiceProvider extends ServiceProvider
             dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
         );
 
-        $this->publishes([$configPath => app()->make('path.config') . DIRECTORY_SEPARATOR . 'model-base.php'], 'config');
+        $this->publishes(
+            [$configPath => app()->make('path.config') . DIRECTORY_SEPARATOR . 'model-base.php'],
+            'config'
+        );
 
         $this->mergeConfigFrom($configPath, 'model-base');
     }
