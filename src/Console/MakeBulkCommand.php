@@ -188,6 +188,10 @@ class MakeBulkCommand extends GeneratorCommand
         /** @var \Illuminate\Filesystem\Filesystem $app */
         $file = \Illuminate\Container\Container::getInstance()->make('files');
 
+        if (!is_dir($path)) {
+            return;
+        }
+
         $extra = [];
         foreach ($file->allFiles($path) as $file) {
             if (!in_array($file, $files)) {
