@@ -71,6 +71,7 @@ return [
     | - renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
+    | - mixin: An array of mixin classes. It is used to help IDEs to auto-complete.
     | - override: In case that the file already exists, whether if we should override it, not, or ask for confirmation.
     |
     */
@@ -80,6 +81,7 @@ return [
     'renames' => [],
     'prefix' => '',
     'suffix' => 'Base',
+    'mixin' => ['\Eloquent'],
     'override' => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*

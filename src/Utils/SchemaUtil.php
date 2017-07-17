@@ -225,6 +225,7 @@ class SchemaUtil extends ConnectionUtilBase
                 $column->aliasSnakeName = $this->snakeCase($column->alias);
                 $column->aliasStudName  = studly_case($column->alias);
                 $column->publicName     = $this->config('snakeAttributes') ? $column->aliasSnakeName : $column->alias;
+                $column->setComment(trim($column->getComment() . ' ' . 'Alias of ' . $column->getName()));
             }
 
             $column->dbType         = $column->getType()->getName();

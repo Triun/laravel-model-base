@@ -7,11 +7,7 @@ namespace DummyNamespace;
 /**
  * Class DummyClass
  * @package DummyNamespace
- *
 {{phpdoc}}
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
- * @mixin \Illuminate\Database\Query\Builder
  */
 abstract class DummyClass extends DummyExtendsClass{{implements}}
 {

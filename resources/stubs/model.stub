@@ -7,11 +7,7 @@ use DummyExtendsNamespace;
 /**
  * Class DummyClass
  * @package DummyNamespace
- *
 {{phpdoc}}
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
- * @mixin \Illuminate\Database\Query\Builder
  */
 class DummyClass extends DummyExtendsClass
 {
