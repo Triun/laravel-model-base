@@ -1,16 +1,15 @@
 <?php
 
-
 namespace Triun\ModelBase\Console;
 
 use DB;
-use App;
 use Triun\ModelBase\Util;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class MakeBulkCommand
+ *
  * @package Triun\ModelBase\Console
  */
 class MakeBulkCommand extends GeneratorCommand
@@ -48,13 +47,13 @@ class MakeBulkCommand extends GeneratorCommand
      */
     public function getStub($file = 'class.stub')
     {
-        return __DIR__ . '/stubs/'.$file;
+        return __DIR__ . '/stubs/' . $file;
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return bool|null
      */
     public function fire()
     {
@@ -65,7 +64,7 @@ class MakeBulkCommand extends GeneratorCommand
 
         // Connection
         $connection = DB::connection($this->option('connection'));
-        $this->output->title('Bulk Model Base generation for '.$connection->getName());
+        $this->output->title('Bulk Model Base generation for ' . $connection->getName());
 
         // Utils
         $this->util = new Util($connection, $this);
@@ -89,6 +88,8 @@ class MakeBulkCommand extends GeneratorCommand
 
         $this->showExtraBasesModels($bases);
         $this->showExtraModels($models);
+
+        return null;
     }
 
     /**
@@ -96,8 +97,8 @@ class MakeBulkCommand extends GeneratorCommand
      */
     protected function prerequisites()
     {
-        if (! interface_exists('Doctrine\DBAL\Driver')) {
-            $this->error($this->name.' requires Doctrine DBAL; install "doctrine/dbal".');
+        if (!interface_exists('Doctrine\DBAL\Driver')) {
+            $this->error($this->name . ' requires Doctrine DBAL; install "doctrine/dbal".');
             die();
         }
     }
@@ -111,7 +112,7 @@ class MakeBulkCommand extends GeneratorCommand
 
         // Exceptions
         $except = $schemaUtil->getTableExceptions();
-        $this->line('Except: '.implode(', ', $except));
+        $this->line('Except: ' . implode(', ', $except));
         $this->output->newLine();
 
         // Load tables
@@ -147,7 +148,8 @@ class MakeBulkCommand extends GeneratorCommand
     /**
      * Write a string as section output.
      *
-     * @param  string  $string
+     * @param  string $string
+     *
      * @return void
      */
     public function section($string)
@@ -157,7 +159,7 @@ class MakeBulkCommand extends GeneratorCommand
         if ($output->isVerbose()) {
             $output->section($string);
         } else {
-            $output->writeln($string.':');
+            $output->writeln($string . ':');
         }
     }
 
@@ -178,22 +180,29 @@ class MakeBulkCommand extends GeneratorCommand
     }
 
     /**
-     * @param string $path
+     * @param string   $path
      * @param string[] $files
      */
     public function showExtraFiles($path, $files)
     {
+        /** @var \Illuminate\Filesystem\Filesystem $app */
+        $file = \Illuminate\Container\Container::getInstance()->make('files');
+
+        if (!is_dir($path)) {
+            return;
+        }
+
         $extra = [];
-        foreach (\File::allFiles($path) as $file) {
+        foreach ($file->allFiles($path) as $file) {
             if (!in_array($file, $files)) {
                 $extra[] = $file;
             }
         }
 
         if (count($extra) > 0) {
-            $this->line('There are '.count($extra). ' files unexpected in '.$path.':');
+            $this->line('There are ' . count($extra) . ' files unexpected in ' . $path . ':');
             foreach ($extra as $file) {
-                $this->line('> '.$file);
+                $this->line('> ' . $file);
             }
         }
     }
@@ -227,8 +236,11 @@ class MakeBulkCommand extends GeneratorCommand
      */
     protected function getNamespaceDirectory($namespace)
     {
-        $name = str_replace(App::getNamespace(), '', $namespace);
+        /** @var \Laravel\Lumen\Application|\Illuminate\Foundation\Application $app */
+        $app = \Illuminate\Container\Container::getInstance()->make('app');
 
-        return App::path().'/'.str_replace('\\', '/', $name);
+        $name = str_replace($app->getNamespace(), '', $namespace);
+
+        return $app->path() . '/' . str_replace('\\', '/', $name);
     }
 }
