@@ -282,7 +282,7 @@ class ModelBaseConfigTest extends TestCase
     {
         $config = $this->getConfig();
 
-        $this->assertEquals('App\\ModelsBases\\UserBase', $config->getBaseClassName('users'));
+        $this->assertEquals('App\\Models\\Bases\\Testing\\UserBase', $config->getBaseClassName('users'));
     }
 
     /**
@@ -296,7 +296,7 @@ class ModelBaseConfigTest extends TestCase
     {
         $config = $this->getConfig();
 
-        $this->assertEquals('App\\Models\\User', $config->getModelClassName('users'));
+        $this->assertEquals('App\\Models\\Testing\\User', $config->getModelClassName('users'));
     }
 }
 
