@@ -8,10 +8,10 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
 use ReflectionClass;
+use Triun\Diff\Diff;
 use Triun\ModelBase\ModelBaseConfig;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Util;
-use Triun\ModelBase\Utils\Diff;
 
 abstract class BuilderUtilBase extends UtilBase
 {
