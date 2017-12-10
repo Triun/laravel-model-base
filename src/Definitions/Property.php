@@ -2,6 +2,11 @@
 
 namespace Triun\ModelBase\Definitions;
 
+/**
+ * Class Property
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class Property
 {
     /**

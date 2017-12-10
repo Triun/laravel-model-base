@@ -2,6 +2,7 @@
 
 /**
  * Class MutatorSkipeableTest
+ *
  * @see \Triun\ModelBase\MutatorSkipeable
  */
 class MutatorSkipeableTest extends TestCase
@@ -248,8 +249,8 @@ class MutatorSkipeableTest extends TestCase
 /**
  * Class Post
  *
- * @property string $title
- * @property array|object $metadata
+ * @property string         $title
+ * @property array|object   $metadata
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
@@ -278,8 +279,9 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Set a given attribute on the model, without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
      * @param  mixed  $value
+     *
      * @return $this
      */
     public function run_setAttributeWithoutMutator($key, $value)
@@ -291,7 +293,8 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Get a plain attribute (not a relationship), without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function run_getAttributeValueWithoutMutator($key)

@@ -5,6 +5,11 @@ namespace Triun\ModelBase\Definitions;
 use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 
+/**
+ * Class Table
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class Table extends DoctrineTable
 {
     /**

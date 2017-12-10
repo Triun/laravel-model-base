@@ -5,12 +5,19 @@ namespace Triun\ModelBase\Modifiers;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class TableModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class TableModifier extends ModifierBase
 {
     /**
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function apply(Skeleton $skeleton)
     {
@@ -26,6 +33,8 @@ class TableModifier extends ModifierBase
 
     /**
      * @param  Skeleton $skeleton
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function setPrimaryKey($skeleton)
     {

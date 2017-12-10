@@ -12,6 +12,11 @@ use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Utils\BuilderUtil;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class Util
+ *
+ * @package Triun\ModelBase
+ */
 class Util
 {
     /**
@@ -50,6 +55,8 @@ class Util
      *
      * @param \Illuminate\Database\Connection|string|null $connection
      * @param \Illuminate\Console\Command|null            $command
+     *
+     * @throws \Exception
      */
     public function __construct($connection = null, Command $command = null)
     {
@@ -71,15 +78,16 @@ class Util
     {
         // interface_exists('Doctrine\DBAL\Driver')
         // class_exists('Doctrine\DBAL\Connection')
-        if (! interface_exists('Doctrine\DBAL\Driver')) {
-            throw new Exception(__CLASS__.' requires Doctrine DBAL; install "doctrine/dbal".');
-        } elseif (! $this->conn->isDoctrineAvailable()) {
+        if (!interface_exists('Doctrine\DBAL\Driver')) {
+            throw new Exception(__CLASS__ . ' requires Doctrine DBAL; install "doctrine/dbal".');
+        } elseif (!$this->conn->isDoctrineAvailable()) {
             throw new Exception('Laravel connection is unable to access Doctrine.');
         }
     }
 
     /**
      * @param \Illuminate\Database\Connection|string|null $connection
+     *
      * @return \Illuminate\Database\Connection
      * @throws Exception
      */
@@ -176,8 +184,10 @@ class Util
     /**
      * Get Doctrine table schema for the given table name.
      *
-     * @param  string  $tableName
+     * @param  string $tableName
+     *
      * @return \Triun\ModelBase\Definitions\Table
+     * @throws \Exception
      */
     protected function table($tableName)
     {
@@ -190,6 +200,7 @@ class Util
      * @param \Triun\ModelBase\Definitions\Table $table
      *
      * @return Skeleton
+     * @throws \Exception
      */
     protected function skeleton($table)
     {
@@ -204,10 +215,11 @@ class Util
     /**
      * Generate Model Skeleton
      *
-     * @param \Triun\ModelBase\Definitions\Table $table
+     * @param \Triun\ModelBase\Definitions\Table    $table
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      *
      * @return Skeleton
+     * @throws \Exception
      */
     protected function modelSkeleton(Table $table, Skeleton $skeleton)
     {
@@ -225,9 +237,10 @@ class Util
      * Build the php class object and save it.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string $path
+     * @param string                                $path
      *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
+     * @throws \Exception
      */
     protected function build(Skeleton $skeleton, &$path)
     {
@@ -238,9 +251,10 @@ class Util
      * Build the php class object for the model and save it.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string $path
+     * @param string                                $path
      *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
+     * @throws \Exception
      */
     protected function buildModel(Skeleton $skeleton, &$path)
     {
@@ -255,6 +269,7 @@ class Util
      * @param string $modelPath
      *
      * @return int
+     * @throws \Exception
      */
     public function make($tableName, &$modelBasePath = null, &$modelPath = null)
     {

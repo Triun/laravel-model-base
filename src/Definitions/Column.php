@@ -4,6 +4,11 @@ namespace Triun\ModelBase\Definitions;
 
 use Doctrine\DBAL\Schema\Column as DoctrineColumn;
 
+/**
+ * Class Column
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class Column extends DoctrineColumn
 {
     /**

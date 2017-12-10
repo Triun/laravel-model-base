@@ -8,6 +8,11 @@ use Triun\ModelBase\Definitions\Table;
 use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class ModifierBase
+ *
+ * @package Triun\ModelBase\Lib
+ */
 abstract class ModifierBase
 {
     /**
@@ -21,13 +26,13 @@ abstract class ModifierBase
     private $table;
 
     /**
-     * @param  \Triun\ModelBase\Utils\SkeletonUtil   $util
-     * @param  \Triun\ModelBase\Definitions\Table    $table
+     * @param  \Triun\ModelBase\Utils\SkeletonUtil $util
+     * @param  \Triun\ModelBase\Definitions\Table  $table
      */
     public function __construct(SkeletonUtil $util, Table $table)
     {
-        $this->util     = $util;
-        $this->table    = $table;
+        $this->util = $util;
+        $this->table = $table;
     }
 
     /**
@@ -95,9 +100,12 @@ abstract class ModifierBase
     /**
      * Return filesystem instance.
      *
+     * @param string $path
+     *
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function getFile($path)
+    public function getFile(string $path)
     {
         return File::get($path);
     }
@@ -106,8 +114,8 @@ abstract class ModifierBase
      * Set constant value.
      *
      * @param  Skeleton $skeleton
-     * @param  string $name
-     * @param  mixed  $value
+     * @param  string   $name
+     * @param  mixed    $value
      *
      * @return $this
      */
@@ -145,8 +153,8 @@ abstract class ModifierBase
      * Set method value.
      *
      * @param  Skeleton $skeleton
-     * @param  string  $name
-     * @param  mixed  $value
+     * @param  string   $name
+     * @param  mixed    $value
      *
      * @return $this
      */
@@ -164,9 +172,9 @@ abstract class ModifierBase
      * 'gray|grey' is also gray and grey
      * '*At|*_at finish in 'At' or '_at'
      *
-     * @param string|string[]   $rules
-     * @param string            $value
-     * @param bool              $case_sensitive
+     * @param string|string[] $rules
+     * @param string          $value
+     * @param bool            $case_sensitive
      *
      * @return bool
      */

@@ -4,6 +4,11 @@ namespace Triun\ModelBase\Definitions;
 
 use Triun\ModelBase\Utils\SkeletonUtil;
 
+/**
+ * Class Method
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class Method
 {
     /**

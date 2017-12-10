@@ -5,6 +5,11 @@ namespace Triun\ModelBase\Modifiers;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class AttributesModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class AttributesModifier extends ModifierBase
 {
     /**

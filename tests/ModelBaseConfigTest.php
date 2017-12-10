@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * Class ModelBaseConfigTest
+ */
 class ModelBaseConfigTest extends TestCase
 {
     /**
@@ -36,6 +38,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test has()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::has()
      *
      * @test
@@ -49,6 +52,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
@@ -61,6 +65,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
@@ -75,6 +80,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
@@ -85,7 +91,8 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test match()
-     * @see \Triun\ModelBase\ModelBaseConfig::match()
+     *
+     * @see  \Triun\ModelBase\ModelBaseConfig::match()
      *
      * fnmatch separated by |
      * @link http://php.net/fnmatch
@@ -192,6 +199,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test modifiers()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::modifiers()
      *
      * @test
@@ -220,6 +228,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test getClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getClassName()
      *
      * @test
@@ -264,6 +273,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test getBaseClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getBaseClassName()
      *
      * @test
@@ -277,6 +287,7 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test getModelClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getModelClassName()
      *
      * @test
@@ -297,10 +308,10 @@ class ConfigUnprotected extends \Triun\ModelBase\ModelBaseConfig
     }
 
     /**
-     * @param string $tableName
-     * @param string $namespace
-     * @param string $prefix
-     * @param string $suffix
+     * @param string   $tableName
+     * @param string   $namespace
+     * @param string   $prefix
+     * @param string   $suffix
      * @param string[] $renames
      *
      * @return string

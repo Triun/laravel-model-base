@@ -2,6 +2,11 @@
 
 namespace Triun\ModelBase\Definitions;
 
+/**
+ * Class Constant
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class Constant
 {
     /**

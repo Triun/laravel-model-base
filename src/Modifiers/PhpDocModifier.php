@@ -10,6 +10,7 @@ use Triun\ModelBase\Definitions\PhpDocTag;
 
 /**
  * Class PhpDocModifier
+ *
  * @package Triun\ModelBase\Modifiers
  */
 class PhpDocModifier extends ModifierBase
@@ -25,10 +26,10 @@ class PhpDocModifier extends ModifierBase
 
         foreach ($this->table()->getColumns() as $column) {
             $skeleton->addPhpDocTag(new PhpDocTag(
-                '$'.$column->snakeName,
+                '$' . $column->snakeName,
                 'property',
                 $column->phpDocType,
-                str_pad($column->dbType, 11).' '.$column->getComment()
+                str_pad($column->dbType, 11) . ' ' . $column->getComment()
             ));
 
             // Avoid existent methods as whereDate or WhereColumn

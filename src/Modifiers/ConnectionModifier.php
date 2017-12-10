@@ -5,6 +5,11 @@ namespace Triun\ModelBase\Modifiers;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class ConnectionModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class ConnectionModifier extends ModifierBase
 {
     /**

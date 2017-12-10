@@ -17,6 +17,7 @@ use Triun\ModelBase\Lib\ConnectionUtilBase;
 
 /**
  * Class SkeletonUtil
+ *
  * @package Triun\ModelBase\Utils
  */
 class SkeletonUtil extends ConnectionUtilBase
@@ -30,6 +31,7 @@ class SkeletonUtil extends ConnectionUtilBase
      * @param string[]                                     $modifiers
      *
      * @return Skeleton
+     * @throws \Exception
      */
     public function make(Table $table, $className = null, $extends = null, $modifiers = [])
     {
@@ -66,7 +68,7 @@ class SkeletonUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param string $name
+     * @param string  $name
      * @param integer $modifiers_id
      *
      * @return \Triun\ModelBase\Definitions\Property
@@ -105,8 +107,8 @@ class SkeletonUtil extends ConnectionUtilBase
      * Set constant value.
      *
      * @param  \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param  string $name
-     * @param  mixed  $value
+     * @param  string                                $name
+     * @param  mixed                                 $value
      *
      * @return $this
      */
@@ -196,7 +198,7 @@ class SkeletonUtil extends ConnectionUtilBase
     /**
      * Make a default skeleton from a class given.
      *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
+     * @param \Triun\ModelBase\Definitions\Skeleton        $skeleton
      * @param string|\Triun\ModelBase\Definitions\Skeleton $extendClassName
      *
      * @throws Exception
@@ -237,8 +239,8 @@ class SkeletonUtil extends ConnectionUtilBase
         // Constants
         foreach ($reflectionClass->getConstants() as $name => $value) {
             $item = new Constant();
-            $item->name         = $name;
-            $item->docComment   = '';
+            $item->name = $name;
+            $item->docComment = '';
             // TODO: Add constants comments
             // (http://stackoverflow.com/questions/22103019/php-reflection-get-constants-doc-comment)
             $item->default = $item->value = $value;
@@ -253,10 +255,10 @@ class SkeletonUtil extends ConnectionUtilBase
             if (!$reflectionProperty->isPrivate()) {
                 $modifiers = $reflectionProperty->getModifiers();
                 $item = new Property();
-                $item->name         = $reflectionProperty->getName();
+                $item->name = $reflectionProperty->getName();
                 $item->modifiers_id = $modifiers;
-                $item->modifiers    = Reflection::getModifierNames($modifiers);
-                $item->docComment   = $reflectionProperty->getDocComment();
+                $item->modifiers = Reflection::getModifierNames($modifiers);
+                $item->docComment = $reflectionProperty->getDocComment();
                 $item->default = $item->value = $defaults[$item->name]; //$reflectionProperty->getValue();
 
                 $skeleton->addProperty($item);
@@ -269,12 +271,12 @@ class SkeletonUtil extends ConnectionUtilBase
             if (!$reflectionMethod->isPrivate()) {
                 $modifiers = $reflectionMethod->getModifiers();
                 $item = new Method();
-                $item->file         = $reflectionMethod->getFileName();
-                $item->line         = [$reflectionMethod->getStartLine(), $reflectionMethod->getEndLine()];
-                $item->name         = $reflectionMethod->getName();
+                $item->file = $reflectionMethod->getFileName();
+                $item->line = [$reflectionMethod->getStartLine(), $reflectionMethod->getEndLine()];
+                $item->name = $reflectionMethod->getName();
                 $item->modifiers_id = $modifiers;
-                $item->modifiers    = Reflection::getModifierNames($modifiers);
-                $item->docComment   = $reflectionMethod->getDocComment();
+                $item->modifiers = Reflection::getModifierNames($modifiers);
+                $item->docComment = $reflectionMethod->getDocComment();
                 //$method->default = $item->value = (string) $reflectionMethod;
 
                 $skeleton->addMethod($item);
@@ -306,7 +308,7 @@ class SkeletonUtil extends ConnectionUtilBase
             $padding = 8 - $padding;
             // Add the left padding
             for ($i = 0; $i < count($lines); $i++) {
-                $lines[$i] = str_repeat(' ', $padding).$lines[$i];
+                $lines[$i] = str_repeat(' ', $padding) . $lines[$i];
             }
 
             $code = implode(PHP_EOL, $lines);
@@ -315,7 +317,7 @@ class SkeletonUtil extends ConnectionUtilBase
         // Append to value
         $closePos = strrpos($method->value, '}');
         $lastLine = strrpos(substr($method->value, 0, $closePos), "\n");
-        $method->value = substr($method->value, 0, $lastLine).PHP_EOL.$code.substr($method->value, $lastLine);
+        $method->value = substr($method->value, 0, $lastLine) . PHP_EOL . $code . substr($method->value, $lastLine);
     }
 
     /**
@@ -326,8 +328,8 @@ class SkeletonUtil extends ConnectionUtilBase
         // The \ReflectionMethod class doesn't return the content of the function, so we have to get it from
         // the original file.
         $method->default = $method->value = '    '
-            .$method->getDocComment() .PHP_EOL
-            .static::getFileContent(
+            . $method->getDocComment() . PHP_EOL
+            . static::getFileContent(
                 $method->getFileName(),
                 $method->getStartLine() - 1,
                 $method->getEndLine()
@@ -357,7 +359,8 @@ class SkeletonUtil extends ConnectionUtilBase
     /**
      * Parse the name and format according to the root namespace.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return string
      */
     public static function parseName($name)

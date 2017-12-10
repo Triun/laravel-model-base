@@ -15,10 +15,11 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * Class UserModifier
+ *
  * @package Triun\ModelBase\Modifiers
  *
- * @link https://laravel.com/docs/5.4/authentication
- * @link https://github.com/laravel/laravel/blob/master/app/User.php
+ * @link    https://laravel.com/docs/5.4/authentication
+ * @link    https://github.com/laravel/laravel/blob/master/app/User.php
  */
 class AuthModifier extends ModifierBase
 {
@@ -28,10 +29,10 @@ class AuthModifier extends ModifierBase
      * @var array
      */
     protected $default = [
-        'Authenticatable' => true,
+        'Authenticatable'  => true,
         'CanResetPassword' => true,
-        'Authorizable' => false,
-        'fillable' => ['email', 'password'],
+        'Authorizable'     => false,
+        'fillable'         => ['email', 'password'],
     ];
 
     /**
@@ -89,7 +90,7 @@ class AuthModifier extends ModifierBase
     }
 
     /**
-     * @param string $name
+     * @param string                                $name
      * @param \Triun\ModelBase\Definitions\Property $property
      */
     protected function addToArrayProperty($name, Property $property)

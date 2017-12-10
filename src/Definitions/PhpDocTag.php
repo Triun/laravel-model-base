@@ -2,6 +2,11 @@
 
 namespace Triun\ModelBase\Definitions;
 
+/**
+ * Class PhpDocTag
+ *
+ * @package Triun\ModelBase\Definitions
+ */
 class PhpDocTag
 {
     /**
@@ -34,10 +39,10 @@ class PhpDocTag
      */
     public function __construct($name, $tag = null, $type = null, $description = null)
     {
-        $this->name          = $name;
-        $this->tag           = $tag;
-        $this->type          = $type;
-        $this->description   = $description;
+        $this->name = $name;
+        $this->tag = $tag;
+        $this->type = $type;
+        $this->description = $description;
     }
 
     /**

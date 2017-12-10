@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase;
 
 use Illuminate\Support\Arr;
@@ -18,6 +17,7 @@ use Triun\ModelBase\Modifiers\PhpDocModifier;
 
 /**
  * Class ModelBaseConfig
+ *
  * @package Triun\ModelBase
  */
 class ModelBaseConfig
@@ -84,10 +84,10 @@ class ModelBaseConfig
     {
         $this->items = array_merge(
             $this->loadConfig(static::CONFIG_FILE),
-            $this->loadConfig(static::CONFIG_FILE.'.drivers.'.$connection->getDriverName()),
-            $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName())
-            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+            $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
+            $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
+        // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
+        // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
     }
 
@@ -104,7 +104,8 @@ class ModelBaseConfig
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -115,8 +116,9 @@ class ModelBaseConfig
     /**
      * Get the specified configuration value.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
@@ -127,8 +129,9 @@ class ModelBaseConfig
     /**
      * Set a given configuration value.
      *
-     * @param  array|string  $key
-     * @param  mixed   $value
+     * @param  array|string $key
+     * @param  mixed        $value
+     *
      * @return void
      */
     /*public function set($key, $value = null)
@@ -149,9 +152,9 @@ class ModelBaseConfig
      * 'gray|grey' is also gray and grey
      * '*At|*_at finish in 'At' or '_at'
      *
-     * @param string|string[]   $rules
-     * @param string            $value
-     * @param bool              $case_sensitive
+     * @param string|string[] $rules
+     * @param string          $value
+     * @param bool            $case_sensitive
      *
      * @return bool
      */
@@ -226,21 +229,21 @@ class ModelBaseConfig
     }
 
     /**
-     * @param string $tableName
-     * @param string $namespace
-     * @param string $prefix
-     * @param string $suffix
+     * @param string   $tableName
+     * @param string   $namespace
+     * @param string   $prefix
+     * @param string   $suffix
      * @param string[] $renames
      *
      * @return string
      */
     protected function getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
     {
-        $name = is_array($renames) && isset($renames[$tableName])?
+        $name = is_array($renames) && isset($renames[$tableName]) ?
             trim($renames[$tableName]) :
             str_singular($tableName);
         $name = studly_case($name);
 
-        return $namespace.'\\'.$prefix.$name.$suffix;
+        return $namespace . '\\' . $prefix . $name . $suffix;
     }
 }

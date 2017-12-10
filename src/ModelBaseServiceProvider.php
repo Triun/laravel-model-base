@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Triun\ModelBase\Console\MakeCommand;
 use Triun\ModelBase\Console\MakeBulkCommand;
 
+/**
+ * Class ModelBaseServiceProvider
+ *
+ * @package Triun\ModelBase
+ */
 class ModelBaseServiceProvider extends ServiceProvider
 {
     /**

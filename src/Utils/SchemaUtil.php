@@ -9,6 +9,11 @@ use Triun\ModelBase\Definitions\Table;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Lib\ConnectionUtilBase;
 
+/**
+ * Class SchemaUtil
+ *
+ * @package Triun\ModelBase\Utils
+ */
 class SchemaUtil extends ConnectionUtilBase
 {
     /**
@@ -77,6 +82,7 @@ class SchemaUtil extends ConnectionUtilBase
      * Retrieve doctrine scheme manager for the given connection.
      *
      * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @throws \Doctrine\DBAL\DBALException
      */
     protected function schema()
     {
@@ -92,6 +98,8 @@ class SchemaUtil extends ConnectionUtilBase
      * Apply platform mapping from the config file
      *
      * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     protected function platformMapping($schema)
     {
@@ -133,12 +141,13 @@ class SchemaUtil extends ConnectionUtilBase
 
         $tables = [];
         foreach ($this->conn->getDoctrineSchemaManager()->listTableNames() as $row) {
-            $row = (array) $row;
+            $row = (array)$row;
             $table = array_shift($row);
             if (array_search($table, $except) === false) {
                 $tables[] = $table;
             }
         }
+
         return $tables;
     }
 
@@ -177,13 +186,13 @@ class SchemaUtil extends ConnectionUtilBase
 
         $columns = $this->listTableColumns($tableName);
 
-        $foreignKeys = array();
+        $foreignKeys = [];
         if ($this->schema()->getDatabasePlatform()->supportsForeignKeyConstraints()) {
             $foreignKeys = $this->schema()->listTableForeignKeys($tableName);
         }
         $indexes = $this->schema()->listTableIndexes($tableName);
 
-        $table = new Table($tableName, $columns, $indexes, $foreignKeys, false, array());
+        $table = new Table($tableName, $columns, $indexes, $foreignKeys, false, []);
 
         // Table callbacks
         foreach (self::$table_callbacks as $callback) {
@@ -214,13 +223,13 @@ class SchemaUtil extends ConnectionUtilBase
         foreach ($doctrineColumns as $key => $doctrineColumn) {
             $column = new Column($doctrineColumn->getName(), $doctrineColumn->getType(), $doctrineColumn->toArray());
 
-            $column->snakeName      = $this->snakeCase($column->getName());
-            $column->studName       = studly_case($column->getName());
-            $column->publicName     = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
-            $column->dbType         = $column->getType()->getName();
-            $column->castType       = $this->getLaravelCastType($column, $tableName);
-            $column->isDate         = $this->isDate($column);
-            $column->phpDocType     = $this->convertToPhpDoc($column);
+            $column->snakeName = $this->snakeCase($column->getName());
+            $column->studName = studly_case($column->getName());
+            $column->publicName = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
+            $column->dbType = $column->getType()->getName();
+            $column->castType = $this->getLaravelCastType($column, $tableName);
+            $column->isDate = $this->isDate($column);
+            $column->phpDocType = $this->convertToPhpDoc($column);
 
             // Columns callbacks
             foreach (self::$column_callbacks as $callback) {
@@ -240,7 +249,7 @@ class SchemaUtil extends ConnectionUtilBase
      * It also uses the maximum database length, instead of the used one.
      *
      * @param \Doctrine\DBAL\Schema\Column[] $columns
-     * @param string $tableName
+     * @param string                         $tableName
      *
      * @throws Exception
      */
@@ -257,7 +266,7 @@ class SchemaUtil extends ConnectionUtilBase
 
         foreach ($columns as $column) {
             if (!isset($platformColumns[$column->getName()])) {
-                throw new Exception("Column {$column->getName()} not found in ".implode(', ', $platformColumns));
+                throw new Exception("Column {$column->getName()} not found in " . implode(', ', $platformColumns));
             }
 
             $raw = $platformColumns[$column->getName()];
@@ -285,6 +294,7 @@ class SchemaUtil extends ConnectionUtilBase
      * @param string $tableName
      *
      * @return array
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function getPlatformColumns($tableName)
     {
@@ -300,7 +310,7 @@ class SchemaUtil extends ConnectionUtilBase
 
             if (!isset($tableColumn['length'])) {
                 $length = strtok('(), ');
-                $tableColumn['length'] = $length === false ? null : (int) $length;
+                $tableColumn['length'] = $length === false ? null : (int)$length;
             }
 
             $platformColumns[$tableColumn['field']] = $tableColumn;
@@ -331,7 +341,7 @@ class SchemaUtil extends ConnectionUtilBase
 
     /**
      * @param \Doctrine\DBAL\Schema\Column $column
-     * @param string $tableName
+     * @param string                       $tableName
      *
      * @return string
      * @throws \Exception
@@ -454,7 +464,7 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         if ($column->isDate) {
-            return '\\'.\Carbon\Carbon::class;
+            return '\\' . \Carbon\Carbon::class;
         } else {
             $type = $column->getType()->getName();
             switch ($type) {

@@ -11,9 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class SoftDeletesModifier
+ *
  * @package Triun\ModelBase\Modifiers
  *
- * @see https://laravel.com/docs/5.3/eloquent#soft-deleting
+ * @see     https://laravel.com/docs/5.3/eloquent#soft-deleting
  */
 class SoftDeletesModifier extends ModifierBase
 {
@@ -45,6 +46,8 @@ class SoftDeletesModifier extends ModifierBase
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function apply(Skeleton $skeleton)
     {
@@ -73,6 +76,7 @@ class SoftDeletesModifier extends ModifierBase
      * @param Skeleton $skeleton
      *
      * @return mixed|null
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function findDelete(Skeleton $skeleton)
     {
@@ -117,6 +121,7 @@ class SoftDeletesModifier extends ModifierBase
      * @param $columnName
      *
      * @return bool
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function isValidColumn($columnName)
     {
@@ -141,6 +146,7 @@ class SoftDeletesModifier extends ModifierBase
      * @param $columnName
      *
      * @return bool
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function columnIsTimestamp($columnName)
     {
@@ -149,7 +155,7 @@ class SoftDeletesModifier extends ModifierBase
     }
 
     /**
-     * @param string $name
+     * @param string                                $name
      * @param \Triun\ModelBase\Definitions\Property $dates
      */
     protected function addToDates($name, Property $dates)

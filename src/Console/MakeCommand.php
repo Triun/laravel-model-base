@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Console;
 
 use DB;
@@ -11,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class MakeCommand
+ *
  * @package Triun\ModelBase\Console
  */
 class MakeCommand extends GeneratorCommand
@@ -38,13 +38,14 @@ class MakeCommand extends GeneratorCommand
      */
     public function getStub($file = 'class.stub')
     {
-        return __DIR__ . '/stubs/'.$file;
+        return __DIR__ . '/stubs/' . $file;
     }
 
     /**
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function handle()
     {
@@ -60,8 +61,8 @@ class MakeCommand extends GeneratorCommand
 
     protected function prerequisites()
     {
-        if (! interface_exists('Doctrine\DBAL\Driver')) {
-            $this->error($this->name.' requires Doctrine DBAL; install "doctrine/dbal".');
+        if (!interface_exists('Doctrine\DBAL\Driver')) {
+            $this->error($this->name . ' requires Doctrine DBAL; install "doctrine/dbal".');
             die();
         }
     }

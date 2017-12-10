@@ -6,6 +6,11 @@ use Doctrine\DBAL\Types\Type;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class TimestampsModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class TimestampsModifier extends ModifierBase
 {
     /**
@@ -19,6 +24,9 @@ class TimestampsModifier extends ModifierBase
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function apply(Skeleton $skeleton)
     {
@@ -38,16 +46,16 @@ class TimestampsModifier extends ModifierBase
 
             if (!$this->hasColumn($CREATED_AT)) {
                 $skeleton->addMethod($this->util()->makeMethod('setCreatedAt', $stub, [
-                    'dummyName' => 'created',
-                    'DummyName' => 'Created',
+                    'dummyName'     => 'created',
+                    'DummyName'     => 'Created',
                     'DUMMY_NAME_AT' => 'CREATED_AT',
                 ]));
             }
 
             if (!$this->hasColumn($UPDATED_AT)) {
                 $skeleton->addMethod($this->util()->makeMethod('setUpdatedAt', $stub, [
-                    'dummyName' => 'updated',
-                    'DummyName' => 'Updated',
+                    'dummyName'     => 'updated',
+                    'DummyName'     => 'Updated',
                     'DUMMY_NAME_AT' => 'UPDATED_AT',
                 ]));
             }
@@ -61,6 +69,7 @@ class TimestampsModifier extends ModifierBase
      * @param          $field
      *
      * @return mixed|null
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function generateTimestamp(Skeleton $skeleton, $field)
     {
@@ -119,6 +128,7 @@ class TimestampsModifier extends ModifierBase
      * @param $name
      *
      * @return bool
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function columnIsTimestamp($name)
     {
@@ -129,6 +139,7 @@ class TimestampsModifier extends ModifierBase
      * Retrieve the template.
      *
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function voidTimestamp()
     {
