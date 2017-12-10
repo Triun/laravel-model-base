@@ -40,7 +40,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_checks_if_an_attribute_exist()
+    public function it_checks_if_an_attribute_exist()
     {
         $config = $this->getConfig();
         $this->assertFalse($config->has($this->notExists));
@@ -53,7 +53,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_loads_null_if_key_do_not_exists()
+    public function it_loads_null_if_key_do_not_exists()
     {
         $config = $this->getConfig();
         $this->assertNull($config->get($this->notExists));
@@ -65,7 +65,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_loads_laravel_configuration()
+    public function it_loads_laravel_configuration()
     {
         $laravelConfig = Config::get('model-base');
         $config = $this->getConfig();
@@ -79,7 +79,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-//    function it_can_specify_explicit_configuration_depending_of_the_connection_or_driver()
+//    public function it_can_specify_explicit_configuration_depending_of_the_connection_or_driver()
 //    {
 //    }
 
@@ -96,7 +96,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_do_matches()
+    public function it_do_matches()
     {
         $config = $this->getConfig();
 
@@ -196,7 +196,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_can_retrieve_the_modifiers()
+    public function it_can_retrieve_the_modifiers()
     {
         $connection = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
@@ -224,7 +224,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_can_generate_a_class_name()
+    public function it_can_generate_a_class_name()
     {
         $connection = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
@@ -268,7 +268,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_can_generate_a_base_class_name()
+    public function it_can_generate_a_base_class_name()
     {
         $config = $this->getConfig();
 
@@ -281,7 +281,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_can_generate_a_model_class_name()
+    public function it_can_generate_a_model_class_name()
     {
         $config = $this->getConfig();
 

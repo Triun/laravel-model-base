@@ -7,7 +7,14 @@
         "issues": "https://github.com/Triun/laravel-model-base/issues",
         "source": "https://github.com/Triun/laravel-model-base"
     },
-    "keywords": ["laravel", "model", "eloquent", "base", "make", "generator"],
+    "keywords": [
+        "laravel",
+        "model",
+        "eloquent",
+        "base",
+        "make",
+        "generator"
+    ],
     "authors": [
         {
             "name": "Gonzalo Moreno"
@@ -37,12 +44,17 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["tests/TestCase.php"]
+        "classmap": [
+            "tests/TestCase.php"
+        ]
     },
     "extra": {
         "branch-alias": {
             "dev-master": "5.5-dev"
         }
+    },
+    "scripts": {
+        "standards": "vendor/bin/phpcs --standard=phpcs.xml"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

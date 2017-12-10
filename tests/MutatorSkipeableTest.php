@@ -30,7 +30,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_has_getter_and_setter_mutators()
+    public function it_has_getter_and_setter_mutators()
     {
         $model = $this->getPost();
 
@@ -60,7 +60,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_sets_an_attribute_value_without_mutator()
+    public function it_sets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -90,7 +90,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_gets_an_attribute_value_without_mutator()
+    public function it_gets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -130,7 +130,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_sets_and_gets_an_attribute_value_without_mutator()
+    public function it_sets_and_gets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -165,7 +165,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_does_casts()
+    public function it_does_casts()
     {
         $model = $this->getPost();
 
@@ -194,7 +194,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_does_dates()
+    public function it_does_dates()
     {
         $model = $this->getPost();
 
