@@ -30,7 +30,7 @@
         <env name="DB_TEST_DRIVER" value="mysql"/>
         <env name="DB_TEST_HOST" value="127.0.0.1"/>
         <env name="DB_TEST_PORT" value="3306"/>
-        <env name="DB_TEST_DATABASE" value="laravel_model_base_test"/>
+        <env name="DB_TEST_DATABASE" value="test_laravel_model_base"/>
         <env name="DB_TEST_USERNAME" value="root"/>
         <env name="DB_TEST_PASSWORD" value=""/>
 
