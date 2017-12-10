@@ -6,6 +6,7 @@ use DummyExtendsNamespace;
 
 /**
  * Class DummyClass
+ *
  * @package DummyNamespace
 {{phpdoc}}
  */
