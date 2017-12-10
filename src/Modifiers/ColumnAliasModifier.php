@@ -4,11 +4,10 @@ namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\MutatorSkipeable;
 use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\Skeleton;
 
-class CamelToSnakeModifier extends ModifierBase
+class ColumnAliasModifier extends ModifierBase
 {
     protected $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
     protected $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
@@ -22,16 +21,10 @@ class CamelToSnakeModifier extends ModifierBase
      */
     public function apply(Skeleton $skeleton)
     {
-        // Only if snakeAttributes is true.
-        if (!$skeleton->property('snakeAttributes')->value) {
-            return;
-        }
-
         foreach ($this->table()->getColumns() as $column) {
-            $name = $column->getName();
             // It may get the namespace... in that case, use $column->toArray()['name'] instead.
-            if ($name !== strtolower($name)) {
-                $this->addSnakeMuttators($skeleton, $column);
+            if ($column->aliasSnakeName !== null && $column->aliasSnakeName !== $column->snakeName) {
+                $this->addMuttators($skeleton, $column);
             }
         }
     }
@@ -40,19 +33,19 @@ class CamelToSnakeModifier extends ModifierBase
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      * @param \Triun\ModelBase\Definitions\Column  $column
      */
-    public function addSnakeMuttators(Skeleton $skeleton, Column $column)
+    public function addMuttators(Skeleton $skeleton, Column $column)
     {
         $name   = $column->getName();
-        $snake  = $column->snakeName;
+        $snake  = $column->aliasSnakeName;
 
         if ($name !== $snake) {
-            $stud   = $column->studName;
+            $stud   = $column->aliasStudName;
             $phpDoc = $column->phpDocType;
 
             $skeleton->addMethod($this->util()->makeMethod('get'.$stud.'Attribute', $this->getAttributeMethod(), [
                 'DummyNamespace'    => $skeleton->getNamespace(),
                 'DummyClass'        => class_basename($skeleton->className),
-                'DummyDescription'  => "Snake name getter: $name -> $snake.",
+                'DummyDescription'  => "Alias getter: $name -> $snake.",
                 'dummyType'         => $phpDoc,
                 'DummyName'         => $stud,
                 'dummy_name'        => $name,
@@ -62,7 +55,7 @@ class CamelToSnakeModifier extends ModifierBase
             $skeleton->addMethod($this->util()->makeMethod('set'.$stud.'Attribute', $this->setAttributeMethod(), [
                 'DummyNamespace'    => $skeleton->getNamespace(),
                 'DummyClass'        => class_basename($skeleton->className),
-                'DummyDescription'  => "Snake name setter: $name -> $snake.",
+                'DummyDescription'  => "Alias setter: $name -> $snake.",
                 'dummyType'         => $phpDoc,
                 'DummyName'         => $stud,
                 'dummy_name'        => $name,

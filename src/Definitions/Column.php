@@ -22,6 +22,21 @@ class Column extends DoctrineColumn
     public $studName;
 
     /**
+     * @var string
+     */
+    public $alias;
+
+    /**
+     * @var string
+     */
+    public $aliasSnakeName;
+
+    /**
+     * @var string
+     */
+    public $aliasStudName;
+
+    /**
      * @var string Laravel casting type of this column. Possible PHP types include:
      * integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp.
      */
