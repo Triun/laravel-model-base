@@ -3,6 +3,7 @@
 namespace Triun\ModelBase;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 
 use Triun\ModelBase\Modifiers\AuthModifier;
@@ -27,6 +28,16 @@ class ModelBaseConfig
      * Config file.
      */
     const CONFIG_FILE = 'model-base';
+
+    /**
+     * @var string
+     */
+    const WILDCARD_CONNECTION_STUD = '{{Connection}}';
+
+    /**
+     * @var string
+     */
+    const WILDCARD_DRIVER_STUD = '{{Driver}}';
 
     /**
      * @var string[]
@@ -80,9 +91,14 @@ class ModelBaseConfig
     protected $items = [];
 
     /**
+     * @var \Illuminate\Database\Connection
+     */
+    protected $connection;
+
+    /**
      * ModelBaseConfig constructor.
      *
-     * @param \Illuminate\Database\Connection|string|null $connection
+     * @param \Illuminate\Database\Connection $connection
      */
     public function __construct($connection)
     {
@@ -93,6 +109,8 @@ class ModelBaseConfig
         // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
         // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
+
+        $this->connection = $connection;
     }
 
     /**
@@ -248,6 +266,12 @@ class ModelBaseConfig
             str_singular($tableName);
         $name = studly_case($name);
 
-        return $namespace . '\\' . $prefix . $name . $suffix;
+        return str_replace([
+            static::WILDCARD_CONNECTION_STUD,
+            static::WILDCARD_DRIVER_STUD,
+        ], [
+            Str::studly($this->connection->getName()),
+            Str::studly($this->connection->getDriverName()),
+        ], $namespace . '\\' . $prefix . $name . $suffix);
     }
 }
