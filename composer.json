@@ -1,5 +1,6 @@
 {
     "name": "triun/laravel-model-base",
+    "version": "5.5.0",
     "description": "Generate Eloquent Model Bases for Laravel",
     "license": "MIT",
     "homepage": "https://github.com/Triun",
@@ -7,27 +8,35 @@
         "issues": "https://github.com/Triun/laravel-model-base/issues",
         "source": "https://github.com/Triun/laravel-model-base"
     },
-    "keywords": ["laravel", "model", "eloquent", "base", "make", "generator"],
+    "keywords": [
+        "laravel",
+        "model",
+        "eloquent",
+        "base",
+        "make",
+        "generator"
+    ],
     "authors": [
         {
             "name": "Gonzalo Moreno"
         }
     ],
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7.0.0",
         "illuminate/support": "^5.4",
         "illuminate/console": "^5.4",
         "illuminate/filesystem": "^5.4",
         "illuminate/database": "^5.4",
         "illuminate/config": "^5.4",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "triun/diff": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^3.0",
+        "phpunit/phpunit": "~6.0",
+        "squizlabs/php_codesniffer": "^3.1",
         "laravel/framework": "^5.4",
-        "orchestra/testbench": "^3.4",
-        "laravel/lumen-framework": "^5.4"
+        "laravel/lumen-framework": "^5.4",
+        "orchestra/testbench": "^3.5"
     },
     "suggest": {
         "triun/laravel-model-validable": "Model validation and rules generator modifier"
@@ -38,12 +47,23 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["tests/TestCase.php"]
+        "classmap": [
+            "tests/TestCase.php"
+        ]
     },
     "extra": {
         "branch-alias": {
             "dev-master": "5.4-dev"
         }
+    },
+    "scripts": {
+        "test-mysql": "vendor/bin/phpunit --configuration phpunit_mysql.xml",
+        "test-pgsql": "vendor/bin/phpunit --configuration phpunit_pgsql.xml",
+        "test-sqlite": "vendor/bin/phpunit --configuration phpunit_sqlite.xml",
+        "test-ci-mysql": "vendor/bin/phpunit --configuration phpunit_mysql.xml --coverage-clover build/coverage.xml",
+        "test-ci-pgsql": "vendor/bin/phpunit --configuration phpunit_pgsql.xml --coverage-clover build/coverage.xml",
+        "test-ci-sqlite": "vendor/bin/phpunit --configuration phpunit_sqlite.xml --coverage-clover build/coverage.xml",
+        "standards": "vendor/bin/phpcs --standard=phpcs.xml"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

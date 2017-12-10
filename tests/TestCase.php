@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class TestCase
+ */
 abstract class TestCase extends Orchestra\Testbench\TestCase
 {
     /**
@@ -47,7 +50,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -59,20 +62,22 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', static::TEST_CONNECTION);
-        $app['config']->set('database.connections.'.static::TEST_CONNECTION, $this->getDefaultDatabaseConfig());
+        $app['config']->set('database.connections.' . static::TEST_CONNECTION, $this->getDefaultDatabaseConfig());
     }
 
     /**
      * Get application timezone.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application $app
+     *
      * @return string|null
      */
     protected function getApplicationTimezone($app)
@@ -98,37 +103,37 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
                 break;
             case 'mysql':
                 return [
-                    'driver' => 'mysql',
-                    'host' => env('DB_TEST_HOST', '127.0.0.1'),
-                    'port' => env('DB_TEST_PORT', '3306'),
-                    'database' => env('DB_TEST_DATABASE', 'testing'),
-                    'username' => env('DB_TEST_USERNAME', 'testing'),
-                    'password' => env('DB_TEST_PASSWORD', ''),
-                    'charset' => 'utf8',
+                    'driver'    => 'mysql',
+                    'host'      => env('DB_TEST_HOST', '127.0.0.1'),
+                    'port'      => env('DB_TEST_PORT', '3306'),
+                    'database'  => env('DB_TEST_DATABASE', 'testing'),
+                    'username'  => env('DB_TEST_USERNAME', 'testing'),
+                    'password'  => env('DB_TEST_PASSWORD', ''),
+                    'charset'   => 'utf8',
                     'collation' => 'utf8_unicode_ci',
-                    'prefix' => '',
-                    'strict' => true,
-                    'engine' => null,
+                    'prefix'    => '',
+                    'strict'    => true,
+                    'engine'    => null,
                 ];
                 break;
             case 'pgsql':
                 return [
-                    'driver' => 'pgsql',
-                    'host' => env('DB_TEST_HOST', '127.0.0.1'),
-                    'port' => env('DB_TEST_PORT', '5432'),
+                    'driver'   => 'pgsql',
+                    'host'     => env('DB_TEST_HOST', '127.0.0.1'),
+                    'port'     => env('DB_TEST_PORT', '5432'),
                     'database' => env('DB_TEST_DATABASE', 'testing'),
                     'username' => env('DB_TEST_USERNAME', 'testing'),
                     'password' => env('DB_TEST_PASSWORD', ''),
-                    'charset' => 'utf8',
-                    'prefix' => '',
-                    'schema' => 'public',
-                    'sslmode' => 'prefer',
+                    'charset'  => 'utf8',
+                    'prefix'   => '',
+                    'schema'   => 'public',
+                    'sslmode'  => 'prefer',
                 ];
                 break;
             case null:
                 throw new Exception('DB_TEST_DRIVER not defined.');
             default:
-                throw new Exception('DB_TEST_DRIVER '.env('DB_TEST_DRIVER').' does\'t exists.');
+                throw new Exception('DB_TEST_DRIVER ' . env('DB_TEST_DRIVER') . ' does\'t exists.');
         }
     }
 

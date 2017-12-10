@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Triun\ModelBase\Utils;
 
 use App;
@@ -13,6 +12,11 @@ use Triun\ModelBase\Definitions\Method;
 use Triun\ModelBase\Definitions\Property;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class BuilderUtil
+ *
+ * @package Triun\ModelBase\Utils
+ */
 class BuilderUtil extends BuilderUtilBase
 {
     /**
@@ -22,6 +26,7 @@ class BuilderUtil extends BuilderUtilBase
      * @param string                                $stub
      *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
+     * @throws \Exception
      */
     public function build(Skeleton $skeleton, $override = Util::CONFIRM, &$path = null, $stub = 'class.stub')
     {
@@ -34,31 +39,32 @@ class BuilderUtil extends BuilderUtilBase
 
     /**
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string $stub
+     * @param string                                $stub
      *
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function getContents(Skeleton $skeleton, $stub)
     {
-        $content =  File::get($this->getStub($stub));
+        $content = File::get($this->getStub($stub));
 
         $replace = [
             //'dummy_cmd' => $this->name,
 
-            '{{phpdoc}}'            => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
+            '{{phpdoc}}' => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
 
-            'DummyNamespace'        => $skeleton->getNamespace(),
-            'DummyRootNamespace'    => App::getNamespace(),
-            'DummyClass'            => class_basename($skeleton->className),
+            'DummyNamespace'     => $skeleton->getNamespace(),
+            'DummyRootNamespace' => App::getNamespace(),
+            'DummyClass'         => class_basename($skeleton->className),
 
             'DummyExtendsNamespace' => $skeleton->extends,
             'DummyExtendsClass'     => class_basename($skeleton->extends),
 
-            '{{uses}}'              => implode(PHP_EOL, $this->getUses($skeleton)),
+            '{{uses}}' => implode(PHP_EOL, $this->getUses($skeleton)),
 
-            '{{implements}}'        => $this->getImplements($skeleton),
+            '{{implements}}' => $this->getImplements($skeleton),
 
-            '{{body}}'              => $this->getBody($skeleton),
+            '{{body}}' => $this->getBody($skeleton),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);
@@ -81,12 +87,13 @@ class BuilderUtil extends BuilderUtilBase
      * Get all the use in the header, before declaring the object.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
+     *
      * @return string
      */
     protected function getUses(Skeleton $skeleton)
     {
         return array_map(function ($value) {
-            return 'use '.ltrim($value, '\\').';';
+            return 'use ' . ltrim($value, '\\') . ';';
         }, $skeleton->uses());
     }
 
@@ -112,7 +119,7 @@ class BuilderUtil extends BuilderUtilBase
     protected function getBody(Skeleton $skeleton)
     {
         return implode(
-            PHP_EOL.PHP_EOL,
+            PHP_EOL . PHP_EOL,
             array_merge(
                 [$this->getTraits($skeleton->traits())],
                 array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
@@ -133,7 +140,7 @@ class BuilderUtil extends BuilderUtilBase
             return '';
         }
 
-        return static::TAB.'use '.implode(', ', $traits).';';
+        return static::TAB . 'use ' . implode(', ', $traits) . ';';
     }
 
     /**
@@ -144,7 +151,7 @@ class BuilderUtil extends BuilderUtilBase
     protected function formatConstant(Constant $constant)
     {
         // TODO: Add phpDoc
-        return static::TAB.'const '.$constant->name.' = '.var_export54($constant->value, true).';';
+        return static::TAB . 'const ' . $constant->name . ' = ' . var_export54($constant->value, true) . ';';
 //        return static::TAB.'const '.$constant->name.' = '.$this->value2File($constant->value).';';
     }
 
@@ -152,16 +159,17 @@ class BuilderUtil extends BuilderUtilBase
      * @param Property $property
      *
      * @return mixed
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function formatProperty(Property $property)
     {
         $content = File::get($this->getStub('property.stub'));
 
         $replace = [
-            '// DummyPhpDoc'    => $property->docComment,
-            'DummyDefinition'   => implode(' ', $property->modifiers),
-            'DummyName'         => '$'.$property->name,
-            'DummyValue'        => var_export54($property->value),
+            '// DummyPhpDoc'  => $property->docComment,
+            'DummyDefinition' => implode(' ', $property->modifiers),
+            'DummyName'       => '$' . $property->name,
+            'DummyValue'      => var_export54($property->value),
 //            'DummyValue'        => $this->value2File($property->value),
         ];
 
@@ -203,18 +211,18 @@ if (!function_exists('var_export54')) {
                 $pad_length = 0;
                 if ($assoc) {
                     foreach (array_keys($value) as $key) {
-                        $pad_length = max($pad_length, strlen($key)+2);
+                        $pad_length = max($pad_length, strlen($key) + 2);
                     }
                 }
 
                 $export = [];
                 foreach ($value as $key => $subValue) {
-                    $export[] = $indent.$TAB
-                        . ($assoc ? str_pad(var_export54($key), $pad_length).' => ' : '')
-                        . var_export54($subValue, $tabs+2, $tabulateKeys);
+                    $export[] = $indent . $TAB
+                        . ($assoc ? str_pad(var_export54($key), $pad_length) . ' => ' : '')
+                        . var_export54($subValue, $tabs + 2, $tabulateKeys);
                 }
 
-                return '['.PHP_EOL.implode(','.PHP_EOL, $export).','.PHP_EOL.$indent.']';
+                return '[' . PHP_EOL . implode(',' . PHP_EOL, $export) . ',' . PHP_EOL . $indent . ']';
 
             case 'string':
                 //return '"' . addcslashes($value, "\\\$\"\r\n\t\v\f") . '"';

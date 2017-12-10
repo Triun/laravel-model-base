@@ -6,6 +6,11 @@ use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Property;
 use Triun\ModelBase\Definitions\Skeleton;
 
+/**
+ * Class DatesModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class DatesModifier extends ModifierBase
 {
     /**
@@ -41,7 +46,7 @@ class DatesModifier extends ModifierBase
     }
 
     /**
-     * @param string $name
+     * @param string                                $name
      * @param \Triun\ModelBase\Definitions\Property $dates
      */
     protected function addToDates($name, Property $dates)

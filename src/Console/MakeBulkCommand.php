@@ -54,8 +54,9 @@ class MakeBulkCommand extends GeneratorCommand
      * Execute the console command.
      *
      * @return bool|null
+     * @throws \Exception
      */
-    public function fire()
+    public function handle()
     {
         // Prerequisites for the command to work.
         $this->prerequisites();

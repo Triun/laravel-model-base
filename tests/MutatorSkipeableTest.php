@@ -2,7 +2,8 @@
 
 /**
  * Class MutatorSkipeableTest
- * @see \Triun\ModelBase\MutatorSkipeable
+ *
+ * @see \Triun\ModelBase\AddOns\MutatorSkipeable
  */
 class MutatorSkipeableTest extends TestCase
 {
@@ -30,7 +31,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_has_getter_and_setter_mutators()
+    public function it_has_getter_and_setter_mutators()
     {
         $model = $this->getPost();
 
@@ -60,7 +61,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_sets_an_attribute_value_without_mutator()
+    public function it_sets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -90,7 +91,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_gets_an_attribute_value_without_mutator()
+    public function it_gets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -130,7 +131,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_sets_and_gets_an_attribute_value_without_mutator()
+    public function it_sets_and_gets_an_attribute_value_without_mutator()
     {
         $model = $this->getPost();
 
@@ -165,7 +166,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_does_casts()
+    public function it_does_casts()
     {
         $model = $this->getPost();
 
@@ -194,7 +195,7 @@ class MutatorSkipeableTest extends TestCase
     /**
      * @test
      */
-    function it_does_dates()
+    public function it_does_dates()
     {
         $model = $this->getPost();
 
@@ -248,14 +249,14 @@ class MutatorSkipeableTest extends TestCase
 /**
  * Class Post
  *
- * @property string $title
- * @property array|object $metadata
+ * @property string         $title
+ * @property array|object   $metadata
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
 class Post extends \Illuminate\Database\Eloquent\Model
 {
-    use \Triun\ModelBase\MutatorSkipeable;
+    use \Triun\ModelBase\AddOns\MutatorSkipeable;
 
     /**
      * The attributes that should be cast to native types.
@@ -278,8 +279,9 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Set a given attribute on the model, without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
      * @param  mixed  $value
+     *
      * @return $this
      */
     public function run_setAttributeWithoutMutator($key, $value)
@@ -291,7 +293,8 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Get a plain attribute (not a relationship), without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function run_getAttributeValueWithoutMutator($key)

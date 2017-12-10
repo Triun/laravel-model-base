@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<ruleset name="Triun's PHP Standard">
+
+    <description>Triun's PHP Standard (PSR2)</description>
+
+    <rule ref="PSR2"/>
+
+    <file>./</file>
+
+    <exclude-pattern>/build</exclude-pattern>
+    <exclude-pattern>/vendor</exclude-pattern>
+    <exclude-pattern>/.phpstorm.meta.php</exclude-pattern>
+    <exclude-pattern>/_ide_helper.php</exclude-pattern>
+    <exclude-pattern>/_extra_ide_helper.php</exclude-pattern>
+
+    <!--<arg name="report" value="summary"/>-->
+    <arg name="colors"/>
+    <arg value="sp"/>
+    <arg name="extensions" value="php,inc,lib"/>
+
+    <ini name="memory_limit" value="128M"/>
+
+    <!-- Config files lines can be longer than 120 chars-->
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>/config/*</exclude-pattern>
+    </rule>
+
+    <!-- Each class must be in a namespace of at least one level (a top-level vendor name)-->
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>/tests/*</exclude-pattern>
+    </rule>
+
+    <!-- is not in camel caps format -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>/tests/*</exclude-pattern>
+    </rule>
+
+    <!-- Each class must be in a file by itself -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <exclude-pattern>/tests/*</exclude-pattern>
+    </rule>
+
+</ruleset>

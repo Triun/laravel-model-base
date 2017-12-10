@@ -5,14 +5,22 @@ namespace Triun\ModelBase\Lib;
 use App;
 use File;
 use Exception;
+use ReflectionClass;
+
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
-use ReflectionClass;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+use Triun\Diff\Diff;
 use Triun\ModelBase\ModelBaseConfig;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Util;
-use Triun\ModelBase\Utils\Diff;
 
+/**
+ * Class BuilderUtilBase
+ *
+ * @package Triun\ModelBase\Lib
+ */
 abstract class BuilderUtilBase extends UtilBase
 {
     const TAB = '    ';
@@ -64,14 +72,14 @@ abstract class BuilderUtilBase extends UtilBase
         $name = str_replace(App::getNamespace(), '', $className);
 
         // TODO: Composer loader compatibility.
-        return App::path().DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $name).'.php';
+        return App::path() . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $name) . '.php';
     }
 
     /**
-     * @param string $path
-     * @param string $name
-     * @param string $content
-     * @param bool   $override
+     * @param string                                $path
+     * @param string                                $name
+     * @param string                                $content
+     * @param bool                                  $override
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      *
      * @return bool|int The method returns the number of bytes that were written to the file, or false on failure.
@@ -86,10 +94,11 @@ abstract class BuilderUtilBase extends UtilBase
             $actual = File::get($path);
             if ($actual === $content) {
                 $this->muted("{$name} identical");
+
                 return Diff::UNMODIFIED;
             }
 
-            $this->command->line($path.' updates:', null, OutputStyle::VERBOSITY_VERBOSE);
+            $this->command->line($path . ' updates:', null, OutputStyle::VERBOSITY_VERBOSE);
             $compare = $this->compare($actual, $content);
             if ($this->command->getOutput()->isVerbose()) {
                 $this->command->getOutput()->newLine();
@@ -103,6 +112,7 @@ abstract class BuilderUtilBase extends UtilBase
                     $this->info("{$name} difiers, but not update required");
                 }
                 $this->verifyExtension($skeleton);
+
                 return false;
             }
         }
@@ -115,13 +125,13 @@ abstract class BuilderUtilBase extends UtilBase
             throw new Exception("{$name} save error: Returned $size bytes");
         }
 
-        $this->success($name.' '.($exists ? 'updated' : 'created'));
+        $this->success($name . ' ' . ($exists ? 'updated' : 'created'));
 
         return $size;
     }
 
     /**
-     * @param string $path
+     * @param string      $path
      * @param bool|string $override
      *
      * @return bool
@@ -158,6 +168,8 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * @param $string1
      * @param $string2
+     *
+     * @return int
      */
     protected function compare($string1, $string2)
     {
@@ -173,11 +185,11 @@ abstract class BuilderUtilBase extends UtilBase
         foreach ($diff as $line) {
             switch ($line[1]) {
                 case Diff::INSERTED:
-                    $this->command->info('<fg=green>+ ' . $line[0].'</>', OutputStyle::VERBOSITY_VERBOSE);
+                    $this->command->info('<fg=green>+ ' . $line[0] . '</>', OutputStyle::VERBOSITY_VERBOSE);
                     $result |= Diff::INSERTED;
                     break;
                 case Diff::DELETED:
-                    $this->command->line('<fg=red>- ' . $line[0].'</>', null, OutputStyle::VERBOSITY_VERY_VERBOSE);
+                    $this->command->line('<fg=red>- ' . $line[0] . '</>', null, OutputStyle::VERBOSITY_VERY_VERBOSE);
                     $result |= Diff::DELETED;
                     break;
                 case Diff::UNMODIFIED:
@@ -192,12 +204,11 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Build the directory for the class if necessary.
      *
-     * @param  string  $path
-     * @return string
+     * @param  string $path
      */
-    protected function makeDirectory($path)
+    protected function makeDirectory(string $path)
     {
-        if (! File::isDirectory(dirname($path))) {
+        if (!File::isDirectory(dirname($path))) {
             File::makeDirectory(dirname($path), 0777, true, true);
         }
     }
@@ -215,10 +226,10 @@ abstract class BuilderUtilBase extends UtilBase
         $tags = [];
         foreach ($skeleton->phpDocTags() as $name => $item) {
             if (!isset($tags[$item->tag])) {
-                $tags[$item->tag] = (object) [
+                $tags[$item->tag] = (object)[
                     'max_type_length' => 0,
                     'max_name_length' => 0,
-                    'items' => [],
+                    'items'           => [],
                 ];
             }
             $tags[$item->tag]->max_type_length = max($tags[$item->tag]->max_type_length, strlen($item->type));
@@ -230,7 +241,7 @@ abstract class BuilderUtilBase extends UtilBase
         ksort($tags);
 
         // Order by a defined tag order
-        $push = ['mixin', 'method', 'property-write', 'property-read', 'property'];
+        $push = ['method', 'property-write', 'property-read', 'property'];
         uksort($tags, function ($a, $b) use ($push) {
             $aIndex = array_search($a, $push);
 
@@ -249,30 +260,32 @@ abstract class BuilderUtilBase extends UtilBase
         foreach ($tags as $tag => $info) {
             $result[] = ' *';
             /**
-             * @var string $name
+             * @var string                                 $name
              * @var \Triun\ModelBase\Definitions\PhpDocTag $item
              */
             foreach ($info->items as $name => $item) {
                 $replace = [
-                    'dummy_tag'     => $tag,
-                    'dummy_type'    => str_pad($item->type, $info->max_type_length),
-                    'dummy_name'    => $item->hasName() ? str_pad($item->getName(), $info->max_name_length) : '',
+                    'dummy_tag'         => $tag,
+                    'dummy_type'        => str_pad($item->type, $info->max_type_length),
+                    'dummy_name'        => $item->hasName() ? str_pad($item->getName(), $info->max_name_length) : '',
                     'dummy_description' => $item->description,
                 ];
                 $result[] = rtrim(str_replace(array_keys($replace), array_values($replace), $stub));
             }
         }
+
         return $result;
     }
 
     /**
      * Write a string as success output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      */
-    public function success($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function success($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
@@ -286,11 +299,12 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as error output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      */
-    public function error($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function error($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
@@ -304,11 +318,12 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as trace output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      */
-    public function trace($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function trace($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         if ($this->command->getOutput()->isVerbose()) {
             $this->muted($string, $verbosity);
@@ -318,11 +333,12 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as warning output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      */
-    public function warning($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function warning($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
@@ -337,27 +353,29 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as info output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      * @link https://symfony.com/doc/current/console/coloring.html
      */
-    public function info($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function info($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         if ($this->command->getOutput()->getVerbosity() >= $verbosity) {
-            $this->command->getOutput()->writeln('<fg=cyan;options=bold>'.$string.'</>'); // black bg
+            $this->command->getOutput()->writeln('<fg=cyan;options=bold>' . $string . '</>'); // black bg
         }
     }
 
     /**
      * Write a string as muted output.
      *
-     * @param  string  $string
-     * @param  int     $verbosity
+     * @param  string $string
+     * @param  int    $verbosity
+     *
      * @return void
      * @link https://symfony.com/doc/current/console/coloring.html
      */
-    public function muted($string, $verbosity = \Symfony\Component\Console\Style\SymfonyStyle::OUTPUT_NORMAL)
+    public function muted($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
     {
         $this->command->line($string, null, $verbosity);
         // $this->command->getOutput()->writeln('<fg=white;options=bold>'.$string.'</>'); // white bg

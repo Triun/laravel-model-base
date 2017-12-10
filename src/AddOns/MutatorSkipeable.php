@@ -1,9 +1,12 @@
 <?php
 
-namespace Triun\ModelBase;
+namespace Triun\ModelBase\AddOns;
+
+use Illuminate\Support\Str;
 
 /**
  * Class MutatorSkipeable
+ *
  * @package Triun\ModelBase
  */
 trait MutatorSkipeable
@@ -12,8 +15,9 @@ trait MutatorSkipeable
      * Set a given attribute on the model, without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
      * @param  mixed  $value
+     *
      * @return $this
      */
     protected function setAttributeWithoutMutator($key, $value)
@@ -22,13 +26,20 @@ trait MutatorSkipeable
             // If an attribute is listed as a "date", we'll convert it from a DateTime
             // instance into a form proper for storage on the database tables using
             // the connection grammar's date format. We will auto set the values.
-            if (in_array($key, $this->getDates()) || $this->isDateCastable($key)) {
+            if ($value && $this->isDateAttribute($key)) {
                 $value = $this->fromDateTime($value);
             }
 
-            if ($this->isJsonCastable($key)) {
-                $value = $this->asJson($value);
+            if ($this->isJsonCastable($key) && !is_null($value)) {
+                $value = $this->castAttributeAsJson($key, $value);
             }
+        }
+
+        // If this attribute contains a JSON ->, we'll set the proper value in the
+        // attribute's underlying array. This takes care of properly nesting an
+        // attribute in the array's value in the case of deeply nested items.
+        if (Str::contains($key, '->')) {
+            return $this->fillJsonAttribute($key, $value);
         }
 
         $this->attributes[$key] = $value;
@@ -40,7 +51,8 @@ trait MutatorSkipeable
      * Get a plain attribute (not a relationship), without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function getAttributeValueWithoutMutator($key)
@@ -57,7 +69,7 @@ trait MutatorSkipeable
         // If the attribute is listed as a date, we will convert it to a DateTime
         // instance on retrieval, which makes it quite convenient to work with
         // date fields without having to create a mutator for each property.
-        if (in_array($key, $this->getDates()) && ! is_null($value)) {
+        if (in_array($key, $this->getDates()) && !is_null($value)) {
             return $this->asDateTime($value);
         }
 

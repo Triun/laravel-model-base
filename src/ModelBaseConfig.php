@@ -1,9 +1,9 @@
 <?php
 
-
 namespace Triun\ModelBase;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 
 use Triun\ModelBase\Modifiers\AuthModifier;
@@ -19,6 +19,7 @@ use Triun\ModelBase\Modifiers\PhpDocModifier;
 
 /**
  * Class ModelBaseConfig
+ *
  * @package Triun\ModelBase
  */
 class ModelBaseConfig
@@ -27,6 +28,16 @@ class ModelBaseConfig
      * Config file.
      */
     const CONFIG_FILE = 'model-base';
+
+    /**
+     * @var string
+     */
+    const WILDCARD_CONNECTION_STUD = '{{Connection}}';
+
+    /**
+     * @var string
+     */
+    const WILDCARD_DRIVER_STUD = '{{Driver}}';
 
     /**
      * @var string[]
@@ -80,19 +91,26 @@ class ModelBaseConfig
     protected $items = [];
 
     /**
+     * @var \Illuminate\Database\Connection
+     */
+    protected $connection;
+
+    /**
      * ModelBaseConfig constructor.
      *
-     * @param \Illuminate\Database\Connection|string|null $connection
+     * @param \Illuminate\Database\Connection $connection
      */
     public function __construct($connection)
     {
         $this->items = array_merge(
             $this->loadConfig(static::CONFIG_FILE),
-            $this->loadConfig(static::CONFIG_FILE.'.drivers.'.$connection->getDriverName()),
-            $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName())
+            $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
+            $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
             // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
             // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
+
+        $this->connection = $connection;
     }
 
     /**
@@ -108,7 +126,8 @@ class ModelBaseConfig
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -119,8 +138,9 @@ class ModelBaseConfig
     /**
      * Get the specified configuration value.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
@@ -131,8 +151,9 @@ class ModelBaseConfig
     /**
      * Set a given configuration value.
      *
-     * @param  array|string  $key
-     * @param  mixed   $value
+     * @param  array|string $key
+     * @param  mixed        $value
+     *
      * @return void
      */
     /*public function set($key, $value = null)
@@ -153,9 +174,9 @@ class ModelBaseConfig
      * 'gray|grey' is also gray and grey
      * '*At|*_at finish in 'At' or '_at'
      *
-     * @param string|string[]   $rules
-     * @param string            $value
-     * @param bool              $case_sensitive
+     * @param string|string[] $rules
+     * @param string          $value
+     * @param bool            $case_sensitive
      *
      * @return bool
      */
@@ -230,21 +251,43 @@ class ModelBaseConfig
     }
 
     /**
-     * @param string $tableName
-     * @param string $namespace
-     * @param string $prefix
-     * @param string $suffix
+     * @param string $className
+     *
+     * @return string
+     */
+    public function getAddOnClassName($className)
+    {
+        return $this->getClassName(
+            class_basename($className),
+            $this->get('addons.namespace'),
+            $this->get('addons.prefix'),
+            $this->get('addons.suffix'),
+            $this->get('addons.renames', [])
+        );
+    }
+
+    /**
+     * @param string   $tableName
+     * @param string   $namespace
+     * @param string   $prefix
+     * @param string   $suffix
      * @param string[] $renames
      *
      * @return string
      */
     protected function getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
     {
-        $name = is_array($renames) && isset($renames[$tableName])?
+        $name = is_array($renames) && isset($renames[$tableName]) ?
             trim($renames[$tableName]) :
             str_singular($tableName);
         $name = studly_case($name);
 
-        return $namespace.'\\'.$prefix.$name.$suffix;
+        return str_replace([
+            static::WILDCARD_CONNECTION_STUD,
+            static::WILDCARD_DRIVER_STUD,
+        ], [
+            Str::studly($this->connection->getName()),
+            Str::studly($this->connection->getDriverName()),
+        ], $namespace . '\\' . $prefix . $name . $suffix);
     }
 }

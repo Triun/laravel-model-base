@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * Class ModelBaseConfigTest
+ */
 class ModelBaseConfigTest extends TestCase
 {
     /**
@@ -36,11 +38,12 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test has()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::has()
      *
      * @test
      */
-    function it_checks_if_an_attribute_exist()
+    public function it_checks_if_an_attribute_exist()
     {
         $config = $this->getConfig();
         $this->assertFalse($config->has($this->notExists));
@@ -49,11 +52,12 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
      */
-    function it_loads_null_if_key_do_not_exists()
+    public function it_loads_null_if_key_do_not_exists()
     {
         $config = $this->getConfig();
         $this->assertNull($config->get($this->notExists));
@@ -61,11 +65,12 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
      */
-    function it_loads_laravel_configuration()
+    public function it_loads_laravel_configuration()
     {
         $laravelConfig = Config::get('model-base');
         $config = $this->getConfig();
@@ -75,17 +80,19 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test get()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::get()
      *
      * @test
      */
-//    function it_can_specify_explicit_configuration_depending_of_the_connection_or_driver()
+//    public function it_can_specify_explicit_configuration_depending_of_the_connection_or_driver()
 //    {
 //    }
 
     /**
      * Test match()
-     * @see \Triun\ModelBase\ModelBaseConfig::match()
+     *
+     * @see  \Triun\ModelBase\ModelBaseConfig::match()
      *
      * fnmatch separated by |
      * @link http://php.net/fnmatch
@@ -96,7 +103,7 @@ class ModelBaseConfigTest extends TestCase
      *
      * @test
      */
-    function it_do_matches()
+    public function it_do_matches()
     {
         $config = $this->getConfig();
 
@@ -192,11 +199,12 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test modifiers()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::modifiers()
      *
      * @test
      */
-    function it_can_retrieve_the_modifiers()
+    public function it_can_retrieve_the_modifiers()
     {
         $connection = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
@@ -220,11 +228,12 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test getClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getClassName()
      *
      * @test
      */
-    function it_can_generate_a_class_name()
+    public function it_can_generate_a_class_name()
     {
         $connection = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
@@ -264,28 +273,30 @@ class ModelBaseConfigTest extends TestCase
 
     /**
      * Test getBaseClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getBaseClassName()
      *
      * @test
      */
-    function it_can_generate_a_base_class_name()
+    public function it_can_generate_a_base_class_name()
     {
         $config = $this->getConfig();
 
-        $this->assertEquals('App\\ModelsBases\\UserBase', $config->getBaseClassName('users'));
+        $this->assertEquals('App\\Models\\Bases\\Testing\\UserBase', $config->getBaseClassName('users'));
     }
 
     /**
      * Test getModelClassName()
+     *
      * @see \Triun\ModelBase\ModelBaseConfig::getModelClassName()
      *
      * @test
      */
-    function it_can_generate_a_model_class_name()
+    public function it_can_generate_a_model_class_name()
     {
         $config = $this->getConfig();
 
-        $this->assertEquals('App\\Models\\User', $config->getModelClassName('users'));
+        $this->assertEquals('App\\Models\\Testing\\User', $config->getModelClassName('users'));
     }
 }
 
@@ -297,10 +308,10 @@ class ConfigUnprotected extends \Triun\ModelBase\ModelBaseConfig
     }
 
     /**
-     * @param string $tableName
-     * @param string $namespace
-     * @param string $prefix
-     * @param string $suffix
+     * @param string   $tableName
+     * @param string   $namespace
+     * @param string   $prefix
+     * @param string   $suffix
      * @param string[] $renames
      *
      * @return string

@@ -4,6 +4,11 @@ namespace Triun\ModelBase\Lib;
 
 use Triun\ModelBase\ModelBaseConfig;
 
+/**
+ * Class UtilBase
+ *
+ * @package Triun\ModelBase\Lib
+ */
 abstract class UtilBase
 {
     /**
@@ -16,7 +21,7 @@ abstract class UtilBase
     /**
      * ModelBaseUtil constructor.
      *
-     * @param \Triun\ModelBase\ModelBaseConfig  $config
+     * @param \Triun\ModelBase\ModelBaseConfig $config
      */
     public function __construct(ModelBaseConfig $config)
     {
@@ -53,9 +58,9 @@ abstract class UtilBase
      * 'gray|grey' is also gray and grey
      * '*At|*_at finish in 'At' or '_at'
      *
-     * @param string|string[]   $rules
-     * @param string            $value
-     * @param bool              $case_sensitive
+     * @param string|string[] $rules
+     * @param string          $value
+     * @param bool            $case_sensitive
      *
      * @return bool
      */

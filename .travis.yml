@@ -3,10 +3,6 @@
 language: php
 
 php:
-  # aliased to the lowest 5.6.4 accepted version
-  - '5.6.4'
-  # aliased to a recent 5.6.x version
-  - '5.6'
   # aliased to a recent 7.x version
   - '7.0'
   # aliased to a recent 7.1.x version
@@ -36,17 +32,9 @@ matrix:
     - php: hhvm
       env: DB=pgsql  # PDO driver for pgsql is unsupported by HHVM (3rd party install for support)
   include:
-    - php: '5.6.4'
+    - php: '7.0'
       env:
         - DB=mysql
-        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-#    - php: '5.6.4'
-#      env:
-#        - DB=pgsql
-#        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-    - php: '5.6.4'
-      env:
-        - DB=sqlite
         - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
   allow_failures:
     - php: 7.0
@@ -55,13 +43,13 @@ matrix:
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
-  - if [[ "$DB" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS laravel_model_base_test;" -U postgres; fi
-  - if [[ "$DB" == "pgsql" ]]; then psql -c "create database laravel_model_base_test;" -U postgres; fi
-  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS laravel_model_base_test;" -uroot; fi
+  - if [[ "$DB" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS test_laravel_model_base;" -U postgres; fi
+  - if [[ "$DB" == "pgsql" ]]; then psql -c "create database test_laravel_model_base;" -U postgres; fi
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test_laravel_model_base;" -uroot; fi
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
 script:
-  - vendor/bin/phpcs --standard=psr2 src/
+  - vendor/bin/phpcs --standard=phpcs.xml
   - vendor/bin/phpunit --configuration phpunit_$DB.xml --coverage-text

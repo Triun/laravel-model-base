@@ -2,22 +2,35 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\MutatorSkipeable;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\AddOns\MutatorSkipeable;
 
 class ColumnAliasModifier extends ModifierBase
 {
+    /**
+     * @var string
+     */
     protected $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
+
+    /**
+     * @var string
+     */
     protected $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
 
+    /**
+     * @var boolean
+     */
     protected $trait_added = false;
 
     /**
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function apply(Skeleton $skeleton)
     {
@@ -31,7 +44,10 @@ class ColumnAliasModifier extends ModifierBase
 
     /**
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param \Triun\ModelBase\Definitions\Column  $column
+     * @param \Triun\ModelBase\Definitions\Column   $column
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function addMuttators(Skeleton $skeleton, Column $column)
     {
@@ -63,13 +79,16 @@ class ColumnAliasModifier extends ModifierBase
             ]));
 
             if (!$this->trait_added) {
-                $skeleton->addTrait(MutatorSkipeable::class);
+                $skeleton->addTrait(
+                    $this->getAddOn(MutatorSkipeable::class)
+                );
             }
         }
     }
 
     /**
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function getAttributeMethod()
     {
@@ -84,6 +103,7 @@ class ColumnAliasModifier extends ModifierBase
 
     /**
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function setAttributeMethod()
     {

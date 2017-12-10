@@ -10,10 +10,14 @@ use Triun\ModelBase\Definitions\PhpDocTag;
 
 /**
  * Class PhpDocModifier
+ *
  * @package Triun\ModelBase\Modifiers
  */
 class PhpDocModifier extends ModifierBase
 {
+    /**
+     * @var string[]
+     */
     protected $defaultMixing = [
         '\\Illuminate\\Database\\Query\\Builder',
         '\\Illuminate\\Database\\Eloquent\\Builder',
@@ -43,10 +47,10 @@ class PhpDocModifier extends ModifierBase
     {
         foreach ($this->table()->getColumns() as $column) {
             $skeleton->addPhpDocTag(new PhpDocTag(
-                '$'.$column->publicName,
+                '$' . $column->publicName,
                 'property',
                 $column->phpDocType,
-                str_pad($column->dbType, 11).' '.$column->getComment()
+                str_pad($column->dbType, 11) . ' ' . $column->getComment()
             ));
 
             // TODO: See what to do with aliases in where. It won't probably be able to do the where correctly, so we

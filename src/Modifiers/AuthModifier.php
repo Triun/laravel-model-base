@@ -7,6 +7,7 @@ use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Definitions\Property;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -15,10 +16,11 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * Class UserModifier
+ *
  * @package Triun\ModelBase\Modifiers
  *
- * @link https://laravel.com/docs/5.4/authentication
- * @link https://github.com/laravel/laravel/blob/master/app/User.php
+ * @link    https://laravel.com/docs/5.5/authentication
+ * @link    https://github.com/laravel/laravel/blob/master/app/User.php
  */
 class AuthModifier extends ModifierBase
 {
@@ -28,10 +30,11 @@ class AuthModifier extends ModifierBase
      * @var array
      */
     protected $default = [
-        'Authenticatable' => true,
+        'Authenticatable'  => true,
+        'Authorizable'     => true,
         'CanResetPassword' => true,
-        'Authorizable' => false,
-        'fillable' => ['email', 'password'],
+        'Notifiable'       => true,
+        'fillable'         => ['name', 'email', 'password'],
     ];
 
     /**
@@ -49,14 +52,18 @@ class AuthModifier extends ModifierBase
                 $skeleton->addInterface(AuthenticatableContract::class, 'AuthenticatableContract');
             }
 
+            if ($params['Authorizable']) {
+                $skeleton->addTrait(Authorizable::class);
+                $skeleton->addInterface(AuthorizableContract::class, 'AuthorizableContract');
+            }
+
             if ($params['CanResetPassword']) {
                 $skeleton->addTrait(CanResetPassword::class);
                 $skeleton->addInterface(CanResetPasswordContract::class, 'CanResetPasswordContract');
             }
 
-            if ($params['Authorizable']) {
-                $skeleton->addTrait(Authorizable::class);
-                $skeleton->addInterface(AuthorizableContract::class, 'AuthorizableContract');
+            if ($params['Notifiable']) {
+                $skeleton->addTrait(Notifiable::class);
             }
 
             // Add to $fillable array
@@ -89,7 +96,7 @@ class AuthModifier extends ModifierBase
     }
 
     /**
-     * @param string $name
+     * @param string                                $name
      * @param \Triun\ModelBase\Definitions\Property $property
      */
     protected function addToArrayProperty($name, Property $property)

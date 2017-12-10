@@ -2,23 +2,39 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\MutatorSkipeable;
 use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\AddOns\MutatorSkipeable;
 
+/**
+ * Class CamelToSnakeModifier
+ *
+ * @package Triun\ModelBase\Modifiers
+ */
 class CamelToSnakeModifier extends ModifierBase
 {
+    /**
+     * @var string
+     */
     protected $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
+
+    /**
+     * @var string
+     */
     protected $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
 
+    /**
+     * @var boolean
+     */
     protected $trait_added = false;
 
     /**
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function apply(Skeleton $skeleton)
     {
@@ -38,45 +54,51 @@ class CamelToSnakeModifier extends ModifierBase
 
     /**
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param \Triun\ModelBase\Definitions\Column  $column
+     * @param \Triun\ModelBase\Definitions\Column   $column
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function addSnakeMuttators(Skeleton $skeleton, Column $column)
     {
-        $name   = $column->getName();
-        $snake  = $column->snakeName;
+        $name = $column->getName();
+        $snake = $column->snakeName;
 
         if ($name !== $snake) {
-            $stud   = $column->studName;
+            $stud = $column->studName;
             $phpDoc = $column->phpDocType;
 
-            $skeleton->addMethod($this->util()->makeMethod('get'.$stud.'Attribute', $this->getAttributeMethod(), [
-                'DummyNamespace'    => $skeleton->getNamespace(),
-                'DummyClass'        => class_basename($skeleton->className),
-                'DummyDescription'  => "Snake name getter: $name -> $snake.",
-                'dummyType'         => $phpDoc,
-                'DummyName'         => $stud,
-                'dummy_name'        => $name,
-                'dummy_snake_name'  => $snake,
+            $skeleton->addMethod($this->util()->makeMethod('get' . $stud . 'Attribute', $this->getAttributeMethod(), [
+                'DummyNamespace'   => $skeleton->getNamespace(),
+                'DummyClass'       => class_basename($skeleton->className),
+                'DummyDescription' => "Snake name getter: $name -> $snake.",
+                'dummyType'        => $phpDoc,
+                'DummyName'        => $stud,
+                'dummy_name'       => $name,
+                'dummy_snake_name' => $snake,
             ]));
 
-            $skeleton->addMethod($this->util()->makeMethod('set'.$stud.'Attribute', $this->setAttributeMethod(), [
-                'DummyNamespace'    => $skeleton->getNamespace(),
-                'DummyClass'        => class_basename($skeleton->className),
-                'DummyDescription'  => "Snake name setter: $name -> $snake.",
-                'dummyType'         => $phpDoc,
-                'DummyName'         => $stud,
-                'dummy_name'        => $name,
-                'dummy_snake_name'  => $snake,
+            $skeleton->addMethod($this->util()->makeMethod('set' . $stud . 'Attribute', $this->setAttributeMethod(), [
+                'DummyNamespace'   => $skeleton->getNamespace(),
+                'DummyClass'       => class_basename($skeleton->className),
+                'DummyDescription' => "Snake name setter: $name -> $snake.",
+                'dummyType'        => $phpDoc,
+                'DummyName'        => $stud,
+                'dummy_name'       => $name,
+                'dummy_snake_name' => $snake,
             ]));
 
             if (!$this->trait_added) {
-                $skeleton->addTrait(MutatorSkipeable::class);
+                $skeleton->addTrait(
+                    $this->getAddOn(MutatorSkipeable::class)
+                );
             }
         }
     }
 
     /**
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function getAttributeMethod()
     {
@@ -91,6 +113,7 @@ class CamelToSnakeModifier extends ModifierBase
 
     /**
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function setAttributeMethod()
     {

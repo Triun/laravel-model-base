@@ -22,7 +22,7 @@ This package follows the PSR-2 coding standard.
 To test if your contribution passes the standard, you can use the command:
 
 ```bash
-./vendor/bin/phpcs --standard=psr2 src/
+./vendor/bin/phpcs --standard=phpcs.xml
 ```
 
 Which should give you no output, indicating that there are no coding standard errors.

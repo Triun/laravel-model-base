@@ -74,15 +74,19 @@ return [
     | - mixin: An array of mixin classes. It is used to help IDEs to auto-complete.
     | - override: In case that the file already exists, whether if we should override it, not, or ask for confirmation.
     |
+    | Namespace wildcards:
+    | -  `{{Connection}}`
+    | -  `{{Driver}}`
+    |
     */
 
-    'namespace' => 'App\\ModelsBases',
-    'extends' => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
-    'renames' => [],
-    'prefix' => '',
-    'suffix' => 'Base',
-    'mixin' => ['\Eloquent'],
-    'override' => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
+    'namespace' => 'App\\Models\\Bases\\{{Connection}}',
+    'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
+    'renames'   => [],
+    'prefix'    => '',
+    'suffix'    => 'Base',
+    'mixin'     => ['\Eloquent'],
+    'override'  => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*
     |--------------------------------------------------------------------------
@@ -94,14 +98,50 @@ return [
     | - namespace: Namespace for the model base objects.
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
+    | - save: Set to true if you want to save the model (if the model already exists, it will not override it).
+    |
+    | Note that all models changes must be done manually, this tool will never override the actual models, but you
+    | can make use of the diff tool to see the differences.
+    |
+    | Tip: To see the differences of the actual model and the suggested model, use the command in verbose mode:
+    | -v verbose
+    | -vv very verbose
+    | -vvv debug
     |
     */
 
     'model' => [
-        'namespace' => 'App\\Models',
-        'prefix' => '',
-        'suffix' => '',
-        'save' => true,
+        'namespace' => 'App\\Models\\{{Connection}}',
+        'prefix'    => '',
+        'suffix'    => '',
+        'save'      => true, // true | false
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | AddOns
+    |--------------------------------------------------------------------------
+    |
+    | Some modifiers may require models AddOns.
+    |
+    | This AddOns will require to be available both in dev environments and prod environments even after the maker is
+    | finished.
+    |
+    | - namespace: Namespace for the model addons objects.
+    | - prefix: Model Class Prefix.
+    | - suffix: Model Class Suffix.
+    | - save: Set to true if you want to save the model into the chosen namespace directory.
+    | - override: In case that the file already exists, whether if we should override it, or not.
+    |
+    */
+
+    'addons' => [
+        'namespace' => 'App\\Models\\AddOns',
+        'renames'   => [],
+        'prefix'    => '',
+        'suffix'    => '',
+        'save'      => true, // true | false
+        'override'  => true, // true | false
     ],
 
     /*
@@ -150,20 +190,20 @@ return [
 
     'doctrine' => [
         'dbal' => [
-          'mapping_types' => [
+            'mapping_types'        => [
 
-           ],
-          'driver_mapping_types' => [
-              'mysql' => [
-                  'enum' => 'string',
-                  //'tinyint' => 'smallint',
-              ],
-              'mssql' => [
-                  'xml' => 'string',
-              ],
-          ],
-          'real_length' => true,
-          'real_tinyint' => true,
+            ],
+            'driver_mapping_types' => [
+                'mysql' => [
+                    'enum' => 'string',
+                    //'tinyint' => 'smallint',
+                ],
+                'mssql' => [
+                    'xml' => 'string',
+                ],
+            ],
+            'real_length'          => true,
+            'real_tinyint'         => true,
         ],
     ],
 
@@ -185,10 +225,10 @@ return [
     |
     */
 
-    'snakeAttributes'   => true,
-    'dates'             => true,
-    'dateFormat'        => null,
-    'softDeletes'       => true, // See DELETED_AT configuration.
+    'snakeAttributes' => true,
+    'dates'           => true,
+    'dateFormat'      => null,
+    'softDeletes'     => true, // See DELETED_AT configuration.
 
     /*
     |--------------------------------------------------------------------------
@@ -226,19 +266,19 @@ return [
         |
         */
 
-        'aliases' => [
+        'aliases'        => [
             // If it match, it will skip it.
             'except' => [],
             // If there is a match, none of the following renames rules will be processed.
-            'force' => [],
+            'force'  => [],
             // Rename it before the other rules are applied.
-            'pre' => [],
+            'pre'    => [],
             // If the column name start with any of the words in the list, it will remove it.
             'prefix' => [],
             // If the column name ends with any of the words in the list, it will remove it.
             'suffix' => [],
             // Rename it after the other rules are applied.
-            'post' => [],
+            'post'   => [],
         ],
 
         /*
@@ -306,13 +346,13 @@ return [
 
     'timestamps' => [
         'CREATED_AT' => [
-            'force' => [],
+            'force'       => [],
             'alternative' => [],
         ],
         'UPDATED_AT' => [
-            'force' => [],
+            'force'       => [],
             'alternative' => [],
-        ]
+        ],
     ],
 
     /*
@@ -332,7 +372,7 @@ return [
     */
 
     'DELETED_AT' => [
-        'force' => [],
+        'force'       => [],
         'alternative' => [],
     ],
 
@@ -354,7 +394,7 @@ return [
     ],
 
     'fillable' => [
-        'tables' => [],
+        'tables'  => [],
         'no_fill' => [
             'id',
         ],
@@ -376,9 +416,10 @@ return [
     |
     | - auth: list of tables that should implement the authenticable configuration.
     |   - auth.Authenticatable: Optional. Whether implement Authenticatable trait and Contract (default true).
+    |   - auth.Authorizable: Optional. Whether implement Authorizable trait and Contract (default true).
     |   - auth.CanResetPassword: Optional. Whether implement CanResetPassword trait and Contract (default true).
-    |   - auth.Authorizable: Optional. Whether implement Authorizable trait and Contract (default false).
-    |   - auth.fillable: Optional. Fillable fields (default ['email', 'password']).
+    |   - auth.Notifiable: Optional. Whether implement Notifiable trait (default true).
+    |   - auth.fillable: Optional. Fillable fields (default ['name', 'email', 'password']).
     |
     | Example 1:
     | 'auth' => [

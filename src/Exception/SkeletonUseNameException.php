@@ -4,6 +4,7 @@ namespace Triun\ModelBase\Exception;
 
 /**
  * Class SkeletonUseNameException
+ *
  * @package Triun\ModelBase\Exception
  */
 class SkeletonUseNameException extends \InvalidArgumentException
@@ -26,11 +27,13 @@ class SkeletonUseNameException extends \InvalidArgumentException
     /**
      * SkeletonUseNameException constructor.
      *
-     * @param string          $name Full name of the class, included namespace.
+     * @param string          $name           Full name of the class, included namespace.
      * @param string          $attemptedAlias Basename or alias that was attempted to be set.
-     * @param string          $actualAlias Basename or alias that was already set.
-     * @param int             $code [optional] The Exception code.
-     * @param \Exception|null $previous [optional] The previous exception used for the exception chaining. Since 5.3.0
+     * @param string          $actualAlias    Basename or alias that was already set.
+     * @param int             $code           [optional] The Exception code.
+     * @param \Exception|null $previous       [optional] The previous exception used for the exception chaining.
+     *                                        Since 5.3.0
+     *
      * @since 5.1.0
      */
     public function __construct($name, $attemptedAlias, $actualAlias, $code = 0, \Exception $previous = null)

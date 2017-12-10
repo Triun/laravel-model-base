@@ -9,6 +9,7 @@ use Triun\ModelBase\Exception\SkeletonUseNameException;
 
 /**
  * Class Skeleton
+ *
  * @package Triun\ModelBase\Definitions
  */
 class Skeleton
@@ -227,7 +228,7 @@ class Skeleton
     public function hasUse($key)
     {
         return isset($this->uses[$key])
-            || isset($this->extends[$key])
+            || ($this->extends === $key)
             || isset($this->interfaces[$key])
             || isset($this->traits[$key]);
     }
@@ -295,7 +296,7 @@ class Skeleton
     /**
      * Get constant.
      *
-     * @param  string  $key
+     * @param  string $key
      *
      * @return  \Triun\ModelBase\Definitions\Constant|null
      * @throws \InvalidArgumentException
@@ -329,7 +330,7 @@ class Skeleton
     /**
      * Get method.
      *
-     * @param  string  $key
+     * @param  string $key
      *
      * @return  \Triun\ModelBase\Definitions\Method|null
      * @throws \InvalidArgumentException
@@ -509,7 +510,7 @@ class Skeleton
                 //dump($value->value);
                 // TODO: Another way to catch this issue.
                 echo "The method {$value->name} already exists."
-                    . " Please, update it instead of try to create it again.".PHP_EOL;
+                    . " Please, update it instead of try to create it again." . PHP_EOL;
                 /*throw new InvalidArgumentException(
                     "The method {$value->name} already exists. Please, update it instead of try to create it again."
                 );*/
@@ -585,7 +586,7 @@ class Skeleton
     {
         return array_filter($this->constants, function ($value) {
             /* @var $value Constant */
-            return  $value->isDirty();
+            return $value->isDirty();
         });
     }
 
@@ -596,7 +597,7 @@ class Skeleton
     {
         return array_filter($this->properties, function ($value) {
             /* @var $value Property */
-            return  $value->isDirty();
+            return $value->isDirty();
         });
     }
 
@@ -607,7 +608,7 @@ class Skeleton
     {
         return array_filter($this->methods, function ($value) {
             /* @var $value Property */
-            return  $value->isDirty();
+            return $value->isDirty();
         });
     }
 
@@ -619,9 +620,9 @@ class Skeleton
     public function toArray()
     {
         return [
-            'constants' => $this->constants,
+            'constants'  => $this->constants,
             'properties' => $this->properties,
-            'methods' => $this->methods,
+            'methods'    => $this->methods,
         ];
     }
 
@@ -633,13 +634,13 @@ class Skeleton
     public function defaults()
     {
         return [
-            'constants' => array_map(function ($value) {
-                return  $value->default;
+            'constants'  => array_map(function ($value) {
+                return $value->default;
             }, $this->constants),
             'properties' => array_map(function ($value) {
-                return  $value->default;
+                return $value->default;
             }, $this->properties),
-            'methods' => $this->methods,
+            'methods'    => $this->methods,
         ];
     }
 
@@ -651,13 +652,13 @@ class Skeleton
     public function values()
     {
         return [
-            'constants' => array_map(function ($value) {
-                return  $value->value;
+            'constants'  => array_map(function ($value) {
+                return $value->value;
             }, $this->constants),
             'properties' => array_map(function ($value) {
-                return  $value->value;
+                return $value->value;
             }, $this->properties),
-            'methods' => $this->methods,
+            'methods'    => $this->methods,
         ];
     }
 
@@ -669,15 +670,15 @@ class Skeleton
     public function dirty()
     {
         return [
-            'constants' => array_filter($this->constants, function ($value) {
+            'constants'  => array_filter($this->constants, function ($value) {
                 /* @var $value Constant */
-                return  $value->isDirty();
+                return $value->isDirty();
             }),
             'properties' => array_filter($this->properties, function ($value) {
                 /* @var $value Constant */
-                return  $value->isDirty();
+                return $value->isDirty();
             }),
-            'methods' => $this->methods,
+            'methods'    => $this->methods,
         ];
     }
 }
