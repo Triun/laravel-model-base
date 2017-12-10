@@ -376,9 +376,10 @@ return [
     |
     | - auth: list of tables that should implement the authenticable configuration.
     |   - auth.Authenticatable: Optional. Whether implement Authenticatable trait and Contract (default true).
+    |   - auth.Authorizable: Optional. Whether implement Authorizable trait and Contract (default true).
     |   - auth.CanResetPassword: Optional. Whether implement CanResetPassword trait and Contract (default true).
-    |   - auth.Authorizable: Optional. Whether implement Authorizable trait and Contract (default false).
-    |   - auth.fillable: Optional. Fillable fields (default ['email', 'password']).
+    |   - auth.Notifiable: Optional. Whether implement Notifiable trait (default true).
+    |   - auth.fillable: Optional. Fillable fields (default ['name', 'email', 'password']).
     |
     | Example 1:
     | 'auth' => [
