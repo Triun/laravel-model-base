@@ -35,8 +35,7 @@
         "squizlabs/php_codesniffer": "^3.1",
         "laravel/framework": "^5.5",
         "laravel/lumen-framework": "^5.4",
-        "orchestra/testbench": "^3.5",
-        "orchestra/testbench": "^3.4"
+        "orchestra/testbench": "^3.5"
     },
     "suggest": {
         "triun/laravel-model-validable": "Model validation and rules generator modifier"
