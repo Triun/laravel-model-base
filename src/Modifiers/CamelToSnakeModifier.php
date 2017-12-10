@@ -57,6 +57,7 @@ class CamelToSnakeModifier extends ModifierBase
      * @param \Triun\ModelBase\Definitions\Column   $column
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function addSnakeMuttators(Skeleton $skeleton, Column $column)
     {
@@ -88,7 +89,9 @@ class CamelToSnakeModifier extends ModifierBase
             ]));
 
             if (!$this->trait_added) {
-                $skeleton->addTrait(MutatorSkipeable::class);
+                $skeleton->addTrait(
+                    $this->getAddOn(MutatorSkipeable::class)
+                );
             }
         }
     }

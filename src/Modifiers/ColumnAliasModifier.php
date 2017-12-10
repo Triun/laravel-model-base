@@ -30,6 +30,7 @@ class ColumnAliasModifier extends ModifierBase
      * @param \Triun\ModelBase\Definitions\Skeleton
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function apply(Skeleton $skeleton)
     {
@@ -46,6 +47,7 @@ class ColumnAliasModifier extends ModifierBase
      * @param \Triun\ModelBase\Definitions\Column   $column
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function addMuttators(Skeleton $skeleton, Column $column)
     {
@@ -77,7 +79,9 @@ class ColumnAliasModifier extends ModifierBase
             ]));
 
             if (!$this->trait_added) {
-                $skeleton->addTrait(MutatorSkipeable::class);
+                $skeleton->addTrait(
+                    $this->getAddOn(MutatorSkipeable::class)
+                );
             }
         }
     }

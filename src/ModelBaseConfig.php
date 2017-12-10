@@ -251,6 +251,22 @@ class ModelBaseConfig
     }
 
     /**
+     * @param string $className
+     *
+     * @return string
+     */
+    public function getAddOnClassName($className)
+    {
+        return $this->getClassName(
+            class_basename($className),
+            $this->get('addons.namespace'),
+            $this->get('addons.prefix'),
+            $this->get('addons.suffix'),
+            $this->get('addons.renames', [])
+        );
+    }
+
+    /**
      * @param string   $tableName
      * @param string   $namespace
      * @param string   $prefix

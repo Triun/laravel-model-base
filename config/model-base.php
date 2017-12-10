@@ -137,6 +137,7 @@ return [
 
     'addons' => [
         'namespace' => 'App\\Models\\AddOns',
+        'renames'   => [],
         'prefix'    => '',
         'suffix'    => '',
         'save'      => true, // true | false
