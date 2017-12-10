@@ -56,7 +56,7 @@ class MakeBulkCommand extends GeneratorCommand
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         // Prerequisites for the command to work.
         $this->prerequisites();

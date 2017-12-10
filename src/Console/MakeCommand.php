@@ -46,7 +46,7 @@ class MakeCommand extends GeneratorCommand
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $this->prerequisites();
 
