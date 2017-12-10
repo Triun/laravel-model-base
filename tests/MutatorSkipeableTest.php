@@ -3,7 +3,7 @@
 /**
  * Class MutatorSkipeableTest
  *
- * @see \Triun\ModelBase\MutatorSkipeable
+ * @see \Triun\ModelBase\AddOns\MutatorSkipeable
  */
 class MutatorSkipeableTest extends TestCase
 {
@@ -256,7 +256,7 @@ class MutatorSkipeableTest extends TestCase
  */
 class Post extends \Illuminate\Database\Eloquent\Model
 {
-    use \Triun\ModelBase\MutatorSkipeable;
+    use \Triun\ModelBase\AddOns\MutatorSkipeable;
 
     /**
      * The attributes that should be cast to native types.

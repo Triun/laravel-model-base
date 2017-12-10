@@ -1,6 +1,8 @@
 <?php
 
-namespace Triun\ModelBase;
+namespace Triun\ModelBase\AddOns;
+
+use Illuminate\Support\Str;
 
 /**
  * Class MutatorSkipeable
@@ -21,16 +23,24 @@ trait MutatorSkipeable
     protected function setAttributeWithoutMutator($key, $value)
     {
         if ($value !== null) {
+
             // If an attribute is listed as a "date", we'll convert it from a DateTime
             // instance into a form proper for storage on the database tables using
             // the connection grammar's date format. We will auto set the values.
-            if (in_array($key, $this->getDates()) || $this->isDateCastable($key)) {
+            if ($value && $this->isDateAttribute($key)) {
                 $value = $this->fromDateTime($value);
             }
 
-            if ($this->isJsonCastable($key)) {
-                $value = $this->asJson($value);
+            if ($this->isJsonCastable($key) && ! is_null($value)) {
+                $value = $this->castAttributeAsJson($key, $value);
             }
+        }
+
+        // If this attribute contains a JSON ->, we'll set the proper value in the
+        // attribute's underlying array. This takes care of properly nesting an
+        // attribute in the array's value in the case of deeply nested items.
+        if (Str::contains($key, '->')) {
+            return $this->fillJsonAttribute($key, $value);
         }
 
         $this->attributes[$key] = $value;
