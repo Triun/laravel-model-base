@@ -77,12 +77,12 @@ return [
     */
 
     'namespace' => 'App\\ModelsBases',
-    'extends' => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
-    'renames' => [],
-    'prefix' => '',
-    'suffix' => 'Base',
-    'mixin' => ['\Eloquent'],
-    'override' => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
+    'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
+    'renames'   => [],
+    'prefix'    => '',
+    'suffix'    => 'Base',
+    'mixin'     => ['\Eloquent'],
+    'override'  => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*
     |--------------------------------------------------------------------------
@@ -99,9 +99,14 @@ return [
 
     'model' => [
         'namespace' => 'App\\Models',
-        'prefix' => '',
-        'suffix' => '',
-        'save' => true,
+        'prefix'    => '',
+        'suffix'    => '',
+        'save'      => true,
+    ],
+
+    'addOns' => [
+        'namespace' => '',
+        'save'      => true,
     ],
 
     /*
@@ -150,20 +155,20 @@ return [
 
     'doctrine' => [
         'dbal' => [
-          'mapping_types' => [
+            'mapping_types'        => [
 
-           ],
-          'driver_mapping_types' => [
-              'mysql' => [
-                  'enum' => 'string',
-                  //'tinyint' => 'smallint',
-              ],
-              'mssql' => [
-                  'xml' => 'string',
-              ],
-          ],
-          'real_length' => true,
-          'real_tinyint' => true,
+            ],
+            'driver_mapping_types' => [
+                'mysql' => [
+                    'enum' => 'string',
+                    //'tinyint' => 'smallint',
+                ],
+                'mssql' => [
+                    'xml' => 'string',
+                ],
+            ],
+            'real_length'          => true,
+            'real_tinyint'         => true,
         ],
     ],
 
@@ -185,10 +190,10 @@ return [
     |
     */
 
-    'snakeAttributes'   => true,
-    'dates'             => true,
-    'dateFormat'        => null,
-    'softDeletes'       => true, // See DELETED_AT configuration.
+    'snakeAttributes' => true,
+    'dates'           => true,
+    'dateFormat'      => null,
+    'softDeletes'     => true, // See DELETED_AT configuration.
 
     /*
     |--------------------------------------------------------------------------
@@ -226,19 +231,19 @@ return [
         |
         */
 
-        'aliases' => [
+        'aliases'        => [
             // If it match, it will skip it.
             'except' => [],
             // If there is a match, none of the following renames rules will be processed.
-            'force' => [],
+            'force'  => [],
             // Rename it before the other rules are applied.
-            'pre' => [],
+            'pre'    => [],
             // If the column name start with any of the words in the list, it will remove it.
             'prefix' => [],
             // If the column name ends with any of the words in the list, it will remove it.
             'suffix' => [],
             // Rename it after the other rules are applied.
-            'post' => [],
+            'post'   => [],
         ],
 
         /*
@@ -306,13 +311,13 @@ return [
 
     'timestamps' => [
         'CREATED_AT' => [
-            'force' => [],
+            'force'       => [],
             'alternative' => [],
         ],
         'UPDATED_AT' => [
-            'force' => [],
+            'force'       => [],
             'alternative' => [],
-        ]
+        ],
     ],
 
     /*
@@ -332,7 +337,7 @@ return [
     */
 
     'DELETED_AT' => [
-        'force' => [],
+        'force'       => [],
         'alternative' => [],
     ],
 
@@ -354,7 +359,7 @@ return [
     ],
 
     'fillable' => [
-        'tables' => [],
+        'tables'  => [],
         'no_fill' => [
             'id',
         ],

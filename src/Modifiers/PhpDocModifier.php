@@ -15,6 +15,9 @@ use Triun\ModelBase\Definitions\PhpDocTag;
  */
 class PhpDocModifier extends ModifierBase
 {
+    /**
+     * @var string[]
+     */
     protected $defaultMixing = [
         '\\Illuminate\\Database\\Query\\Builder',
         '\\Illuminate\\Database\\Eloquent\\Builder',

@@ -4,7 +4,6 @@ namespace Triun\ModelBase\Modifiers;
 
 use Triun\ModelBase\MutatorSkipeable;
 use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\Skeleton;
 
