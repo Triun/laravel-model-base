@@ -9,3 +9,7 @@ composer.lock
 
 # phpStorm
 .idea
+
+# IDE Helper
+.phpstorm.meta.php
+_ide_helper.php
