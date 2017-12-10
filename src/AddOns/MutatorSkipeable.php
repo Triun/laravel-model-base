@@ -23,7 +23,6 @@ trait MutatorSkipeable
     protected function setAttributeWithoutMutator($key, $value)
     {
         if ($value !== null) {
-
             // If an attribute is listed as a "date", we'll convert it from a DateTime
             // instance into a form proper for storage on the database tables using
             // the connection grammar's date format. We will auto set the values.
@@ -31,7 +30,7 @@ trait MutatorSkipeable
                 $value = $this->fromDateTime($value);
             }
 
-            if ($this->isJsonCastable($key) && ! is_null($value)) {
+            if ($this->isJsonCastable($key) && !is_null($value)) {
                 $value = $this->castAttributeAsJson($key, $value);
             }
         }

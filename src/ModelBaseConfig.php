@@ -106,8 +106,8 @@ class ModelBaseConfig
             $this->loadConfig(static::CONFIG_FILE),
             $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
             $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
-        // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-        // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
 
         $this->connection = $connection;

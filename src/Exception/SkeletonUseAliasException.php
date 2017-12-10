@@ -31,7 +31,8 @@ class SkeletonUseAliasException extends \InvalidArgumentException
      * @param string          $attemptedName Full name, included namespace, that was attempted to be use by the alias.
      * @param string          $actualName    Full name, included namespace, that was already use by the alias.
      * @param int             $code          [optional] The Exception code.
-     * @param \Exception|null $previous      [optional] The previous exception used for the exception chaining. Since 5.3.0
+     * @param \Exception|null $previous      [optional] The previous exception used for the exception chaining.
+     *                                       Since 5.3.0
      *
      * @since 5.1.0
      */
