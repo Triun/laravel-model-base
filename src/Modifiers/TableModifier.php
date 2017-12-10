@@ -25,6 +25,9 @@ class TableModifier extends ModifierBase
         $this->setPrimaryKey($skeleton);
     }
 
+    /**
+     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
+     */
     protected function setTableName(Skeleton $skeleton)
     {
         // TODO TEST: See how to get out laravel prefix. ($this->_conn->getTablePrefix())
