@@ -46,6 +46,14 @@ class PhpDocTag
     }
 
     /**
+     * @return boolean
+     */
+    public function hasName()
+    {
+        return $this->name !== null;
+    }
+
+    /**
      * @return string
      */
     public function getName()

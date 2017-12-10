@@ -79,6 +79,56 @@ You can publish the configuration file into your app with:
 php artisan vendor:publish --provider="Triun\ModelBase\ModelBaseServiceProvider" --tag=config
 ```
 
+# Lumen
+
+If you are using Lumen, you may need to do some manual steps...
+
+Copy the config file into your `config` directory:
+
+```bash
+cp vendor/triun/laravel-model-base/config/model-base.php config/
+```
+
+And you may also need to uncomment the following lines in `bootstrap/app.php` file:
+
+```php
+<?php
+# bootstrap/app.php
+
+$app = new Laravel\Lumen\Application(
+    realpath(__DIR__.'/../')
+);
+
+$app->withFacades(true, [
+    Illuminate\Support\Facades\App::class => 'App',
+    Illuminate\Support\Facades\File::class => 'File',
+]);
+$app->withEloquent();
+$app->register(App\Providers\AppServiceProvider::class);
+```
+
+So we can use Facades and Eloquent, as well as add some content in the `AppServiceProvider`:
+
+```php
+<?php
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
+        
+        if ($this->app->environment() !== 'production') {
+            $this->app->configure('model-base');
+            $this->app->register(\Triun\ModelBase\ModelBaseServiceProvider::class);
+        }
+    }
+}
+```
+
 // TODO
 
 Besides the configuration file, you can also add or create your own [modifiers](#modifiers).

@@ -3,7 +3,6 @@
 namespace Triun\ModelBase\Console;
 
 use DB;
-use App;
 use Triun\ModelBase\Util;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,7 +53,7 @@ class MakeBulkCommand extends GeneratorCommand
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return bool|null
      * @throws \Exception
      */
     public function handle()
@@ -90,6 +89,8 @@ class MakeBulkCommand extends GeneratorCommand
 
         $this->showExtraBasesModels($bases);
         $this->showExtraModels($models);
+
+        return null;
     }
 
     /**
@@ -185,8 +186,15 @@ class MakeBulkCommand extends GeneratorCommand
      */
     public function showExtraFiles($path, $files)
     {
+        /** @var \Illuminate\Filesystem\Filesystem $app */
+        $file = \Illuminate\Container\Container::getInstance()->make('files');
+
+        if (!is_dir($path)) {
+            return;
+        }
+
         $extra = [];
-        foreach (\File::allFiles($path) as $file) {
+        foreach ($file->allFiles($path) as $file) {
             if (!in_array($file, $files)) {
                 $extra[] = $file;
             }
@@ -229,8 +237,11 @@ class MakeBulkCommand extends GeneratorCommand
      */
     protected function getNamespaceDirectory($namespace)
     {
-        $name = str_replace(App::getNamespace(), '', $namespace);
+        /** @var \Laravel\Lumen\Application|\Illuminate\Foundation\Application $app */
+        $app = \Illuminate\Container\Container::getInstance()->make('app');
 
-        return App::path() . '/' . str_replace('\\', '/', $name);
+        $name = str_replace($app->getNamespace(), '', $namespace);
+
+        return $app->path() . '/' . str_replace('\\', '/', $name);
     }
 }

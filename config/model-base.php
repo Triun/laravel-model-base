@@ -4,6 +4,51 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Connections
+    |--------------------------------------------------------------------------
+    |
+    | Connection specific configurations.
+    |
+    | The configurations set for a specific connection would would be merged with the outside connections
+    | configurations.
+    |
+    | Example:
+    |
+    |   'connections' => [
+    |       'my-connection-1' => [
+    |           'namespace' => 'App\\ModelsBases\\MyConnection1',
+    |           'extends' => \My\Laravel\ModelBase::class,
+    |           'renames' => [
+    |               'deliveriesAddresses'   => 'delivery_address',
+    |               'salesSync'             => 'sale_sync',
+    |           ],
+    |           'prefix' => '',
+    |           'suffix' => 'Base',
+    |           'override' => true,
+    |
+    |           'model' => [
+    |               'namespace' => 'App\\Models\\MyConnection1',
+    |               'prefix' => '',
+    |               'suffix' => '',
+    |               'save' => true,
+    |           ],
+    |       ],
+    |   ],
+    |
+    | Note: If multi connections are set, you may want to move the auth to the respective connection instead to the
+    | default configuration.
+    |
+    | To run a specific connection:
+    |
+    | ```
+    | php artisan make:model-base-bulk --connection=my-connection-1
+    | ```
+    |
+    */
+    'connections' => [],
+
+    /*
+    |--------------------------------------------------------------------------
     | Modifiers
     |--------------------------------------------------------------------------
     |
@@ -26,6 +71,7 @@ return [
     | - renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
+    | - mixin: An array of mixin classes. It is used to help IDEs to auto-complete.
     | - override: In case that the file already exists, whether if we should override it, not, or ask for confirmation.
     |
     */
@@ -35,6 +81,7 @@ return [
     'renames' => [],
     'prefix' => '',
     'suffix' => 'Base',
+    'mixin' => ['\Eloquent'],
     'override' => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*
@@ -145,22 +192,73 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Camel case to snake case compatibility
+    | Column
     |--------------------------------------------------------------------------
     |
-    | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
-    | $model->column_name could access columnName in the database.
-    |
-    | In order to do manual renaming, you can fill camel_to_snake.
-    |
-    | This could be useful in order to correct snake_names conversion singularities, for example:
-    | IP should be ip, and not i_p.
-    |
-    | Notice that the values of the array will be set as lower case.
+    | Processes applied to the columns.
     |
     */
 
-    'camel_to_snake' => [],
+    'column' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Column Aliases
+        |--------------------------------------------------------------------------
+        |
+        | You may want to add some aliases, maybe because the table name has a standard naming like prefixes.
+        |
+        | With the aliases you can hide the original names (which will remain active by magic methods), and create
+        | aliases instead.
+        |
+        | The execution of this rules are:
+        |
+        | If `except` has a match, it will skip it.
+        |
+        | If `force` has a match, it will set this alias and skip the other rules.
+        |
+        | The rest of the rules will be processed in the following order:
+        |
+        | 1. pre: Rename it before the other rules are applied.
+        | 2. prefix: If the column name start with any of the words in the list, it will remove it.
+        | 3. suffix: If the column name ends with any of the words in the list, it will remove it.
+        | 4. post: Rename it after the other rules are applied.
+        |
+        */
+
+        'aliases' => [
+            // If it match, it will skip it.
+            'except' => [],
+            // If there is a match, none of the following renames rules will be processed.
+            'force' => [],
+            // Rename it before the other rules are applied.
+            'pre' => [],
+            // If the column name start with any of the words in the list, it will remove it.
+            'prefix' => [],
+            // If the column name ends with any of the words in the list, it will remove it.
+            'suffix' => [],
+            // Rename it after the other rules are applied.
+            'post' => [],
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Camel case to snake case compatibility
+        |--------------------------------------------------------------------------
+        |
+        | This modifier allow the model to use databases with camelCase column names as snake case in the model, so
+        | $model->column_name could access columnName in the database.
+        |
+        | In order to do manual renaming, you can fill camel_to_snake.
+        |
+        | This could be useful in order to correct snake_names conversion singularities, for example:
+        | IP should be ip, and not i_p.
+        |
+        | Notice that the values of the array will be set as lower case.
+        |
+        */
+        'camel_to_snake' => [],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -180,6 +278,13 @@ return [
     |          'cast_type'  => 'array',
     |      ],
     |  ],
+    |
+    | You can use multiple values with '|'. Example: 'field_1|field_2'
+    |
+    | You can also use the shell wildcard pattern.
+    | Example: "*gr[ae]y" would match grey, gray, or anything that finish in any of those.
+    | @see \fnmatch
+    | @link http://php.net/manual/en/function.fnmatch.php
     |
     */
 
@@ -304,10 +409,14 @@ return [
     | either. You can update the auth models or tables used by laravel's in config/auth.php.
     | More info about auth customization: https://laravel.com/docs/5.2/authentication#adding-custom-guards
     |
+    | Note:
+    | If you use more than one connection, we recommend to leave this array empty, and add it to the respective
+    | connection.
+    |
     */
 
     'auth' => [
-        'users',
+        'users', // For multi connections: Move this array to the specific connection and left here an empty array.
     ],
 
     /*

@@ -258,11 +258,16 @@ abstract class BuilderUtilBase extends UtilBase
 
         $result = [];
         foreach ($tags as $tag => $info) {
+            $result[] = ' *';
+            /**
+             * @var string $name
+             * @var \Triun\ModelBase\Definitions\PhpDocTag $item
+             */
             foreach ($info->items as $name => $item) {
                 $replace = [
-                    'dummy_tag'         => $tag,
-                    'dummy_type'        => str_pad($item->type, $info->max_type_length),
-                    'dummy_name'        => str_pad($name, $info->max_name_length),
+                    'dummy_tag'     => $tag,
+                    'dummy_type'    => str_pad($item->type, $info->max_type_length),
+                    'dummy_name'    => $item->hasName() ? str_pad($item->getName(), $info->max_name_length) : '',
                     'dummy_description' => $item->description,
                 ];
                 $result[] = rtrim(str_replace(array_keys($replace), array_values($replace), $stub));

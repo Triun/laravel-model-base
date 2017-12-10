@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 
 use Triun\ModelBase\Modifiers\AuthModifier;
 use Triun\ModelBase\Modifiers\ConnectionModifier;
+use Triun\ModelBase\Modifiers\ColumnAliasModifier;
 use Triun\ModelBase\Modifiers\TableModifier;
 use Triun\ModelBase\Modifiers\TimestampsModifier;
 use Triun\ModelBase\Modifiers\DatesModifier;
@@ -52,6 +53,9 @@ class ModelBaseConfig
 
         // CamelToSnake Attributes
         CamelToSnakeModifier::class,
+
+        // For custom aliases
+        ColumnAliasModifier::class,
 
         // PhpDoc tags
         PhpDocModifier::class,

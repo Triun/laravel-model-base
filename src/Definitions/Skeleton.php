@@ -441,6 +441,13 @@ class Skeleton
      */
     public function addPhpDocTag(PhpDocTag $value)
     {
+        // If the tag doesn't have names...
+        if ($value->getName() === null && in_array($value->tag, ['mixin'])) {
+            $this->phpDocTags[] = $value;
+
+            return $this;
+        }
+
         if (isset($this->properties[$value->getName()])) {
             throw new InvalidArgumentException("The property {$value->getName()} already exists");
         }

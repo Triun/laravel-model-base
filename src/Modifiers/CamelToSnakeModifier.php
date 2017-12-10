@@ -18,12 +18,12 @@ class CamelToSnakeModifier extends ModifierBase
     /**
      * @var string
      */
-    protected $getAttributeMethod_stub = 'camel-to-snake/getAttributeMethod.stub';
+    protected $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
 
     /**
      * @var string
      */
-    protected $setAttributeMethod_stub = 'camel-to-snake/setAttributeMethod.stub';
+    protected $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
 
     /**
      * @var boolean
