@@ -17,7 +17,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 ### Added
 
 - Support for Laravel 5.4
-- Support for Lumen 5.4 (with some tunning explained in [README.md](README.md))
+- Support for Lumen 5.4 (with some tuning explained in [README.md](README.md))
 - New configurable aliases tools: `except`, `force`, `pre`, `prefix`, `suffix` and `post`.
 
 ## Changed
