@@ -21,6 +21,18 @@
             "name": "Gonzalo Moreno"
         }
     ],
+    "archive": {
+        "exclude": [
+            "/.git",
+            "/.travis.yml",
+            "/tests",
+            "/build",
+            "/*.md",
+            "/LICENCE",
+            "/phpcs.xml",
+            "/phpunit_*.xml"
+        ]
+    },
     "require": {
         "php": ">=7.0.0",
         "illuminate/support": "^5.4",
