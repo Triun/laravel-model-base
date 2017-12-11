@@ -63,7 +63,7 @@ script:
 deploy:
   provider: releases
   prerelease: true
-  api_key: $GITHUB_TOKEN # Set in travis-ci.org dashboard ("GITHUB OAUTH TOKEN")
+  #api_key: $GITHUB_TOKEN # Set in travis-ci.org dashboard ("GITHUB OAUTH TOKEN")
   #github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   # Travis CI can automatically upload assets from your $TRAVIS_BUILD_DIR to git tags on your GitHub repository.
   #file: "FILE TO UPLOAD"
