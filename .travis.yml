@@ -52,11 +52,11 @@ script:
   - vendor/bin/phpcs --standard=phpcs.xml
   - vendor/bin/phpunit --configuration phpunit_$DB.xml --coverage-text
 
-before_deploy:
-    # Set up git user name and tag this commit
-    - git config --local user.name "YOUR GIT USER NAME"
-    - git config --local user.email "YOUR GIT USER EMAIL"
-    - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+#before_deploy:
+#    # Set up git user name and tag this commit
+#    # - git config --local user.name "YOUR GIT USER NAME"
+#    # - git config --local user.email "YOUR GIT USER EMAIL"
+#    - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
 
 # https://docs.travis-ci.com/user/deployment/releases/
 # https://octokit.github.io/octokit.rb/Octokit/Client/Releases.html#create_release-instance_method
