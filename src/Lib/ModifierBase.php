@@ -132,13 +132,6 @@ abstract class ModifierBase
             return static::$addons[$class];
         }
 
-        $fromPath = $this->getClassNamePath($class);
-        echo "$fromPath" . PHP_EOL;
-
-        if (!File::exists($fromPath)) {
-            throw new RuntimeException("The addon class $class doesn't exists.");
-        }
-
         // If we don't want to save it, we can use the original
         // But it will be missing in prod if the library is in dev.
         if (!$this->config('addons.save')) {
@@ -159,29 +152,67 @@ abstract class ModifierBase
             ));
         }
 
-        if (!File::exists($newClass) || $this->config('addons.override')) {
-            $toPath = $this->getAppClassNamePath($newClass);
-            echo "$fromPath -> $toPath" . PHP_EOL;
-
-            $content = File::get($fromPath);
-
-            // Substitute class name in file content
-            $content = str_replace(
-                [class_basename($class), $this->getNamespace($class)],
-                [class_basename($newClass), $this->getNamespace($newClass)],
-                $content
-            );
-
-            if (!File::isDirectory(dirname($toPath))) {
-                File::makeDirectory(dirname($toPath), 0777, true, true);
-            }
-
-            File::put($toPath, $content);
-        }
+        $this->saveAddOn($class, $newClass);
 
         static::$addons[$class] = $newClass;
 
         return $newClass;
+    }
+
+    /**
+     * @param $class
+     * @param $newClass
+     *
+     * @throws \Exception
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function saveAddOn($class, $newClass)
+    {
+        $fromPath = $this->getClassNamePath($class);
+
+        if (!File::exists($fromPath)) {
+            throw new RuntimeException("The addon class $class doesn't exists.");
+        }
+
+        $toPath = $this->getAppClassNamePath($newClass);
+        $exists = File::exists($toPath);
+
+        // If exists but we do not have override permissions
+        if ($exists && !$this->config('addons.override')) {
+            return;
+        }
+
+        // Substitute class name in file content
+        $content = $this->getNewAddOnContent(File::get($fromPath), $class, $newClass);
+
+        // If exists, but the content is no changed
+        if ($exists && $content === File::get($toPath)) {
+            return;
+        }
+
+        echo "Save Addon: $fromPath -> $toPath" . PHP_EOL;
+
+        if (!File::isDirectory(dirname($toPath))) {
+            File::makeDirectory(dirname($toPath), 0777, true, true);
+        }
+
+        File::put($toPath, $content);
+    }
+
+    /**
+     * @param string $content
+     * @param string $class
+     * @param string $newClass
+     *
+     * @return mixed
+     */
+    protected function getNewAddOnContent($content, $class, $newClass)
+    {
+        return str_replace(
+            [class_basename($class), $this->getNamespace($class)],
+            [class_basename($newClass), $this->getNamespace($newClass)],
+            $content
+        );
     }
 
     /**
@@ -230,7 +261,7 @@ abstract class ModifierBase
         }
 
         /** @var \Composer\Autoload\ClassLoader $loader */
-        $loader = require App::basePath() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR. 'autoload.php';
+        $loader = require App::basePath() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
         return realpath($loader->findFile($className));
     }
