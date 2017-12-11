@@ -225,7 +225,7 @@ if (!function_exists('var_export54')) {
                 return '[' . PHP_EOL . implode(',' . PHP_EOL, $export) . ',' . PHP_EOL . $indent . ']';
 
             // Null as lowercase to pass PSR-2 standard
-            case null:
+            case 'NULL':
                 return 'null';
 
             case 'string':
