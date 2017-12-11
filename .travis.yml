@@ -37,17 +37,13 @@ matrix:
       env: DB=pgsql  # PDO driver for pgsql is unsupported by HHVM (3rd party install for support)
   include:
     - php: '5.5'
-      env:
-        - DB=mysql
-        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+      env: 'DB=mysql COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 #    - php: '5.5'
 #      env:
 #        - DB=pgsql
 #        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
     - php: '5.5'
-      env:
-        - DB=sqlite
-        - 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+      env: 'DB=sqlite COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
   allow_failures:
     - php: 7.0
     - php: 7.1
