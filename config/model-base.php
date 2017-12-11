@@ -81,11 +81,13 @@ return [
     */
 
     'namespace' => 'App\\Models\\Bases\\{{Connection}}',
-    'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent'|\Illuminate\Database\Eloquent\Model::class,
+    'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
     'renames'   => [],
     'prefix'    => '',
     'suffix'    => 'Base',
-    'mixin'     => ['\Eloquent'],
+    'mixin'     => [
+        // '\Eloquent'
+    ],
     'override'  => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*
