@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v5.6.0] - 2018-05-01
+
+`Changed`
+
+- `connection` option accepts more than one connection, and gets all connections as the default value.
+
 ## [v5.5.1] - 2018-05-01
 
 `Fixes`
@@ -67,8 +73,9 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.5.1...master
-[v5.5.0]: https://github.com/Triun/laravel-model-base/compare/v5.5.0...v5.5.1
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.6.0...master
+[v5.6.0]: https://github.com/Triun/laravel-model-base/compare/v5.5.1...v5.6.0
+[v5.5.1]: https://github.com/Triun/laravel-model-base/compare/v5.5.0...v5.5.1
 [v5.5.0]: https://github.com/Triun/laravel-model-base/compare/v5.4.1...v5.5.0
 [v5.4.1]: https://github.com/Triun/laravel-model-base/compare/v5.4.0...v5.4.1
 [v5.4.0]: https://github.com/Triun/laravel-model-base/compare/v5.2.0...v5.4.0

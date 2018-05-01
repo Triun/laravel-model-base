@@ -4,6 +4,7 @@ namespace Triun\ModelBase\Console;
 
 use DB;
 use Triun\ModelBase\Util;
+use Illuminate\Database\Connection;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -39,6 +40,21 @@ class MakeBulkCommand extends GeneratorCommand
     protected $tables;
 
     /**
+     * Configure command.
+     */
+    protected function configure()
+    {
+        $this
+            ->addOption(
+                'connection',
+                'c',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The connection we want to run.',
+                config('database.connections', [])
+            );
+    }
+
+    /**
      * Get stub file location for the model.
      *
      * @param string $file
@@ -64,7 +80,20 @@ class MakeBulkCommand extends GeneratorCommand
         ini_set('memory_limit', '512M');
 
         // Connection
-        $connection = DB::connection($this->option('connection'));
+        foreach (DB::connection($this->option('connection')) as $connection) {
+            $this->runConnection($connection);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \Illuminate\Database\Connection $connection
+     *
+     * @throws \Exception
+     */
+    protected function runConnection(Connection $connection)
+    {
         $this->output->title('Bulk Model Base generation for ' . $connection->getName());
 
         // Utils
@@ -89,8 +118,6 @@ class MakeBulkCommand extends GeneratorCommand
 
         $this->showExtraBasesModels($bases);
         $this->showExtraModels($models);
-
-        return null;
     }
 
     /**
@@ -118,32 +145,6 @@ class MakeBulkCommand extends GeneratorCommand
 
         // Load tables
         $this->tables = $schemaUtil->getTableNames($except);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array_merge(
-            parent::getOptions(),
-            [
-                // ['force', "f", InputOption::VALUE_NONE, 'Force override'],
-                // ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
-                ['connection', 'c', InputOption::VALUE_OPTIONAL, 'The connection we want to use'],
-                //['except', null, InputOption::VALUE_OPTIONAL, 'The tables we want to exclude, as comma separated'],
-            ]
-        );
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [];
     }
 
     /**
