@@ -239,35 +239,65 @@ class ModelBaseConfigTest extends TestCase
         $unprotected = new ConfigUnprotected($connection);
 
         // To singular
-        $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('user', 'App\\Models', '', '', []));
-        $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('users', 'App\\Models', '', '', []));
+        $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('user', 'App\\Models', '', '', [], []));
+        $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('users', 'App\\Models', '', '', [], []));
 
         // Prefix and suffix
         $this->assertEquals(
             'App\\Models\\PrefixUser',
-            $unprotected->run_getClassName('users', 'App\\Models', 'Prefix', '', [])
+            $unprotected->run_getClassName('users', 'App\\Models', 'Prefix', '', [], [])
         );
         $this->assertEquals(
             'App\\Models\\UserSuffix',
-            $unprotected->run_getClassName('users', 'App\\Models', '', 'Suffix', [])
+            $unprotected->run_getClassName('users', 'App\\Models', '', 'Suffix', [], [])
         );
         $this->assertEquals(
             'App\\Models\\PrefixUserSuffix',
-            $unprotected->run_getClassName('users', 'App\\Models', 'Prefix', 'Suffix', [])
+            $unprotected->run_getClassName('users', 'App\\Models', 'Prefix', 'Suffix', [], [])
         );
 
         // Renames
         $this->assertEquals(
             'App\\Models\\Customer',
-            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => 'Customer'])
+            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => 'Customer'], [])
         );
         $this->assertEquals(
             'App\\Models\\Customer',
-            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => '  customer  '])
+            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => '  customer  '], [])
         );
         $this->assertNotEquals(
             'App\\Models\\Customer',
-            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => 'customers'])
+            $unprotected->run_getClassName('users', 'App\\Models', '', '', ['users' => 'customers'], [])
+        );
+
+        // Prefixes
+        $this->assertEquals(
+            'App\\Models\\TblUser',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], [])
+        );
+        $this->assertEquals(
+            'App\\Models\\TblUser',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], [null])
+        );
+        $this->assertEquals(
+            'App\\Models\\User',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], ['tbl_'])
+        );
+        $this->assertEquals(
+            'App\\Models\\User',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], ['tbl_', null])
+        );
+        $this->assertEquals(
+            'App\\Models\\User',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], [null, 'tbl_'])
+        );
+        $this->assertEquals(
+            'App\\Models\\TblUser',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', [], ['t_'])
+        );
+        $this->assertEquals(
+            'App\\Models\\Customer',
+            $unprotected->run_getClassName('tbl_users', 'App\\Models', '', '', ['tbl_users' => 'Customer'], ['tbl_'])
         );
     }
 
@@ -312,12 +342,19 @@ class ConfigUnprotected extends \Triun\ModelBase\ModelBaseConfig
      * @param string   $namespace
      * @param string   $prefix
      * @param string   $suffix
-     * @param string[] $renames
+     * @param string[] $tableRenames
+     * @param string[] $tablePrefixes
      *
      * @return string
      */
-    public function run_getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
-    {
-        return $this->getClassName($tableName, $namespace, $prefix, $suffix, $renames);
+    public function run_getClassName(
+        string $tableName,
+        string $namespace,
+        string $prefix,
+        string $suffix,
+        array $tableRenames,
+        array $tablePrefixes
+    ) {
+        return $this->getClassName($tableName, $namespace, $prefix, $suffix, $tableRenames, $tablePrefixes);
     }
 }

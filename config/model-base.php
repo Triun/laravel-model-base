@@ -68,7 +68,10 @@ return [
     |
     | - namespace: Namespace for the model base objects.
     | - extends: The class which the Model Bases should be extended from.
-    | - renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
+    | - table.prefixes: If the prefix match, it will remove it to make the model class name.
+    |   It accept different prefixes, evaluated in order.
+    | - table.renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
+    | - renames: Deprecated. Alias of table.renames Used for backwards support.
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
     | - mixin: An array of mixin classes. It is used to help IDEs to auto-complete.
@@ -82,7 +85,10 @@ return [
 
     'namespace' => 'App\\Models\\Bases\\{{Connection}}',
     'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
-    'renames'   => [],
+    'table'     => [
+        'prefixes' => [],
+        'renames'  => [],
+    ],
     'prefix'    => '',
     'suffix'    => 'Base',
     'mixin'     => [

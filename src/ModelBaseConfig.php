@@ -106,8 +106,8 @@ class ModelBaseConfig
             $this->loadConfig(static::CONFIG_FILE),
             $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
             $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
-            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+        // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
+        // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
 
         $this->connection = $connection;
@@ -230,7 +230,8 @@ class ModelBaseConfig
             $this->get('namespace'),
             $this->get('prefix'),
             $this->get('suffix'),
-            $this->get('renames')
+            $this->get('table.renames', $this->get('renames', [])),
+            $this->get('table.prefixes')
         );
     }
 
@@ -246,7 +247,8 @@ class ModelBaseConfig
             $this->get('model.namespace'),
             $this->get('model.prefix'),
             $this->get('model.suffix'),
-            $this->get('renames')
+            $this->get('table.renames', $this->get('renames', [])),
+            $this->get('table.prefixes')
         );
     }
 
@@ -262,7 +264,8 @@ class ModelBaseConfig
             $this->get('addons.namespace'),
             $this->get('addons.prefix'),
             $this->get('addons.suffix'),
-            $this->get('addons.renames', [])
+            $this->get('addons.table.renames', $this->get('addons.renames', [])),
+            $this->get('addons.table.prefixes', [])
         );
     }
 
@@ -271,16 +274,20 @@ class ModelBaseConfig
      * @param string   $namespace
      * @param string   $prefix
      * @param string   $suffix
-     * @param string[] $renames
+     * @param string[] $tableRenames
+     * @param string[] $tablePrefixes
      *
      * @return string
      */
-    protected function getClassName($tableName, $namespace, $prefix, $suffix, array $renames)
-    {
-        $name = is_array($renames) && isset($renames[$tableName]) ?
-            trim($renames[$tableName]) :
-            str_singular($tableName);
-        $name = studly_case($name);
+    protected function getClassName(
+        string $tableName,
+        string $namespace,
+        string $prefix,
+        string $suffix,
+        array $tableRenames,
+        array $tablePrefixes
+    ) {
+        $name = Str::studly($this->renameTableName($tableName, $tableRenames, $tablePrefixes));
 
         return str_replace([
             static::WILDCARD_CONNECTION_STUD,
@@ -289,5 +296,27 @@ class ModelBaseConfig
             Str::studly($this->connection->getName()),
             Str::studly($this->connection->getDriverName()),
         ], $namespace . '\\' . $prefix . $name . $suffix);
+    }
+
+    /**
+     * @param string $tableName
+     * @param array  $tableRenames
+     * @param array  $tablePrefixes
+     *
+     * @return string
+     */
+    protected function renameTableName(string $tableName, array $tableRenames, array $tablePrefixes)
+    {
+        if (is_array($tableRenames) && isset($tableRenames[$tableName])) {
+            return trim($tableRenames[$tableName]);
+        }
+
+        foreach ($tablePrefixes as $prefix) {
+            if (Str::startsWith($tableName, $prefix)) {
+                return Str::singular(Str::replaceFirst($prefix, '', $tableName));
+            }
+        }
+
+        return Str::singular($tableName);
     }
 }
