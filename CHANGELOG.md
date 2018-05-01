@@ -18,6 +18,14 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ## [v5.5.0][Unreleased] - Unreleased
 
+`Added`
+
+- In `config/model-base.php`, `table.prefixes` will remove the defined prefixes to generate the model names.
+
+`Changed`
+
+- In `config/model-base.php`, the key `renames` now is `table.renames`.
+
 ## [v5.4.1] - 2017-12-11
 
 `Fixes`
