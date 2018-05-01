@@ -230,7 +230,7 @@ class ModelBaseConfig
             $this->get('namespace'),
             $this->get('prefix'),
             $this->get('suffix'),
-            $this->get('table.renames', $this->get('renames', [])),
+            array_merge($this->get('table.renames', []), $this->get('renames', [])),
             $this->get('table.prefixes')
         );
     }
@@ -247,7 +247,7 @@ class ModelBaseConfig
             $this->get('model.namespace'),
             $this->get('model.prefix'),
             $this->get('model.suffix'),
-            $this->get('table.renames', $this->get('renames', [])),
+            array_merge($this->get('table.renames', []), $this->get('renames', [])),
             $this->get('table.prefixes')
         );
     }
@@ -264,7 +264,7 @@ class ModelBaseConfig
             $this->get('addons.namespace'),
             $this->get('addons.prefix'),
             $this->get('addons.suffix'),
-            $this->get('addons.table.renames', $this->get('addons.renames', [])),
+            array_merge($this->get('addons.table.renames', []), $this->get('addons.renames', [])),
             $this->get('addons.table.prefixes', [])
         );
     }
