@@ -50,8 +50,20 @@ class MakeBulkCommand extends GeneratorCommand
                 'c',
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'The connection we want to run.',
-                config('database.connections', [])
+                config('model-base.bulk.connections', null)
             );
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * Used to remove the argument `name` defined in parent.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [];
     }
 
     /**
@@ -79,12 +91,40 @@ class MakeBulkCommand extends GeneratorCommand
 
         ini_set('memory_limit', '512M');
 
-        // Connection
-        foreach (DB::connection($this->option('connection')) as $connection) {
-            $this->runConnection($connection);
+        // Connections
+        $connections = $this->getConnectionNames();
+
+        if (count($connections) === 0) {
+            $this->line(
+                'No default connections specify. ' .
+                'Please, set `bulk.connections` to `null` in your config file to run all configured connections, or ' .
+                'specify one or more connections to run with the option `--connection`.'
+            );
+        } else {
+            foreach ($connections as $connection) {
+                $this->runConnection(DB::connection($connection));
+            }
         }
 
         return null;
+    }
+
+    /**
+     * Connections to be run.
+     *
+     * @return string[]
+     */
+    protected function getConnectionNames()
+    {
+        $connections = $this->option('connection');
+
+        // Run all connections.
+        // The input sets the option connection as an array, even when the value is null, so we need to double check.
+        if (null === $connections || (0 === count($connections) && null === config('model-base.bulk.connections'))) {
+            return array_keys(config('database.connections', []));
+        }
+
+        return $connections;
     }
 
     /**

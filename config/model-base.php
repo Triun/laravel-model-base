@@ -18,13 +18,18 @@ return [
     |       'my-connection-1' => [
     |           'namespace' => 'App\\ModelsBases\\MyConnection1',
     |           'extends' => \My\Laravel\ModelBase::class,
-    |           'renames' => [
-    |               'deliveriesAddresses'   => 'delivery_address',
-    |               'salesSync'             => 'sale_sync',
-    |           ],
     |           'prefix' => '',
     |           'suffix' => 'Base',
     |           'override' => true,
+    |
+    |           'table' => [
+    |               'prefixes' => ['tbl_'],
+    |               'renames' => [
+    |                   'deliveriesAddresses'   => 'delivery_address',
+    |                   'salesSync'             => 'sale_sync',
+    |                   'tbl_settings'          => 'Settings',
+    |               ],
+    |           ],
     |
     |           'model' => [
     |               'namespace' => 'App\\Models\\MyConnection1',
@@ -43,6 +48,9 @@ return [
     | ```
     | php artisan make:model-base-bulk --connection=my-connection-1
     | ```
+    |
+    | If not connection is specify in the bulk command, it will run all the connections configured by
+    | `bulk.connections` (for more information read the config attribute description).
     |
     */
     'connections' => [],
@@ -68,9 +76,6 @@ return [
     |
     | - namespace: Namespace for the model base objects.
     | - extends: The class which the Model Bases should be extended from.
-    | - table.prefixes: If the prefix match, it will remove it to make the model class name.
-    |   It accept different prefixes, evaluated in order.
-    | - table.renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
     | - renames: Deprecated. Alias of table.renames Used for backwards support.
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
@@ -85,10 +90,6 @@ return [
 
     'namespace' => 'App\\Models\\Bases\\{{Connection}}',
     'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
-    'table'     => [
-        'prefixes' => [],
-        'renames'  => [],
-    ],
     'prefix'    => '',
     'suffix'    => 'Base',
     'mixin'     => [
@@ -154,65 +155,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Support for custom Doctrine dbal mapping types
+    | Table
     |--------------------------------------------------------------------------
     |
-    | This setting allow you to map any custom database type (that you may have
-    | created using CREATE TYPE statement or imported using database plugin
-    | / extension to a Doctrine type.
+    | Processes applied to the table names.
     |
-    | Each key in this array is a name of the Doctrine2 DBAL Platform. Currently valid names are:
-    | 'postgresql', 'db2', 'drizzle', 'mysql', 'oracle', 'sqlanywhere', 'sqlite', 'mssql'
-    |
-    | This name is returned by getName() method of the specific Doctrine/DBAL/Platforms/AbstractPlatform descendant
-    |
-    | The value of the array is an array of type mappings. Key is the name of the custom type,
-    | (for example, "jsonb" from Postgres 9.4) and the value is the name of the corresponding Doctrine2 type (in
-    | our case it is 'json_array'. Doctrine types are listed here:
-    | http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
-    |
-    | So to support jsonb in your models when working with Postgres, just add the following entry to the array below:
-    |
-    | "postgresql" => [
-    |       "jsonb" => "json_array",
-    |  ],
-    |
-    | More info:
-    | http://symfony.com/doc/current/doctrine/dbal.html
-    |
-    | 'doctrine' => [
-    |     'dbal' => [
-    |       'mapping_types' => [
-    |
-    |        ],
-    |     ],
-    | ],
-    |
-    | - doctrine.dbal.mapping_types: Mapping applied for all drivers.
-    | - doctrine.dbal.driver_mapping_types: Mapping applied for a specific driver.
-    | - doctrine.dbal.real_length: Overwrite the default length with the real one.
-    | - doctrine.dbal.real_tinyint: Overwrite the type of tinyint to the type given, instead of boolean, if the length
-    |   it's bigger than 1.
+    | - prefixes: If the prefix match, it will remove it to make the model class name.
+    |   It accept different prefixes, evaluated in order.
+    | - renames: Tables which should take a different name for the model class ('table_name' => 'ModelName').
+    |   Renames has priority over the prefixes.
     |
     */
 
-    'doctrine' => [
-        'dbal' => [
-            'mapping_types'        => [
-
-            ],
-            'driver_mapping_types' => [
-                'mysql' => [
-                    'enum' => 'string',
-                    //'tinyint' => 'smallint',
-                ],
-                'mssql' => [
-                    'xml' => 'string',
-                ],
-            ],
-            'real_length'          => true,
-            'real_tinyint'         => true,
-        ],
+    'table' => [
+        'prefixes' => [],
+        'renames'  => [],
     ],
 
     /*
@@ -475,12 +432,83 @@ return [
     |
     | Tables rules used by bulk generation.
     |
+    | - connections: Default connections list that we want to run in bulk mode.
+    |   If the option --connection is set in the command call, then it will use it instead.
+    |   If `null`, it will run all the connections configured in laravel.
+    |   If empty array `[]`, it will not run any connection in bulk mode, unless is specify by the command option.
+    |   If null `[null]` or an empty string `['']` is found in the array, it will use the default connection.
+    |   Note: This value will not be evaluated per connection as the others.
+    |
     | - except: Array of tables that doesn't need a Model.
     |
     */
 
     'bulk' => [
-        'except' => ['migrations', 'sessions'],
+        'connections' => null,
+        'except'      => ['migrations', 'sessions'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Support for custom Doctrine dbal mapping types
+    |--------------------------------------------------------------------------
+    |
+    | This setting allow you to map any custom database type (that you may have
+    | created using CREATE TYPE statement or imported using database plugin
+    | / extension to a Doctrine type.
+    |
+    | Each key in this array is a name of the Doctrine2 DBAL Platform. Currently valid names are:
+    | 'postgresql', 'db2', 'drizzle', 'mysql', 'oracle', 'sqlanywhere', 'sqlite', 'mssql'
+    |
+    | This name is returned by getName() method of the specific Doctrine/DBAL/Platforms/AbstractPlatform descendant
+    |
+    | The value of the array is an array of type mappings. Key is the name of the custom type,
+    | (for example, "jsonb" from Postgres 9.4) and the value is the name of the corresponding Doctrine2 type (in
+    | our case it is 'json_array'. Doctrine types are listed here:
+    | http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
+    |
+    | So to support jsonb in your models when working with Postgres, just add the following entry to the array below:
+    |
+    | "postgresql" => [
+    |       "jsonb" => "json_array",
+    |  ],
+    |
+    | More info:
+    | http://symfony.com/doc/current/doctrine/dbal.html
+    |
+    | 'doctrine' => [
+    |     'dbal' => [
+    |       'mapping_types' => [
+    |
+    |        ],
+    |     ],
+    | ],
+    |
+    | - doctrine.dbal.mapping_types: Mapping applied for all drivers.
+    | - doctrine.dbal.driver_mapping_types: Mapping applied for a specific driver.
+    | - doctrine.dbal.real_length: Overwrite the default length with the real one.
+    | - doctrine.dbal.real_tinyint: Overwrite the type of tinyint to the type given, instead of boolean, if the length
+    |   it's bigger than 1.
+    |
+    */
+
+    'doctrine' => [
+        'dbal' => [
+            'mapping_types'        => [
+
+            ],
+            'driver_mapping_types' => [
+                'mysql' => [
+                    'enum' => 'string',
+                    //'tinyint' => 'smallint',
+                ],
+                'mssql' => [
+                    'xml' => 'string',
+                ],
+            ],
+            'real_length'          => true,
+            'real_tinyint'         => true,
+        ],
     ],
 
 ];

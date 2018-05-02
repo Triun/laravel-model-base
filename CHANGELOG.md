@@ -16,6 +16,17 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v5.6.1] - 2018-05-01
+
+`Added`
+
+- Config setting (`bulk.connections`) to specify the default connections in bulk mode.
+
+`Fixes`
+
+- Bulk command exception fixed: `An argument with name "name" already exists.`.
+- Connections array bug fixed.
+
 ## [v5.6.0] - 2018-05-01
 
 `Changed`
