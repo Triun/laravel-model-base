@@ -32,7 +32,7 @@ class ModelBaseConfigTest extends TestCase
     public function model_base_config_loaded()
     {
         $laravelConfig = Config::get('model-base');
-        $this->assertNotNull(\Triun\ModelBase\ModelBaseConfig::class, $laravelConfig);
+        //$this->assertNotNull(\Triun\ModelBase\ModelBaseConfig::class, $laravelConfig); // must be of the type string
         $this->assertArrayHasKey($this->exists, $laravelConfig);
     }
 
