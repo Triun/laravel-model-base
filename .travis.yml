@@ -9,6 +9,8 @@ php:
   - '7.1'
   # aliased to a recent 7.2.x version
   - '7.2'
+  # aliased to a recent 7.3.x version
+  - '7.3'
   # aliased to a recent hhvm version
   # - hhvm # This package requires php >=7.0.0 but your HHVM version does not satisfy that requirement.
   - nightly
