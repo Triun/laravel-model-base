@@ -9,9 +9,6 @@ php:
   - '7.2'
   # aliased to a recent 7.3.x version
   - '7.3'
-  # aliased to a recent hhvm version
-  # - hhvm # This package requires php >=7.0.0 but your HHVM version does not satisfy that requirement.
-  - nightly
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
@@ -33,14 +30,6 @@ env:
 
 matrix:
   fast_finish: true # Will finish as soon as a job has failed, or when the only jobs left allow failures.
-#  exclude:
-#    - php: hhvm
-#      env: DB=pgsql  # PDO driver for pgsql is unsupported by HHVM (3rd party install for support)
-  include:
-    - php: '7.0'
-      env: 'DB=mysql COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
-#  allow_failures:
-#    - php: hhvm
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
