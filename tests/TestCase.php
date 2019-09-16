@@ -16,11 +16,11 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     const DEFAULT_MIGRATION = true;
 
     /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
+     * Setup the test environment.
      *
+     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -35,10 +35,11 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     }
 
     /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (static::DEFAULT_MIGRATION) {
             $this->migrateDown();
@@ -50,7 +51,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -62,7 +63,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -76,7 +77,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Get application timezone.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return string|null
      */
