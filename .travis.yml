@@ -24,6 +24,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+services:
+  - mysql
+  - postgresql
+
 # optionally specify a list of environments, for example to test different RDBMS
 env:
   - DB=mysql
