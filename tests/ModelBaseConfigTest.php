@@ -73,7 +73,7 @@ class ModelBaseConfigTest extends TestCase
     public function it_loads_laravel_configuration()
     {
         $laravelConfig = Config::get('model-base');
-        $config = $this->getConfig();
+        $config        = $this->getConfig();
         $this->assertInstanceOf(\Triun\ModelBase\ModelBaseConfig::class, $config);
         $this->assertEquals($laravelConfig[$this->exists], $config->get($this->exists));
     }
@@ -206,9 +206,9 @@ class ModelBaseConfigTest extends TestCase
      */
     public function it_can_retrieve_the_modifiers()
     {
-        $connection = $this->getConnection();
+        $connection  = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
-        $default = $unprotected->getProperty('modifiers');
+        $default     = $unprotected->getProperty('modifiers');
 
         $config = $this->getConfig();
         $this->assertEquals($default, $config->modifiers());
@@ -235,12 +235,15 @@ class ModelBaseConfigTest extends TestCase
      */
     public function it_can_generate_a_class_name()
     {
-        $connection = $this->getConnection();
+        $connection  = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
 
         // To singular
         $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('user', 'App\\Models', '', '', [], []));
-        $this->assertEquals('App\\Models\\User', $unprotected->run_getClassName('users', 'App\\Models', '', '', [], []));
+        $this->assertEquals(
+            'App\\Models\\User',
+            $unprotected->run_getClassName('users', 'App\\Models', '', '', [], [])
+        );
 
         // Prefix and suffix
         $this->assertEquals(

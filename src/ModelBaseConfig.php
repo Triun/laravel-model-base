@@ -106,8 +106,8 @@ class ModelBaseConfig
             $this->loadConfig(static::CONFIG_FILE),
             $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
             $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
-        // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-        // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
+            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
 
         $this->connection = $connection;
@@ -126,7 +126,7 @@ class ModelBaseConfig
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -138,8 +138,8 @@ class ModelBaseConfig
     /**
      * Get the specified configuration value.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -151,8 +151,8 @@ class ModelBaseConfig
     /**
      * Set a given configuration value.
      *
-     * @param  array|string $key
-     * @param  mixed        $value
+     * @param array|string $key
+     * @param mixed        $value
      *
      * @return void
      */
@@ -192,7 +192,7 @@ class ModelBaseConfig
             $rule = str_replace(' ', '', $rule);
 
             if (!$case_sensitive) {
-                $rule = strtolower($rule);
+                $rule  = strtolower($rule);
                 $value = strtolower($value);
             }
 
