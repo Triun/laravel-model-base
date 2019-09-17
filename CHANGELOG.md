@@ -16,6 +16,16 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.0] - 2019-09-17
+
+`Added`
+
+- Upgrade to Laravel 6.0.
+
+`Removed`
+
+- Removed support for PHP 7.1.
+
 ## [v5.8.1] - 2019-09-17
 
 `Removed`
@@ -46,7 +56,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 `Removed`
 
-- Support for PHP 7.0 and hhvm.
+- Removed support for PHP 7.0 and hhvm.
 
 ## [v5.6.1] - 2018-05-01
 
