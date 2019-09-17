@@ -89,13 +89,15 @@ return [
     */
 
     'namespace' => 'App\\Models\\Bases\\{{Connection}}',
-    'extends'   => \Illuminate\Database\Eloquent\Model::class, // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
+    'extends'   => \Illuminate\Database\Eloquent\Model::class,
+    // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
     'prefix'    => '',
     'suffix'    => 'Base',
     'mixin'     => [
         // '\Eloquent'
     ],
-    'override'  => true, // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
+    'override'  => true,
+    // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
 
     /*
     |--------------------------------------------------------------------------
@@ -124,6 +126,11 @@ return [
         'prefix'    => '',
         'suffix'    => '',
         'save'      => true, // true | false
+        'custom'    => [
+            'interfaces' => [],
+            'traits'     => [],
+            'uses'       => [],
+        ],
     ],
 
     /*
@@ -193,7 +200,8 @@ return [
     'snakeAttributes' => true,
     'dates'           => true,
     'dateFormat'      => null,
-    'softDeletes'     => true, // See DELETED_AT configuration.
+    'softDeletes'     => true,
+    // See DELETED_AT configuration.
 
     /*
     |--------------------------------------------------------------------------

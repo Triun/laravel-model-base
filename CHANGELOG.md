@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [Unreleased] - 2019-09-17
+
+`Added`
+
+- Custom interfaces, traits and uses.
+
 ## [v6.0.1] - 2019-09-17
 
 `Removed`
