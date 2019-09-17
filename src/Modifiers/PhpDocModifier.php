@@ -27,6 +27,8 @@ class PhpDocModifier extends ModifierBase
      * Apply the modifications of the class.
      *
      * @param \Triun\ModelBase\Definitions\Skeleton
+     *
+     * @throws \ReflectionException
      */
     public function apply(Skeleton $skeleton)
     {
