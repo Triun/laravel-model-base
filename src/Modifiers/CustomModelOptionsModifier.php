@@ -14,6 +14,9 @@ use Triun\ModelBase\Lib\ModifierBase;
  */
 class CustomModelOptionsModifier extends ModifierBase
 {
+    /**
+     * @var array
+     */
     private $default = [
         'interfaces' => [],
         'traits'     => [],
@@ -27,7 +30,7 @@ class CustomModelOptionsModifier extends ModifierBase
      */
     public function apply(Skeleton $skeleton)
     {
-        $config = array_merge($this->default, $this->config('model.custom', []));
+        $config = $this->getConfig();
 
         foreach ($config['interfaces'] as $key => $value) {
             if (is_string($key)) {
@@ -52,5 +55,27 @@ class CustomModelOptionsModifier extends ModifierBase
                 $skeleton->addUse($value);
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig(): array
+    {
+        $tableName = $this->table()->getName();
+
+        $rawConfig = $this->config('custom_model_options', []);
+
+        $config = $this->default;
+
+        if (array_key_exists('default', $rawConfig)) {
+            $config =  array_merge($config, $rawConfig['default']);
+        }
+
+        if (array_key_exists('tables', $rawConfig) && array_key_exists($tableName, $rawConfig['tables'])) {
+            return array_merge($config, $rawConfig['tables'][$tableName]);
+        }
+
+        return $config;
     }
 }

@@ -126,11 +126,28 @@ return [
         'prefix'    => '',
         'suffix'    => '',
         'save'      => true, // true | false
-        'custom'    => [
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom model options
+    |--------------------------------------------------------------------------
+    |
+    | Extra automation for the model generations.
+    |
+    | - default.interfaces | tables.{table_name}.interface: Interfaces to be added to the models
+    | - default.traits | tables.{table_name}.traits: Traits to be added to the models
+    | - default.uses | tables.{table_name}.uses: Additional uses to be added to the models
+    |
+    */
+
+    'custom_model_options' => [
+        'default' => [
             'interfaces' => [],
             'traits'     => [],
             'uses'       => [],
         ],
+        'tables'  => [],
     ],
 
     /*
