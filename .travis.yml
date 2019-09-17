@@ -9,9 +9,6 @@ php:
   - '7.1'
   # aliased to a recent 7.2.x version
   - '7.2'
-  # aliased to a recent hhvm version
-  # - hhvm # This package requires php >=7.0.0 but your HHVM version does not satisfy that requirement.
-  - nightly
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
