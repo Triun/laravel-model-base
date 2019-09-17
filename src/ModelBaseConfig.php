@@ -6,16 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 
-use Triun\ModelBase\Modifiers\AuthModifier;
-use Triun\ModelBase\Modifiers\ConnectionModifier;
-use Triun\ModelBase\Modifiers\ColumnAliasModifier;
-use Triun\ModelBase\Modifiers\TableModifier;
-use Triun\ModelBase\Modifiers\TimestampsModifier;
-use Triun\ModelBase\Modifiers\DatesModifier;
-use Triun\ModelBase\Modifiers\SoftDeletesModifier;
-use Triun\ModelBase\Modifiers\AttributesModifier;
-use Triun\ModelBase\Modifiers\CamelToSnakeModifier;
-use Triun\ModelBase\Modifiers\PhpDocModifier;
+use Triun\ModelBase\Modifiers;
 
 /**
  * Class ModelBaseConfig
@@ -45,34 +36,37 @@ class ModelBaseConfig
     protected $modifiers = [
 
         // Connection
-        ConnectionModifier::class,
+        Modifiers\ConnectionModifier::class,
 
         // Table
-        TableModifier::class,
+        Modifiers\TableModifier::class,
 
         // Timestamps
-        TimestampsModifier::class,
+        Modifiers\TimestampsModifier::class,
 
         // Dates
-        DatesModifier::class,
+        Modifiers\DatesModifier::class,
 
         // Soft Deletes
-        SoftDeletesModifier::class,
+        Modifiers\SoftDeletesModifier::class,
 
         // Attributes
-        AttributesModifier::class,
+        Modifiers\AttributesModifier::class,
 
         // CamelToSnake Attributes
-        CamelToSnakeModifier::class,
+        Modifiers\CamelToSnakeModifier::class,
 
         // For custom aliases
-        ColumnAliasModifier::class,
+        Modifiers\ColumnAliasModifier::class,
 
         // PhpDoc tags
-        PhpDocModifier::class,
+        Modifiers\PhpDocModifier::class,
 
         // PhpDoc tags
-        AuthModifier::class,
+        Modifiers\AuthModifier::class,
+
+        // Custom
+        Modifiers\CustomModelOptionsModifier::class,
 
         // Relations
         // Input transformations

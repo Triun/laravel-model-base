@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [Unreleased] - 2019-09-17
+
+`Added`
+
+- Custom interfaces, traits and uses.
+
 ## [v5.8.2] - 2019-09-17
 
 `Removed`
@@ -52,7 +58,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 `Removed`
 
-- Support for PHP 7.0 and hhvm.
+- Removed support for PHP 7.0 and hhvm.
 
 ## [v5.6.1] - 2018-05-01
 
