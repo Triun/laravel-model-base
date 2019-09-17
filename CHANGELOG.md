@@ -16,6 +16,32 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v5.8.0] - 2019-09-17
+
+`Added`
+
+- Upgrade to Laravel 5.8
+
+## [v5.7.0] - 2019-09-17
+
+`Added`
+
+- Upgrade to Laravel 5.7
+
+## [v5.6.2] - 2019-09-17
+
+`Added`
+
+- Support for PHP 7.3.
+
+`Changed`
+
+- Upgrade composer dependencies.
+
+`Removed`
+
+- Support for PHP 7.0 and hhvm.
+
 ## [v5.6.1] - 2018-05-01
 
 `Added`
@@ -84,7 +110,11 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.6.0...master
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.8.0...master
+[v5.8.0]: https://github.com/Triun/laravel-model-base/compare/v5.7.0...v5.8.0
+[v5.7.0]: https://github.com/Triun/laravel-model-base/compare/v5.6.2...v5.7.0
+[v5.6.2]: https://github.com/Triun/laravel-model-base/compare/v5.6.1...v5.6.2
+[v5.6.1]: https://github.com/Triun/laravel-model-base/compare/v5.6.0...v5.6.1
 [v5.6.0]: https://github.com/Triun/laravel-model-base/compare/v5.5.1...v5.6.0
 [v5.5.1]: https://github.com/Triun/laravel-model-base/compare/v5.5.0...v5.5.1
 [v5.5.0]: https://github.com/Triun/laravel-model-base/compare/v5.4.1...v5.5.0
