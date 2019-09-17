@@ -54,21 +54,6 @@ class PhpDocModifier extends ModifierBase
                 $column->phpDocType,
                 str_pad($column->dbType, 11) . ' ' . $column->getComment()
             ));
-
-            // TODO: See what to do with aliases in where. It won't probably be able to do the where correctly, so we
-            // probably will need to create the function ourselves.
-            // Avoid existent methods as whereDate or WhereColumn
-            $method = "where{$column->studName}";
-            if ($skeleton->hasMethod($method) || $BuilderReflectionClass->hasMethod($method)) {
-                continue;
-            }
-
-            $skeleton->addPhpDocTag(new PhpDocTag(
-                "{$method}(\$value)",
-                'method',
-                'static \\Illuminate\\Database\\Query\\Builder|\DummyNamespace\DummyClass',
-                $column->getComment()
-            ));
         }
     }
 
