@@ -125,6 +125,7 @@ return [
         'namespace' => 'App\\Models\\{{Connection}}',
         'prefix'    => '',
         'suffix'    => '',
+        'modifiers' => [],
         'save'      => true, // true | false
     ],
 
