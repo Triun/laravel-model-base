@@ -17,10 +17,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-os:
-  - linux
-  - osx
-  - windows
+#os:
+#  - linux
+#  #- osx     # PHP not working
+#  #- windows # PHP not supported
 
 services:
   - mysql
