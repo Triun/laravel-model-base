@@ -17,6 +17,11 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+os:
+  - linux
+  - osx
+  - windows
+
 services:
   - mysql
 
