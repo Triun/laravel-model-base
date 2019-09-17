@@ -2,11 +2,10 @@
 
 namespace Triun\ModelBase;
 
-use DB;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Triun\ModelBase\Definitions\Table;
-use Triun\ModelBase\Modifiers\PhpDocModifier;
 use Triun\ModelBase\Utils\SchemaUtil;
 use Triun\ModelBase\Utils\SkeletonUtil;
 use Triun\ModelBase\Utils\BuilderUtil;
@@ -86,9 +85,9 @@ class Util
     }
 
     /**
-     * @param \Illuminate\Database\Connection|string|null $connection
+     * @param \Illuminate\Database\Connection||string|null $connection
      *
-     * @return \Illuminate\Database\Connection
+     * @return \Illuminate\Database\Connection|\Illuminate\Database\ConnectionInterface
      * @throws Exception
      */
     protected function normalizeConnection($connection)
@@ -176,7 +175,7 @@ class Util
      */
     protected function loadModifiers()
     {
-        foreach ($this->config()->modifiers() as $modClass) {
+        foreach ($this->config()->baseModifiers() as $modClass) {
             call_user_func([$modClass, 'boot']);
         }
     }
@@ -202,13 +201,13 @@ class Util
      * @return Skeleton
      * @throws \Exception
      */
-    protected function skeleton($table)
+    protected function baseSkeleton($table)
     {
         return $this->skeletonUtil()->make(
             $table,
             $this->config()->getBaseClassName($table->getName()),
             $this->config()->get('extends'),
-            $this->config()->modifiers()
+            $this->config()->baseModifiers()
         );
     }
 
@@ -227,9 +226,7 @@ class Util
             $table,
             $this->config()->getModelClassName($table->getName()),
             $skeleton,
-            [
-                PhpDocModifier::class,
-            ]
+            $this->config()->modelModifiers()
         );
     }
 
@@ -277,7 +274,7 @@ class Util
 
         $table = $this->table($tableName);
 
-        $skeleton = $this->skeleton($table);
+        $skeleton = $this->baseSkeleton($table);
 
         $size = $this->build($skeleton, $modelBasePath);
 

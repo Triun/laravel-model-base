@@ -200,7 +200,7 @@ class ModelBaseConfigTest extends TestCase
     /**
      * Test modifiers()
      *
-     * @see \Triun\ModelBase\ModelBaseConfig::modifiers()
+     * @see \Triun\ModelBase\ModelBaseConfig::baseModifiers()
      *
      * @test
      */
@@ -211,7 +211,7 @@ class ModelBaseConfigTest extends TestCase
         $default     = $unprotected->getProperty('modifiers');
 
         $config = $this->getConfig();
-        $this->assertEquals($default, $config->modifiers());
+        $this->assertEquals($default, $config->baseModifiers());
 
         // If we add more modifiers to the configuration...
         $newModifiers = [
@@ -221,9 +221,9 @@ class ModelBaseConfigTest extends TestCase
         config(['model-base.modifiers' => $newModifiers]);
         $config = $this->getConfig();
 
-        $this->assertNotEquals($default, $config->modifiers());
-        $this->assertContains($newModifiers[0], $config->modifiers());
-        $this->assertContains($newModifiers[1], $config->modifiers());
+        $this->assertNotEquals($default, $config->baseModifiers());
+        $this->assertContains($newModifiers[0], $config->baseModifiers());
+        $this->assertContains($newModifiers[1], $config->baseModifiers());
     }
 
     /**

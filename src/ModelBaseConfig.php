@@ -5,7 +5,6 @@ namespace Triun\ModelBase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-
 use Triun\ModelBase\Modifiers;
 
 /**
@@ -33,7 +32,7 @@ class ModelBaseConfig
     /**
      * @var string[]
      */
-    protected $modifiers = [
+    protected $baseModifiers = [
 
         // Connection
         Modifiers\ConnectionModifier::class,
@@ -71,6 +70,14 @@ class ModelBaseConfig
         // Relations
         // Input transformations
         // ValueObjects
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $modelModifiers = [
+        Modifiers\PhpDocModifier::class,
+        Modifiers\CustomModelOptionsModifier::class,
     ];
 
     /**
@@ -205,9 +212,21 @@ class ModelBaseConfig
      *
      * @return string[]
      */
-    public function modifiers()
+    public function baseModifiers()
     {
-        return array_merge($this->modifiers, $this->get('modifiers'));
+        return array_merge($this->baseModifiers, $this->get('modifiers'));
+    }
+
+    /**
+     * Returns the combination of mandatory plus custom modifiers.
+     *
+     * The custom modifiers are defined in the config file.
+     *
+     * @return string[]
+     */
+    public function modelModifiers()
+    {
+        return array_merge($this->modelModifiers, $this->get('model.modifiers'));
     }
 
     /**
