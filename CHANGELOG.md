@@ -32,6 +32,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Removed support for PHP 7.1.
 
+## [v5.8.2] - 2019-09-17
+
+`Removed`
+
+- Removed `whereAttribute` phpDoc properties helpers.
+
 ## [v5.8.1] - 2019-09-17
 
 `Removed`
@@ -135,6 +141,7 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.1...master
 [v6.0.1]: https://github.com/Triun/laravel-model-base/compare/v6.0.0...v6.0.1
 [v6.0.0]: https://github.com/Triun/laravel-model-base/compare/v5.8.1...v6.0.0
+[v5.8.2]: https://github.com/Triun/laravel-model-base/compare/v5.8.1...v5.8.2
 [v5.8.1]: https://github.com/Triun/laravel-model-base/compare/v5.8.0...v5.8.1
 [v5.8.0]: https://github.com/Triun/laravel-model-base/compare/v5.7.0...v5.8.0
 [v5.7.0]: https://github.com/Triun/laravel-model-base/compare/v5.6.2...v5.7.0
