@@ -3,6 +3,7 @@
 namespace Triun\ModelBase\Utils;
 
 use Exception;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Doctrine\DBAL\Types\Type;
 use Triun\ModelBase\Definitions\Table;
@@ -225,14 +226,14 @@ class SchemaUtil extends ConnectionUtilBase
 
             // snake_name and StudyName
             $column->snakeName      = $this->snakeCase($column->getName());
-            $column->studName       = studly_case($column->getName());
+            $column->studName       = Str::studly($column->getName());
             $column->publicName     = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
 
             // Alias
             $column->alias          = $this->aliasName($column->getName());
             if ($column->alias !== null) {
                 $column->aliasSnakeName = $this->snakeCase($column->alias);
-                $column->aliasStudName  = studly_case($column->alias);
+                $column->aliasStudName  = Str::studly($column->alias);
                 $column->publicName     = $this->config('snakeAttributes') ? $column->aliasSnakeName : $column->alias;
                 $column->setComment(trim($column->getComment() . ' ' . 'Alias of ' . $column->getName()));
             }
@@ -348,7 +349,7 @@ class SchemaUtil extends ConnectionUtilBase
             return strtolower($rename[$name]);
         }
 
-        return snake_case($name);
+        return Str::snake($name);
     }
 
     /**

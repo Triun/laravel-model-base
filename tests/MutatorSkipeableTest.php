@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 /**
  * Class MutatorSkipeableTest
  *
@@ -37,7 +39,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->title = $this->original;
 
-        $native = array_get($model->getAttributes(), 'title');
+        $native = Arr::get($model->getAttributes(), 'title');
 
         // Native (setter mutation)
         $this->assertEquals(
@@ -67,7 +69,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->run_setAttributeWithoutMutator('title', $this->original);
 
-        $native = array_get($model->getAttributes(), 'title');
+        $native = Arr::get($model->getAttributes(), 'title');
 
         // Native (setter mutation)
         $this->assertEquals(
@@ -97,7 +99,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->title = $this->original;
 
-        $native = array_get($model->getAttributes(), 'title');
+        $native = Arr::get($model->getAttributes(), 'title');
 
         // Native (setter mutation)
         $this->assertEquals(
@@ -137,7 +139,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->run_setAttributeWithoutMutator('title', $this->original);
 
-        $native = array_get($model->getAttributes(), 'title');
+        $native = Arr::get($model->getAttributes(), 'title');
 
         // Native (setter mutation)
         $this->assertEquals(
@@ -178,7 +180,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->run_setAttributeWithoutMutator('metadata', $metadata);
 
-        $native = array_get($model->getAttributes(), 'metadata');
+        $native = Arr::get($model->getAttributes(), 'metadata');
 
         // Native (setter mutation)
         $this->assertEquals(
@@ -208,7 +210,7 @@ class MutatorSkipeableTest extends TestCase
 
         $model->run_setAttributeWithoutMutator('updated_at', $carbon);
 
-        $native = array_get($model->getAttributes(), 'updated_at');
+        $native = Arr::get($model->getAttributes(), 'updated_at');
 
         // Native (setter mutation)
         $this->assertEquals(

@@ -16,17 +16,23 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v5.8.1] - 2019-09-17
+
+`Removed`
+
+- Remove all `array_*` and `str_*` deprecated global helpers (https://laravel.com/docs/5.8/upgrade#support).
+
 ## [v5.8.0] - 2019-09-17
 
 `Added`
 
-- Upgrade to Laravel 5.8
+- Upgrade to Laravel 5.8.
 
 ## [v5.7.0] - 2019-09-17
 
 `Added`
 
-- Upgrade to Laravel 5.7
+- Upgrade to Laravel 5.7.
 
 ## [v5.6.2] - 2019-09-17
 
