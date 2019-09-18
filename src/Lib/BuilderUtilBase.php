@@ -2,15 +2,13 @@
 
 namespace Triun\ModelBase\Lib;
 
-use App;
-use File;
 use Exception;
-use ReflectionClass;
-
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
-
 use Triun\Diff\Diff;
 use Triun\ModelBase\ModelBaseConfig;
 use Triun\ModelBase\Definitions\Skeleton;
