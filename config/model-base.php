@@ -127,6 +127,8 @@ return [
         'suffix'    => '',
         'modifiers' => [],
         'save'      => true, // true | false
+        'override'  => true,
+        // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
     ],
 
     /*

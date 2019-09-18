@@ -29,15 +29,17 @@ class SkeletonUtil extends ConnectionUtilBase
      * @param string                                       $className
      * @param string|\Triun\ModelBase\Definitions\Skeleton $extends
      * @param string[]                                     $modifiers
+     * @param bool                                         $isAbstract
      *
      * @return Skeleton
-     * @throws \Exception
+     * @throws Exception
      */
-    public function make(Table $table, $className = null, $extends = null, $modifiers = [])
+    public function make(Table $table, $className = null, $extends = null, $modifiers = [], bool $isAbstract = false)
     {
         // New empty Skeleton
         $skeleton = new Skeleton;
 
+        $skeleton->isAbstract = $isAbstract;
         $skeleton->className = self::parseName($className);
 
         if ($extends !== null) {

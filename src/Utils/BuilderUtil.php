@@ -4,7 +4,6 @@ namespace Triun\ModelBase\Utils;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
-use Triun\ModelBase\Util;
 use Triun\ModelBase\Lib\BuilderUtilBase;
 use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Method;
@@ -27,7 +26,7 @@ class BuilderUtil extends BuilderUtilBase
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
      * @throws \Exception
      */
-    public function build(Skeleton $skeleton, $override = Util::CONFIRM, &$path = null, $stub = 'class.stub')
+    public function build(Skeleton $skeleton, $override, string &$path, string $stub = 'class.stub')
     {
         $path = $this->getSkeletonPath($skeleton);
 
@@ -48,9 +47,8 @@ class BuilderUtil extends BuilderUtilBase
         $content = File::get($this->getStub($stub));
 
         $replace = [
-            //'dummy_cmd' => $this->name,
-
             '{{phpdoc}}' => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
+            '{{abstract}}' => $skeleton->isAbstract ? 'abstract ' : '',
 
             'DummyNamespace'     => $skeleton->getNamespace(),
             'DummyRootNamespace' => App::getNamespace(),

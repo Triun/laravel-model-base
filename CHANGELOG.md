@@ -16,7 +16,17 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-## [v5.8.3] - 2019-09-17
+## [v5.8.4] - 2019-09-18
+
+`Added`
+
+- Override model.
+
+`Changed`
+
+- Unify model class and base class into one stud.
+
+## [v5.8.3] - 2019-09-18
 
 `Added`
 
@@ -128,8 +138,9 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.8.3...master
-[v5.8.3]: https://github.com/Triun/laravel-model-base/compare/v5.8.2...v5.9.0
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v5.8.4...master
+[v5.8.4]: https://github.com/Triun/laravel-model-base/compare/v5.8.3...v5.8.4
+[v5.8.3]: https://github.com/Triun/laravel-model-base/compare/v5.8.2...v5.8.3
 [v5.8.2]: https://github.com/Triun/laravel-model-base/compare/v5.8.1...v5.8.2
 [v5.8.1]: https://github.com/Triun/laravel-model-base/compare/v5.8.0...v5.8.1
 [v5.8.0]: https://github.com/Triun/laravel-model-base/compare/v5.7.0...v5.8.0

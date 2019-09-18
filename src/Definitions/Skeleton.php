@@ -15,6 +15,11 @@ use Triun\ModelBase\Exception\SkeletonUseNameException;
 class Skeleton
 {
     /**
+     * @var bool
+     */
+    public $isAbstract = false;
+
+    /**
      * Name for the class, included namespace.
      *
      * @var string

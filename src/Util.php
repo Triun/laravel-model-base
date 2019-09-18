@@ -183,7 +183,7 @@ class Util
     /**
      * Get Doctrine table schema for the given table name.
      *
-     * @param  string $tableName
+     * @param string $tableName
      *
      * @return \Triun\ModelBase\Definitions\Table
      * @throws \Exception
@@ -207,7 +207,8 @@ class Util
             $table,
             $this->config()->getBaseClassName($table->getName()),
             $this->config()->get('extends'),
-            $this->config()->baseModifiers()
+            $this->config()->baseModifiers(),
+            true
         );
     }
 
@@ -226,7 +227,8 @@ class Util
             $table,
             $this->config()->getModelClassName($table->getName()),
             $skeleton,
-            $this->config()->modelModifiers()
+            $this->config()->modelModifiers(),
+            false
         );
     }
 
@@ -239,7 +241,7 @@ class Util
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
      * @throws \Exception
      */
-    protected function build(Skeleton $skeleton, &$path)
+    protected function buildBase(Skeleton $skeleton, &$path)
     {
         return $this->builderUtil()->build($skeleton, $this->config->get('override', 'confirm'), $path);
     }
@@ -255,7 +257,7 @@ class Util
      */
     protected function buildModel(Skeleton $skeleton, &$path)
     {
-        return $this->builderUtil()->build($skeleton, false, $path, 'model.stub');
+        return $this->builderUtil()->build($skeleton, $this->config->get('model.override', 'confirm'), $path);
     }
 
     /**
@@ -276,11 +278,11 @@ class Util
 
         $skeleton = $this->baseSkeleton($table);
 
-        $size = $this->build($skeleton, $modelBasePath);
+        $size = $this->buildBase($skeleton, $modelBasePath);
 
         if ($size >= 0 && $this->config->get('model.save', true)) {
             $modelSkeleton = $this->modelSkeleton($table, $skeleton);
-            $modelSize = $this->buildModel($modelSkeleton, $modelPath);
+            $modelSize     = $this->buildModel($modelSkeleton, $modelPath);
         }
 
         return $size;
