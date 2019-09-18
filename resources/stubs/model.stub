@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use DummyExtendsNamespace;
+{{uses}}
 
 /**
  * Class DummyClass
@@ -10,6 +10,7 @@ use DummyExtendsNamespace;
  * @package DummyNamespace
 {{phpdoc}}
  */
-class DummyClass extends DummyExtendsClass
+class DummyClass extends DummyExtendsClass{{implements}}
 {
+{{body}}
 }
