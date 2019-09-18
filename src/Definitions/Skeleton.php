@@ -150,7 +150,7 @@ class Skeleton
             }
         }*/
 
-        ksort($uses);
+        asort($uses);
 
         return $uses;
     }
