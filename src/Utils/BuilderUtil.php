@@ -123,8 +123,10 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getBody(Skeleton $skeleton): string
     {
+        $traits = $this->getTraits($skeleton->traits());
+
         $parts = array_merge(
-            [$this->getTraits($skeleton->traits())],
+            '' === $traits ? [] : [$traits],
             array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
             array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
             array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
