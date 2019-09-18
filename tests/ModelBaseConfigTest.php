@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
 /**
  * Class ModelBaseConfigTest
  */
@@ -208,7 +210,7 @@ class ModelBaseConfigTest extends TestCase
     {
         $connection  = $this->getConnection();
         $unprotected = new ConfigUnprotected($connection);
-        $default     = $unprotected->getProperty('modifiers');
+        $default     = $unprotected->getProperty('baseModifiers');
 
         $config = $this->getConfig();
         $this->assertEquals($default, $config->baseModifiers());
