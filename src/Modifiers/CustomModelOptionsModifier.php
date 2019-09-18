@@ -21,6 +21,7 @@ class CustomModelOptionsModifier extends ModifierBase
         'interfaces' => [],
         'traits'     => [],
         'uses'       => [],
+        'phpDocTags' => [],
     ];
 
     /**
@@ -55,6 +56,24 @@ class CustomModelOptionsModifier extends ModifierBase
                 $skeleton->addUse($value);
             }
         }
+
+        if (count($config['phpDocTags']) > 0) {
+            $phpDocTags = $skeleton->phpDocTags();
+
+            foreach ($config['phpDocTags'] as $name => $tagChanges) {
+                if (array_key_exists($name, $phpDocTags)) {
+                    $tag = $phpDocTags[$name];
+
+                    if (array_key_exists('type', $tagChanges)) {
+                        $tag->type = $tagChanges['type'];
+                    }
+
+                    if (array_key_exists('description', $tagChanges)) {
+                        $tag->description = $tagChanges['description'];
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -69,7 +88,7 @@ class CustomModelOptionsModifier extends ModifierBase
         $config = $this->default;
 
         if (array_key_exists('default', $rawConfig)) {
-            $config =  array_merge($config, $rawConfig['default']);
+            $config = array_merge($config, $rawConfig['default']);
         }
 
         if (array_key_exists('tables', $rawConfig) && array_key_exists($tableName, $rawConfig['tables'])) {

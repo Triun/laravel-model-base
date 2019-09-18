@@ -147,6 +147,7 @@ return [
             'interfaces' => [],
             'traits'     => [],
             'uses'       => [],
+            'phpDocTags' => [],
         ],
         'tables'  => [],
     ],
