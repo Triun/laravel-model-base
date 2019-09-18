@@ -2,10 +2,9 @@
 
 namespace Triun\ModelBase\Utils;
 
-use App;
-use File;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Triun\ModelBase\Util;
-use Illuminate\Support\Str;
 use Triun\ModelBase\Lib\BuilderUtilBase;
 use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Method;
@@ -60,11 +59,11 @@ class BuilderUtil extends BuilderUtilBase
             'DummyExtendsNamespace' => $skeleton->extends,
             'DummyExtendsClass'     => class_basename($skeleton->extends),
 
-            '{{uses}}' => implode(PHP_EOL, $this->getUses($skeleton)),
+            PHP_EOL . PHP_EOL . '{{uses}}' => $this->getUses($skeleton),
 
             '{{implements}}' => $this->getImplements($skeleton),
 
-            '{{body}}' => $this->getBody($skeleton),
+            PHP_EOL . '{{body}}' => $this->getBody($skeleton),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);
@@ -73,12 +72,12 @@ class BuilderUtil extends BuilderUtilBase
     /**
      * Get the destination class path.
      *
-     * @param  \Triun\ModelBase\Definitions\Skeleton $skeleton
+     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      *
      * @return string
      * @throws \Exception
      */
-    public function getSkeletonPath(Skeleton $skeleton)
+    public function getSkeletonPath(Skeleton $skeleton): string
     {
         return $this->getClassNamePath($skeleton->className);
     }
@@ -90,11 +89,17 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @return string
      */
-    protected function getUses(Skeleton $skeleton)
+    protected function getUses(Skeleton $skeleton): string
     {
-        return array_map(function ($value) {
+        $parts = array_map(function ($value) {
             return 'use ' . ltrim($value, '\\') . ';';
         }, $skeleton->uses());
+
+        if (count($parts) === 0) {
+            return '';
+        }
+
+        return PHP_EOL . PHP_EOL . implode(PHP_EOL, $parts);
     }
 
     /**
@@ -102,7 +107,7 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @return string
      */
-    protected function getImplements(Skeleton $skeleton)
+    protected function getImplements(Skeleton $skeleton): string
     {
         if (count($skeleton->interfaces()) > 0) {
             return ' implements ' . implode(', ', $skeleton->interfaces());
@@ -116,17 +121,20 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @return string
      */
-    protected function getBody(Skeleton $skeleton)
+    protected function getBody(Skeleton $skeleton): string
     {
-        return implode(
-            PHP_EOL . PHP_EOL,
-            array_merge(
-                [$this->getTraits($skeleton->traits())],
-                array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
-                array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
-                array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
-            )
+        $parts = array_merge(
+            [$this->getTraits($skeleton->traits())],
+            array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
+            array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
+            array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
         );
+
+        if (count($parts) === 0) {
+            return '';
+        }
+
+        return PHP_EOL . implode(PHP_EOL . PHP_EOL, $parts);
     }
 
     /**
@@ -134,7 +142,7 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @return string
      */
-    protected function getTraits($traits)
+    protected function getTraits($traits): string
     {
         if (count($traits) === 0) {
             return '';
@@ -148,7 +156,7 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @return string
      */
-    protected function formatConstant(Constant $constant)
+    protected function formatConstant(Constant $constant): string
     {
         // TODO: Add phpDoc
         return static::TAB . 'const ' . $constant->name . ' = ' . var_export54($constant->value, true) . ';';
@@ -170,7 +178,7 @@ class BuilderUtil extends BuilderUtilBase
             'DummyDefinition' => implode(' ', $property->modifiers),
             'DummyName'       => '$' . $property->name,
             'DummyValue'      => var_export54($property->value),
-//            'DummyValue'        => $this->value2File($property->value),
+            //            'DummyValue'        => $this->value2File($property->value),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);
@@ -205,7 +213,7 @@ if (!function_exists('var_export54')) {
                 }
 
                 $indent = str_repeat($TAB, $tabs);
-                $assoc = count(array_diff(array_keys($value), array_keys(array_keys($value)))) > 0;
+                $assoc  = count(array_diff(array_keys($value), array_keys(array_keys($value)))) > 0;
 
                 // Tabular keys
                 $pad_length = 0;
@@ -218,8 +226,8 @@ if (!function_exists('var_export54')) {
                 $export = [];
                 foreach ($value as $key => $subValue) {
                     $export[] = $indent . $TAB
-                        . ($assoc ? str_pad(var_export54($key), $pad_length) . ' => ' : '')
-                        . var_export54($subValue, $tabs + 2, $tabulateKeys);
+                                . ($assoc ? str_pad(var_export54($key), $pad_length) . ' => ' : '')
+                                . var_export54($subValue, $tabs + 2, $tabulateKeys);
                 }
 
                 return '[' . PHP_EOL . implode(',' . PHP_EOL, $export) . ',' . PHP_EOL . $indent . ']';
