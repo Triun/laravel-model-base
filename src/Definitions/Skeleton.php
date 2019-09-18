@@ -230,9 +230,9 @@ class Skeleton
     public function hasUse($key)
     {
         return isset($this->uses[$key])
-            || ($this->extends === $key)
-            || isset($this->interfaces[$key])
-            || isset($this->traits[$key]);
+               || ($this->extends === $key)
+               || isset($this->interfaces[$key])
+               || isset($this->traits[$key]);
     }
 
     /**
@@ -298,7 +298,7 @@ class Skeleton
     /**
      * Get constant.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return  \Triun\ModelBase\Definitions\Constant|null
      * @throws \InvalidArgumentException
@@ -315,7 +315,7 @@ class Skeleton
     /**
      * Get property.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return null|Property
      * @throws \InvalidArgumentException
@@ -332,7 +332,7 @@ class Skeleton
     /**
      * Get method.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return  \Triun\ModelBase\Definitions\Method|null
      * @throws \InvalidArgumentException
@@ -349,8 +349,8 @@ class Skeleton
     /**
      * Add Use.
      *
-     * @param  string      $className
-     * @param  string|null $alias
+     * @param string      $className
+     * @param string|null $alias
      *
      * @return $this
      */
@@ -365,8 +365,8 @@ class Skeleton
     /**
      * Add Interface to be implemented.
      *
-     * @param  string      $interfaceName
-     * @param  string|null $alias
+     * @param string      $interfaceName
+     * @param string|null $alias
      *
      * @return $this
      */
@@ -387,8 +387,8 @@ class Skeleton
     /**
      * Add Trait.
      *
-     * @param  string      $traitName
-     * @param  string|null $alias
+     * @param string      $traitName
+     * @param string|null $alias
      *
      * @return $this
      */
@@ -408,19 +408,19 @@ class Skeleton
     /**
      * Add Class to class collection.
      *
-     * @param  array       $array
-     * @param  string      $name
-     * @param  string|null $alias
-     * @param  string      $type
+     * @param array       $array
+     * @param string      $name
+     * @param string|null $alias
+     * @param string      $type
      *
      * @return $this
      */
     protected function appendClass(array &$array, $name, $alias = null, $type = 'class')
     {
         if (strstr($name, ' as ')) {
-            $name = explode(' as ', $name);
+            $name  = explode(' as ', $name);
             $alias = trim($name[1]);
-            $name = trim($name[0]);
+            $name  = trim($name[0]);
         } elseif ($alias === null) {
             $alias = class_basename($name);
         }
@@ -437,7 +437,7 @@ class Skeleton
     /**
      * Add phpDoc Tag.
      *
-     * @param  \Triun\ModelBase\Definitions\PhpDocTag $value
+     * @param \Triun\ModelBase\Definitions\PhpDocTag $value
      *
      * @return $this
      */
@@ -462,7 +462,7 @@ class Skeleton
     /**
      * Set Constant.
      *
-     * @param  \Triun\ModelBase\Definitions\Constant $value
+     * @param \Triun\ModelBase\Definitions\Constant $value
      *
      * @return $this
      */
@@ -480,7 +480,7 @@ class Skeleton
     /**
      * Set Property.
      *
-     * @param  \Triun\ModelBase\Definitions\Property $value
+     * @param \Triun\ModelBase\Definitions\Property $value
      *
      * @return $this
      */
@@ -498,7 +498,7 @@ class Skeleton
     /**
      * Set Method.
      *
-     * @param  \Triun\ModelBase\Definitions\Method $value
+     * @param \Triun\ModelBase\Definitions\Method $value
      *
      * @return $this
      */
@@ -512,7 +512,7 @@ class Skeleton
                 //dump($value->value);
                 // TODO: Another way to catch this issue.
                 echo "The method {$value->name} already exists."
-                    . " Please, update it instead of try to create it again." . PHP_EOL;
+                     . " Please, update it instead of try to create it again." . PHP_EOL;
                 /*throw new InvalidArgumentException(
                     "The method {$value->name} already exists. Please, update it instead of try to create it again."
                 );*/
@@ -542,7 +542,7 @@ class Skeleton
     /**
      * Unset Constant.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return $this
      */
@@ -556,7 +556,7 @@ class Skeleton
     /**
      * Unset Property.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return $this
      */
@@ -570,7 +570,7 @@ class Skeleton
     /**
      * Unset Method.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return $this
      */
