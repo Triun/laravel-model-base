@@ -4,13 +4,12 @@ namespace Triun\ModelBase\Utils;
 
 use App;
 use File;
-use Triun\ModelBase\Util;
-use Illuminate\Support\Str;
-use Triun\ModelBase\Lib\BuilderUtilBase;
 use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Method;
 use Triun\ModelBase\Definitions\Property;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\BuilderUtilBase;
+use Triun\ModelBase\Util;
 
 /**
  * Class BuilderUtil
@@ -73,7 +72,7 @@ class BuilderUtil extends BuilderUtilBase
     /**
      * Get the destination class path.
      *
-     * @param  \Triun\ModelBase\Definitions\Skeleton $skeleton
+     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      *
      * @return string
      * @throws \Exception
@@ -88,7 +87,7 @@ class BuilderUtil extends BuilderUtilBase
      *
      * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      *
-     * @return string
+     * @return string[]
      */
     protected function getUses(Skeleton $skeleton)
     {
@@ -170,7 +169,7 @@ class BuilderUtil extends BuilderUtilBase
             'DummyDefinition' => implode(' ', $property->modifiers),
             'DummyName'       => '$' . $property->name,
             'DummyValue'      => var_export54($property->value),
-//            'DummyValue'        => $this->value2File($property->value),
+            //'DummyValue'        => $this->value2File($property->value),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);
@@ -205,7 +204,7 @@ if (!function_exists('var_export54')) {
                 }
 
                 $indent = str_repeat($TAB, $tabs);
-                $assoc = count(array_diff(array_keys($value), array_keys(array_keys($value)))) > 0;
+                $assoc  = count(array_diff(array_keys($value), array_keys(array_keys($value)))) > 0;
 
                 // Tabular keys
                 $pad_length = 0;
@@ -218,8 +217,8 @@ if (!function_exists('var_export54')) {
                 $export = [];
                 foreach ($value as $key => $subValue) {
                     $export[] = $indent . $TAB
-                        . ($assoc ? str_pad(var_export54($key), $pad_length) . ' => ' : '')
-                        . var_export54($subValue, $tabs + 2, $tabulateKeys);
+                                . ($assoc ? str_pad(var_export54($key), $pad_length) . ' => ' : '')
+                                . var_export54($subValue, $tabs + 2, $tabulateKeys);
                 }
 
                 return '[' . PHP_EOL . implode(',' . PHP_EOL, $export) . ',' . PHP_EOL . $indent . ']';
