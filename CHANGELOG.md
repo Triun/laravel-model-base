@@ -20,11 +20,11 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 `Added`
 
-- Ability to customise phpDoc properties types.
+- Ability to customize phpDoc properties types.
 
 `Fixes`
 
-- Move the custom interfaces, traits, uses and the new phpDoc into the model, to avoid traits errors.
+- Move the custom interfaces, traits, uses, and the new phpDoc into the model, to avoid traits errors.
 
 ## [v6.0.2] - 2019-12-26
 
