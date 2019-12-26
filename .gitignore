@@ -4,8 +4,8 @@ vendor/
 #build
 build/
 
-# composer
-composer.lock
+#phpunit
+.phpunit.result.cache
 
 # phpStorm
 .idea
