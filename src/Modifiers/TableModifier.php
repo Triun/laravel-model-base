@@ -58,6 +58,8 @@ class TableModifier extends ModifierBase
         if ($type === 'integer') {
             $type = 'int';
         }
+        // known issue with string, real, double, etc.
+        // https://github.com/laravel/framework/issues/29824
 
         $skeleton->property('primaryKey')->setValue($name);
         $skeleton->property('keyType')->setValue($type);
