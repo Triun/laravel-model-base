@@ -76,7 +76,7 @@ class CustomModelOptionsModifier extends ModifierBase
         $config = $this->default;
 
         if (array_key_exists('default', $rawConfig)) {
-            $config =  array_merge($config, $rawConfig['default']);
+            $config = array_merge($config, $rawConfig['default']);
         }
 
         if (array_key_exists('tables', $rawConfig) && array_key_exists($tableName, $rawConfig['tables'])) {
