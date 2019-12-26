@@ -22,6 +22,10 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Custom interfaces, traits and uses.
 
+`Fixes`
+
+- Fix class use sorting.
+
 ## [v6.0.1] - 2019-09-17
 
 `Removed`
