@@ -59,11 +59,10 @@ class BuilderUtil extends BuilderUtilBase
             'DummyExtendsNamespace' => $skeleton->extends,
             'DummyExtendsClass'     => class_basename($skeleton->extends),
 
-            '{{uses}}' => implode(PHP_EOL, $this->getUses($skeleton)),
-
+            '{{abstract}}'   => $skeleton->isAbstract ? 'abstract ' : '',
+            '{{uses}}'       => implode(PHP_EOL, $this->getUses($skeleton)),
             '{{implements}}' => $this->getImplements($skeleton),
-
-            '{{body}}' => $this->getBody($skeleton),
+            '{{body}}'       => $this->getBody($skeleton),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $content);

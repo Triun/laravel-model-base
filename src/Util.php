@@ -208,7 +208,8 @@ class Util
             $table,
             $this->config()->getBaseClassName($table->getName()),
             $this->config()->get('extends'),
-            $this->config()->modifiers()
+            $this->config()->modifiers(),
+            true
         );
     }
 
@@ -232,7 +233,8 @@ class Util
 
                 // Custom
                 Modifiers\CustomModelOptionsModifier::class,
-            ]
+            ],
+            false
         );
     }
 
@@ -261,7 +263,7 @@ class Util
      */
     protected function buildModel(Skeleton $skeleton, &$path)
     {
-        return $this->builderUtil()->build($skeleton, false, $path, 'model.stub');
+        return $this->builderUtil()->build($skeleton, false, $path);
     }
 
     /**

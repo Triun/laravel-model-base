@@ -22,6 +22,11 @@ class Skeleton
     public $className;
 
     /**
+     * @var bool
+     */
+    public $isAbstract = false;
+
+    /**
      * Which class extends.
      *
      * @var string
