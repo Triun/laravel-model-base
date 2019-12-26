@@ -229,6 +229,9 @@ class Util
             $skeleton,
             [
                 PhpDocModifier::class,
+
+                // Custom
+                Modifiers\CustomModelOptionsModifier::class,
             ]
         );
     }

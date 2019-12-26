@@ -65,9 +65,6 @@ class ModelBaseConfig
         // PhpDoc tags
         Modifiers\AuthModifier::class,
 
-        // Custom
-        Modifiers\CustomModelOptionsModifier::class,
-
         // Relations
         // Input transformations
         // ValueObjects
