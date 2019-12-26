@@ -2,12 +2,12 @@
 
 namespace Triun\ModelBase\Utils;
 
+use Doctrine\DBAL\Types\Type;
 use Exception;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Doctrine\DBAL\Types\Type;
-use Triun\ModelBase\Definitions\Table;
 use Triun\ModelBase\Definitions\Column;
+use Triun\ModelBase\Definitions\Table;
 use Triun\ModelBase\Lib\ConnectionUtilBase;
 
 /**
@@ -108,7 +108,7 @@ class SchemaUtil extends ConnectionUtilBase
         $databasePlatform->registerDoctrineTypeMapping('enum', 'string');
 
         $platformName = $databasePlatform->getName();
-        $customTypes = $this->config(
+        $customTypes  = $this->config(
             "doctrine.dbal.driver_mapping_types.{$platformName}",
             $this->config('doctrine.dbal.mapping_types', [])
         );
@@ -142,7 +142,7 @@ class SchemaUtil extends ConnectionUtilBase
 
         $tables = [];
         foreach ($this->conn->getDoctrineSchemaManager()->listTableNames() as $row) {
-            $row = (array)$row;
+            $row   = (array)$row;
             $table = array_shift($row);
             if (array_search($table, $except) === false) {
                 $tables[] = $table;
@@ -225,12 +225,12 @@ class SchemaUtil extends ConnectionUtilBase
             $column = new Column($doctrineColumn->getName(), $doctrineColumn->getType(), $doctrineColumn->toArray());
 
             // snake_name and StudyName
-            $column->snakeName      = $this->snakeCase($column->getName());
-            $column->studName       = Str::studly($column->getName());
-            $column->publicName     = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
+            $column->snakeName  = $this->snakeCase($column->getName());
+            $column->studName   = Str::studly($column->getName());
+            $column->publicName = $this->config('snakeAttributes') ? $column->snakeName : $column->getName();
 
             // Alias
-            $column->alias          = $this->aliasName($column->getName());
+            $column->alias = $this->aliasName($column->getName());
             if ($column->alias !== null) {
                 $column->aliasSnakeName = $this->snakeCase($column->alias);
                 $column->aliasStudName  = Str::studly($column->alias);
@@ -238,10 +238,10 @@ class SchemaUtil extends ConnectionUtilBase
                 $column->setComment(trim($column->getComment() . ' ' . 'Alias of ' . $column->getName()));
             }
 
-            $column->dbType         = $column->getType()->getName();
-            $column->castType       = $this->getLaravelCastType($column, $tableName);
-            $column->isDate         = $this->isDate($column);
-            $column->phpDocType     = $this->convertToPhpDoc($column);
+            $column->dbType     = $column->getType()->getName();
+            $column->castType   = $this->getLaravelCastType($column, $tableName);
+            $column->isDate     = $this->isDate($column);
+            $column->phpDocType = $this->convertToPhpDoc($column);
 
             // Columns callbacks
             foreach (self::$column_callbacks as $callback) {
@@ -267,7 +267,7 @@ class SchemaUtil extends ConnectionUtilBase
      */
     protected function tableColumnsFixes($columns, $tableName)
     {
-        $real_length = $this->config('doctrine.dbal.real_length', true);
+        $real_length  = $this->config('doctrine.dbal.real_length', true);
         $real_tinyint = $this->config('doctrine.dbal.real_tinyint', true);
 
         if ($real_length !== true && $real_tinyint !== true) {
@@ -316,12 +316,12 @@ class SchemaUtil extends ConnectionUtilBase
         foreach ($this->conn->getDoctrineConnection()->fetchAll($sql) as $tableColumn) {
             $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
 
-            $dbType = strtolower($tableColumn['type']);
+            $dbType                 = strtolower($tableColumn['type']);
             $tableColumn['db_type'] = $dbType;
-            $tableColumn['type'] = strtok($dbType, '(), ');
+            $tableColumn['type']    = strtok($dbType, '(), ');
 
             if (!isset($tableColumn['length'])) {
-                $length = strtok('(), ');
+                $length                = strtok('(), ');
                 $tableColumn['length'] = $length === false ? null : (int)$length;
             }
 
@@ -414,14 +414,15 @@ class SchemaUtil extends ConnectionUtilBase
     /**
      * Remove a given substring at the beginning of a given string.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     protected function removePrefix($haystack, $needles)
     {
-        foreach ((array) $needles as $needle) {
-            if ($needle != '' && $needle !== $haystack && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+        foreach ((array)$needles as $needle) {
+            if ($needle != '' && $needle !== $haystack && substr($haystack, 0, strlen($needle)) === (string)$needle) {
                 return substr($haystack, strlen($needle));
             }
         }
@@ -432,14 +433,15 @@ class SchemaUtil extends ConnectionUtilBase
     /**
      * Remove a given substring at the end of a given string.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     protected function removeSuffix($haystack, $needles)
     {
-        foreach ((array) $needles as $needle) {
-            if ($needle !== $haystack && substr($haystack, -strlen($needle)) === (string) $needle) {
+        foreach ((array)$needles as $needle) {
+            if ($needle !== $haystack && substr($haystack, -strlen($needle)) === (string)$needle) {
                 return substr($haystack, 0, -strlen($needle));
             }
         }
@@ -572,7 +574,7 @@ class SchemaUtil extends ConnectionUtilBase
         }
 
         if ($column->isDate) {
-            return '\\'.\Carbon\Carbon::class;
+            return '\\' . \Carbon\Carbon::class;
         } else {
             $type = $column->getType()->getName();
             switch ($type) {
