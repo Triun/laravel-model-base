@@ -21,6 +21,7 @@ class CustomModelOptionsModifier extends ModifierBase
         'interfaces' => [],
         'traits'     => [],
         'uses'       => [],
+        'phpDocTags' => [],
     ];
 
     /**
@@ -53,6 +54,12 @@ class CustomModelOptionsModifier extends ModifierBase
                 $skeleton->addUse($key, $value);
             } else {
                 $skeleton->addUse($value);
+            }
+        }
+
+        foreach ($config['phpDocTags'] as $key => $value) {
+            if ($skeleton->hasPhpDocTag($key) && array_key_exists('type', $value)) {
+                $skeleton->phpDocTag($key)->type = $value['type'];
             }
         }
     }

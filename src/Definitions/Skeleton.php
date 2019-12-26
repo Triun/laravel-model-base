@@ -301,6 +301,23 @@ class Skeleton
     }
 
     /**
+     * Get phpDocTag.
+     *
+     * @param  string $key
+     *
+     * @return  \Triun\ModelBase\Definitions\PhpDocTag|null
+     * @throws \InvalidArgumentException
+     */
+    public function phpDocTag($key)
+    {
+        if (!$this->hasPhpDocTag($key)) {
+            throw new InvalidArgumentException("PhpDocTag $key not defined");
+        }
+
+        return $this->phpDocTags[$key];
+    }
+
+    /**
      * Get constant.
      *
      * @param  string $key
