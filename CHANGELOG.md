@@ -22,6 +22,10 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Custom interfaces, traits and uses.
 
+`Changed`
+
+- Composer updated.
+
 `Fixes`
 
 - Fix class use sorting.
