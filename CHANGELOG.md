@@ -16,6 +16,16 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.3] - 2019-12-26
+
+`Added`
+
+- Ability to customise phpDoc properties types.
+
+`Fixes`
+
+- Move the custom interfaces, traits, uses and the new phpDoc into the model, to avoid traits errors.
+
 ## [v6.0.2] - 2019-12-26
 
 `Added`
@@ -152,7 +162,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.2...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.3...HEAD
+[v6.0.3]: https://github.com/Triun/laravel-model-base/compare/v6.0.2...v6.0.3
 [v6.0.2]: https://github.com/Triun/laravel-model-base/compare/v6.0.1...v6.0.2
 [v6.0.1]: https://github.com/Triun/laravel-model-base/compare/v6.0.0...v6.0.1
 [v6.0.0]: https://github.com/Triun/laravel-model-base/compare/v5.8.1...v6.0.0
