@@ -58,6 +58,7 @@ class TableModifier extends ModifierBase
         if ($type === 'integer') {
             $type = 'int';
         }
+        // TODO: Laravel types: Triun\ModelBase\Utils\SchemaUtil::getLaravelCastType()
         // known issue with string, real, double, etc.
         // https://github.com/laravel/framework/issues/29824
 
