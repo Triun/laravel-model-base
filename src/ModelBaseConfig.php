@@ -176,7 +176,7 @@ class ModelBaseConfig
      */
     public function match($rules, $value, $case_sensitive = false)
     {
-//        return fnmatch($rules, $value);
+        //return fnmatch($rules, $value);
 
         if (is_string($rules)) {
             $rules = explode('|', $rules);
