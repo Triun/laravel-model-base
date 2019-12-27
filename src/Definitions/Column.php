@@ -42,10 +42,33 @@ class Column extends DoctrineColumn
     public $aliasStudName;
 
     /**
-     * @var string Laravel casting type of this column. Possible PHP types include:
+     * The DB type of this column. Possible DB types vary according to the type of DBMS.
+     *
+     * @var string
+     */
+    public $dbType;
+
+    /**
+     * phpDoc property type.
+     *
+     * @var string
+     */
+    public $phpDocType;
+
+    /**
+     * Laravel casting type of this column. Possible PHP types include:
      * integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp.
+     *
+     * @var string
      */
     public $laravelType;
+
+    /**
+     * Laravel php type returned by Eloquent.
+     *
+     * @var string
+     */
+    public $castType;
 
     /**
      * Whether if the column is a date or not.
@@ -53,19 +76,4 @@ class Column extends DoctrineColumn
      * @var bool
      */
     public $isDate;
-
-    /**
-     * @var string Laravel php type returned by Eloquent.
-     */
-    public $castType;
-
-    /**
-     * @var string Laravel casting type for Eloquent.
-     */
-    public $phpDocType;
-
-    /**
-     * @var string the DB type of this column. Possible DB types vary according to the type of DBMS.
-     */
-    public $dbType;
 }
