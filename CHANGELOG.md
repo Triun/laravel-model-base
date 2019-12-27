@@ -16,6 +16,20 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.4] - 2019-12-27
+
+`Added`
+
+- New helpers: DBALHelper and TypeHelper.
+
+`Changed`
+
+- SchemaUtil refactoring with breaking changes.
+
+`Fixed`
+
+- Model `keyType` fix: use laravel types instead of database types.
+
 ## [v6.0.3] - 2019-12-26
 
 `Added`
@@ -162,7 +176,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.3...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.4...HEAD
+[v6.0.4]: https://github.com/Triun/laravel-model-base/compare/v6.0.3...v6.0.4
 [v6.0.3]: https://github.com/Triun/laravel-model-base/compare/v6.0.2...v6.0.3
 [v6.0.2]: https://github.com/Triun/laravel-model-base/compare/v6.0.1...v6.0.2
 [v6.0.1]: https://github.com/Triun/laravel-model-base/compare/v6.0.0...v6.0.1
