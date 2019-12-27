@@ -2,8 +2,9 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Helpers\TypeHelper;
+use Triun\ModelBase\Lib\ModifierBase;
 
 /**
  * Class TableModifier
@@ -35,32 +36,26 @@ class TableModifier extends ModifierBase
     }
 
     /**
-     * @param  Skeleton $skeleton
+     * @param Skeleton $skeleton
      *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     protected function setPrimaryKey($skeleton)
     {
-        $name = null;
-        $type = null;
+        $name         = null;
+        $type         = null;
         $incrementing = false;
 
-        // TODO TEST: Check if it return one or more fields in a composed primary key.
-        // TODO TEST: Check primary keys types other than null or int.
         if ($this->table()->hasPrimaryKey()) {
-            $name = $this->table()->getPrimaryKey()->getColumns()[0];
-            $column = $this->table()->getColumn($name);
-            $type = $column->getType()->getName();
+            // TODO TEST: Check if it return one or more fields in a composed primary key.
+            // TODO TEST: Check primary keys types other than null or int.
+            // known issue with string, real, double, etc.
+            // https://github.com/laravel/framework/issues/29824
+            $name         = $this->table()->getPrimaryKey()->getColumns()[0];
+            $column       = $this->table()->getColumn($name);
+            $type         = TypeHelper::getLaravelType($column->getType());
             $incrementing = $column->getAutoincrement();
         }
-
-        // integer is int
-        if ($type === 'integer') {
-            $type = 'int';
-        }
-        // TODO: Laravel types: Triun\ModelBase\Utils\SchemaUtil::getLaravelCastType()
-        // known issue with string, real, double, etc.
-        // https://github.com/laravel/framework/issues/29824
 
         $skeleton->property('primaryKey')->setValue($name);
         $skeleton->property('keyType')->setValue($type);
