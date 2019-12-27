@@ -181,6 +181,7 @@ abstract class TypeHelper
             case Types::STRING:
             case Types::TEXT:
             case Types::GUID:
+                return 'string';
             case Types::INTEGER:
             case Types::SMALLINT:
                 //return 'integer';
