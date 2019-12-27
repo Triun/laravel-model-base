@@ -188,12 +188,10 @@ abstract class TypeHelper
                 return 'int';
             case Types::BIGINT:
                 //return 'real';
-                return 'string|double';
+                return 'string|int';
             case Types::FLOAT:
+            case Types::DECIMAL:
                 return 'float';
-            case Types::DECIMAL: // decimal:<digits>
-                //return 'decimal';
-                return 'double';
             case Types::BOOLEAN:
                 //return 'boolean';
                 return 'bool';
@@ -202,7 +200,6 @@ abstract class TypeHelper
             case Types::ARRAY:
             case Types::SIMPLE_ARRAY:
             case Types::JSON_ARRAY: // deprecated. Keeping for backwards compatibility.
-                //return 'collection';
                 return 'array';
             case Types::JSON:
                 //return 'json';

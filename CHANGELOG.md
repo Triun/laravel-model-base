@@ -18,6 +18,10 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ## [v6.0.5] - 2019-12-27
 
+`Change`
+
+- Change back `double` as `float` as either `double`, `float` or `real` are the same in PHP.
+
 `Fixed`
 
 - string in phpDoc.
@@ -31,6 +35,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 `Changed`
 
 - SchemaUtil refactoring with breaking changes.
+- Normalisation of `integer` as `int` and `boolean` as `bool`.
 
 `Fixed`
 
