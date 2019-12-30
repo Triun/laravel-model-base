@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.7] - 2019-12-30
+
+`Fixed`
+
+- Force type conversion to either `int` or `string`, in model primary type, in order to avoid types or code issues.
+
 ## [v6.0.6] - 2019-12-30
 
 `Added`
@@ -193,7 +199,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...HEAD
+[v6.0.7]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...v6.0.7
 [v6.0.6]: https://github.com/Triun/laravel-model-base/compare/v6.0.5...v6.0.6
 [v6.0.5]: https://github.com/Triun/laravel-model-base/compare/v6.0.4...v6.0.5
 [v6.0.4]: https://github.com/Triun/laravel-model-base/compare/v6.0.3...v6.0.4

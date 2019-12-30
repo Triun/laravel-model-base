@@ -55,6 +55,23 @@ class TableModifier extends ModifierBase
             $column       = $this->table()->getColumn($name);
             $type         = TypeHelper::getLaravelType($column->getType());
             $incrementing = $column->getAutoincrement();
+
+            // Laravel only allows int or string as primary key type
+            // Big int require to be string, as PHP int is not big enough
+            switch ($type) {
+                case 'string':
+                case 'int':
+                    // Nothing to do
+                    break;
+                case 'integer':
+                    $type = 'int';
+                    break;
+                case 'real':
+                case 'float':
+                case 'double':
+                default:
+                    $type = 'string';
+            }
         }
 
         $skeleton->property('primaryKey')->setValue($name);
