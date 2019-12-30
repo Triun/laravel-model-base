@@ -211,6 +211,7 @@ return [
     | - dates: whether or not we want to use Carbon objects for dates.
     | - dateFormat: Eloquent date format. Default null.
     | - softDeletes: whether or not we want to implement eloquent soft deleted in the models (see DELETED_AT config).
+    | - sort_types: Short types will use `int` and `bool`, if false it will use `integer` and `boolean` instead.
     |
     */
 
@@ -219,6 +220,7 @@ return [
     'dateFormat'      => null,
     'softDeletes'     => true,
     // See DELETED_AT configuration.
+    'short_types'     => true,
 
     /*
     |--------------------------------------------------------------------------

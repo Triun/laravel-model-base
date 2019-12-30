@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.6] - 2019-12-30
+
+`Added`
+
+- Ability to choose between short types (`int`, `bool`) or long types (`integer`, `boolean`) which are equivalent for both laravel and  phpDoc.
+
 ## [v6.0.5] - 2019-12-27
 
 `Change`
@@ -187,7 +193,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.5...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...HEAD
+[v6.0.6]: https://github.com/Triun/laravel-model-base/compare/v6.0.5...v6.0.6
 [v6.0.5]: https://github.com/Triun/laravel-model-base/compare/v6.0.4...v6.0.5
 [v6.0.4]: https://github.com/Triun/laravel-model-base/compare/v6.0.3...v6.0.4
 [v6.0.3]: https://github.com/Triun/laravel-model-base/compare/v6.0.2...v6.0.3

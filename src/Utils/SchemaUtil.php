@@ -69,6 +69,16 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
+     * Initialize Util
+     */
+    protected function init()
+    {
+        parent::init();
+        
+        TypeHelper::$shortTypes = $this->config('short_types', true);
+    }
+
+    /**
      * Retrieve doctrine scheme manager for the given connection.
      *
      * @return \Doctrine\DBAL\Schema\AbstractSchemaManager

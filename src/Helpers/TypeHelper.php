@@ -24,6 +24,14 @@ abstract class TypeHelper
     private static $cast_callbacks = [];
 
     /**
+     * true:  `int`,     `bool`
+     * false: `integer`, `boolean`
+     *
+     * @var bool
+     */
+    public static $shortTypes = true;
+
+    /**
      * @param callback|callable $callback
      *
      * @return void
@@ -75,8 +83,7 @@ abstract class TypeHelper
                 return 'string';
             case Types::INTEGER:
             case Types::SMALLINT:
-                //return 'integer';
-                return 'int';
+                return static::$shortTypes ? 'int' : 'integer';
             case Types::BIGINT:
                 return 'real';
             case Types::FLOAT:
@@ -85,8 +92,7 @@ abstract class TypeHelper
                 //return 'decimal';
                 return 'double';
             case Types::BOOLEAN:
-                //return 'boolean';
-                return 'bool';
+                return static::$shortTypes ? 'bool' : 'boolean';
             case Types::OBJECT:
                 return 'object';
             case Types::ARRAY:
@@ -184,17 +190,15 @@ abstract class TypeHelper
                 return 'string';
             case Types::INTEGER:
             case Types::SMALLINT:
-                //return 'integer';
-                return 'int';
+                return static::$shortTypes ? 'int' : 'integer';
             case Types::BIGINT:
                 //return 'real';
-                return 'string|int';
+                return 'string|' . static::$shortTypes ? 'int' : 'integer';
             case Types::FLOAT:
             case Types::DECIMAL:
                 return 'float';
             case Types::BOOLEAN:
-                //return 'boolean';
-                return 'bool';
+                return static::$shortTypes ? 'bool' : 'boolean';
             case Types::OBJECT:
                 return 'object';
             case Types::ARRAY:
