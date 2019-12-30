@@ -20,7 +20,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 `Added`
 
-- Ability to choose between short types (`int`, `bool`) or long types (`integer`, `boolean`) which are equivalent for both laravel and  phpDoc.
+- Ability to choose between short types (`int`, `bool`) or long types (`integer`, `boolean`) which are equivalent for both Laravel and phpDoc.
 
 ## [v6.0.5] - 2019-12-27
 
