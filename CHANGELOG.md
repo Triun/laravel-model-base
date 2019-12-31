@@ -24,7 +24,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 `Fixed`
 
-- BIGINT to string|float|int in phpDoc.
+- BIGINT to `float|int` in phpDoc.
 
 ## [v6.0.7] - 2019-12-30
 
