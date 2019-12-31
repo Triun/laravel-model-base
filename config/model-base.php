@@ -110,6 +110,7 @@ return [
     | - prefix: Model Class Prefix.
     | - suffix: Model Class Suffix.
     | - save: Set to true if you want to save the model (if the model already exists, it will not override it).
+    | - override: In case that the file already exists, whether if we should override it, not, or ask for confirmation.
     |
     | Note that all models changes must be done manually, this tool will never override the actual models, but you
     | can make use of the diff tool to see the differences.
@@ -126,6 +127,8 @@ return [
         'prefix'    => '',
         'suffix'    => '',
         'save'      => true, // true | false
+        'override'  => false,
+        // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
     ],
 
     /*

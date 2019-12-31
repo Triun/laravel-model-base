@@ -263,7 +263,7 @@ class Util
      */
     protected function buildModel(Skeleton $skeleton, &$path)
     {
-        return $this->builderUtil()->build($skeleton, false, $path);
+        return $this->builderUtil()->build($skeleton, $this->config->get('model.override', 'confirm'), $path);
     }
 
     /**
