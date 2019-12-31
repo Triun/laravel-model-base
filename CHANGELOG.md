@@ -48,7 +48,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ## [v6.0.5] - 2019-12-27
 
-`Change`
+`Changed`
 
 - Change back `double` as `float` as either `double`, `float` or `real` are the same in PHP.
 
