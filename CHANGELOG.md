@@ -16,6 +16,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.9] - 2019-12-31
+
+`Added`
+
+- phpDoc of nullable values.
+- Additional phpDoc description of the database type.
+
 ## [v6.0.8] - 2019-12-31
 
 `Changed`
@@ -41,7 +48,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ## [v6.0.5] - 2019-12-27
 
-`Change`
+`Changed`
 
 - Change back `double` as `float` as either `double`, `float` or `real` are the same in PHP.
 
@@ -210,7 +217,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.8...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.9...HEAD
+[v6.0.9]: https://github.com/Triun/laravel-model-base/compare/v6.0.8...v6.0.9
 [v6.0.8]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...v6.0.8
 [v6.0.7]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...v6.0.7
 [v6.0.6]: https://github.com/Triun/laravel-model-base/compare/v6.0.5...v6.0.6

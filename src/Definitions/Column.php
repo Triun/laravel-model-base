@@ -76,4 +76,18 @@ class Column extends DoctrineColumn
      * @var bool
      */
     public $isDate;
+
+    /**
+     * Whether if the column is unsigned or not.
+     *
+     * @var bool
+     */
+    public $unsigned;
+
+    /**
+     * Whether if the column is nullable or not.
+     *
+     * @var bool
+     */
+    public $nullable;
 }

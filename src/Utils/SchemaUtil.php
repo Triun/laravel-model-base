@@ -231,6 +231,9 @@ class SchemaUtil extends ConnectionUtilBase
                 $column->setComment(trim($column->getComment() . ' ' . 'Alias of ' . $column->getName()));
             }
 
+            $column->nullable = $doctrineColumn->getNotnull();
+            $column->unsigned = $doctrineColumn->getUnsigned();
+
             $column->dbType      = $column->getType()->getName();
             $column->laravelType = TypeHelper::getLaravelType($column->getType());
             $column->castType    =
@@ -388,6 +391,23 @@ class SchemaUtil extends ConnectionUtilBase
      * @throws Exception
      */
     private function convertToPhpDoc(Column $column): string
+    {
+        $type = $this->getToPhpDocBaseType($column);
+
+        if ($column->nullable) {
+            return 'null|' . $type;
+        }
+
+        return $type;
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Column $column
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function getToPhpDocBaseType(Column $column): string
     {
         if ($column->isDate === null) {
             throw new Exception('Not defined if the column is date or not.');

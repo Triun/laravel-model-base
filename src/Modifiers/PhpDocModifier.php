@@ -2,11 +2,13 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use ReflectionClass;
 use Illuminate\Database\Query\Builder;
-use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Definitions\Skeleton;
+use Illuminate\Support\Str;
+use ReflectionClass;
+use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\PhpDocTag;
+use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
 /**
  * Class PhpDocModifier
@@ -47,14 +49,62 @@ class PhpDocModifier extends ModifierBase
      */
     protected function columnsPhpDoc(Skeleton $skeleton, ReflectionClass $BuilderReflectionClass)
     {
-        foreach ($this->table()->getColumns() as $column) {
+        $columns      = $this->table()->getColumns();
+        $descriptions = $this->getDescriptions($columns);
+
+        foreach ($columns as $column) {
             $skeleton->addPhpDocTag(new PhpDocTag(
                 '$' . $column->publicName,
                 'property',
                 $column->phpDocType,
-                str_pad($column->dbType, 11) . ' ' . $column->getComment()
+                trim($descriptions[$column->publicName] . ' ' . $column->getComment())
             ));
         }
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Column[] $columns
+     *
+     * @return string[]
+     */
+    private function getDescriptions(array $columns): array
+    {
+        $descriptions = [];
+        $maxLength    = 0;
+        foreach ($columns as $column) {
+            $descriptions[$column->publicName] = $this->columnsPhpDocCommentType($column);
+            $maxLength                         = max($maxLength, Str::length($descriptions[$column->publicName]));
+        }
+
+        foreach ($descriptions as $publicName => $value) {
+            $descriptions[$publicName] = str_pad($value, $maxLength);
+        }
+
+        return $descriptions;
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Column $column
+     *
+     * @return string
+     */
+    private function columnsPhpDocCommentType(Column $column): string
+    {
+        $comment = $column->dbType;
+
+        if ($column->unsigned) {
+            $comment = 'unsigned ' . $comment;
+        }
+
+        if ($column->nullable) {
+            $comment .= '|null';
+        }
+
+        if (null !== $column->getDefault()) {
+            $comment .= ' (default: ' . $column->getDefault() . ')';
+        }
+
+        return $comment;
     }
 
     /**
