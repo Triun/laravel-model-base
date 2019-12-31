@@ -395,7 +395,7 @@ class SchemaUtil extends ConnectionUtilBase
         $type = $this->getToPhpDocBaseType($column);
 
         if ($column->nullable) {
-            return 'null|' . $type;
+            $type .= '|null';
         }
 
         return $type;

@@ -18,6 +18,10 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ## [v6.0.12] - 2019-12-31
 
+`Changed`
+
+- Put null after type in phpDoc.
+
 `Fix`
 
 - Fix traits as not a line when empty.
