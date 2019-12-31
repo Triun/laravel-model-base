@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.10] - 2019-12-31
+
+`Added`
+
+- Ability to override the model files.
+
 ## [v6.0.9] - 2019-12-31
 
 `Added`
@@ -217,7 +223,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.9...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.10...HEAD
+[v6.0.10]: https://github.com/Triun/laravel-model-base/compare/v6.0.9...v6.0.10
 [v6.0.9]: https://github.com/Triun/laravel-model-base/compare/v6.0.8...v6.0.9
 [v6.0.8]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...v6.0.8
 [v6.0.7]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...v6.0.7
