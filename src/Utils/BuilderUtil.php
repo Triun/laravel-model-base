@@ -116,8 +116,10 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getBody(Skeleton $skeleton)
     {
+        $traits = $this->getTraits($skeleton->traits());
+
         $parts = array_merge(
-            [$this->getTraits($skeleton->traits())],
+            null === $traits ? [] : [$traits],
             array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
             array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
             array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
@@ -133,12 +135,12 @@ class BuilderUtil extends BuilderUtilBase
     /**
      * @param string[] $traits
      *
-     * @return string
+     * @return string|null
      */
-    protected function getTraits($traits)
+    protected function getTraits($traits): ?string
     {
         if (count($traits) === 0) {
-            return '';
+            return null;
         }
 
         return static::TAB . 'use ' . implode(', ', $traits) . ';';
