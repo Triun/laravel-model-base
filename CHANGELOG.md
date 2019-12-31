@@ -25,6 +25,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 `Fixed`
 
 - BIGINT to `float|int` in phpDoc.
+- Primary keys can be forced to be `string` and the phpDoc as `string|float` or `string|int` to avoid Laravel issues.
 
 ## [v6.0.7] - 2019-12-30
 
