@@ -2,6 +2,7 @@
 
 namespace Triun\ModelBase\Modifiers;
 
+use Doctrine\DBAL\ParameterType;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -100,8 +101,32 @@ class PhpDocModifier extends ModifierBase
             $comment .= '|null';
         }
 
-        if (null !== $column->getDefault()) {
-            $comment .= ' (default: ' . $column->getDefault() . ')';
+        if (null !== ($default = $column->getDefault())) {
+            if (null === $default) {
+                $default = 'null';
+            } else {
+                switch ($column->getType()->getBindingType()) {
+                    case ParameterType::NULL:
+                        $default = 'null';
+                        break;
+                    case ParameterType::STRING:
+                        $default = '"' . $default . '"';
+                        break;
+                    case ParameterType::BOOLEAN:
+                        $default = $default ? 'true' : 'false';
+                        break;
+                    case ParameterType::LARGE_OBJECT:
+                        $default = 'large object';
+                        break;
+                    case ParameterType::BINARY:
+                        $default = 'binary';
+                        break;
+                    case ParameterType::INTEGER:
+                    default:
+                        // As it is
+                }
+            }
+            $comment .= ' (default: ' . $default . ')';
         }
 
         return $comment;

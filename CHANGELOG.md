@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.13] - 2019-12-31
+
+`Changed`
+
+- Quote default values.
+
 ## [v6.0.12] - 2019-12-31
 
 `Changed`
@@ -239,7 +245,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.12...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.13...HEAD
+[v6.0.13]: https://github.com/Triun/laravel-model-base/compare/v6.0.12...v6.0.13
 [v6.0.12]: https://github.com/Triun/laravel-model-base/compare/v6.0.11...v6.0.12
 [v6.0.11]: https://github.com/Triun/laravel-model-base/compare/v6.0.10...v6.0.11
 [v6.0.10]: https://github.com/Triun/laravel-model-base/compare/v6.0.9...v6.0.10
