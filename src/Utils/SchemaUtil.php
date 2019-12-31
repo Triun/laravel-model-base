@@ -231,6 +231,9 @@ class SchemaUtil extends ConnectionUtilBase
                 $column->setComment(trim($column->getComment() . ' ' . 'Alias of ' . $column->getName()));
             }
 
+            $column->nullable = $doctrineColumn->getNotnull();
+            $column->unsigned = $doctrineColumn->getUnsigned();
+
             $column->dbType      = $column->getType()->getName();
             $column->laravelType = TypeHelper::getLaravelType($column->getType());
             $column->castType    =
