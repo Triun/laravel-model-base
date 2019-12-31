@@ -16,11 +16,16 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-## [v6.0.8] - 2019-12-30
+## [v6.0.8] - 2019-12-31
+
+`Changed`
+
+- Normalise value types `real` and `double` as `float`.
 
 `Fixed`
 
-- BIGINT to string|float|int in phpDoc.
+- BIGINT to `float|int` in phpDoc.
+- Primary keys can be forced to be `string` and the phpDoc as `string|float` or `string|int` to avoid Laravel issues.
 
 ## [v6.0.7] - 2019-12-30
 
@@ -205,7 +210,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.8...HEAD
+[v6.0.8]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...v6.0.8
 [v6.0.7]: https://github.com/Triun/laravel-model-base/compare/v6.0.6...v6.0.7
 [v6.0.6]: https://github.com/Triun/laravel-model-base/compare/v6.0.5...v6.0.6
 [v6.0.5]: https://github.com/Triun/laravel-model-base/compare/v6.0.4...v6.0.5

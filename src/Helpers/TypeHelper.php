@@ -84,13 +84,14 @@ abstract class TypeHelper
             case Types::INTEGER:
             case Types::SMALLINT:
                 return static::$shortTypes ? 'int' : 'integer';
-            case Types::BIGINT:
-                return 'real';
-            case Types::FLOAT:
-                return 'float';
+            // real and double, in PHP, is equivalent to float
             case Types::DECIMAL: // decimal:<digits>
                 //return 'decimal';
-                return 'double';
+                //return 'double';
+            case Types::BIGINT:
+                //return 'real';
+            case Types::FLOAT:
+                return 'float';
             case Types::BOOLEAN:
                 return static::$shortTypes ? 'bool' : 'boolean';
             case Types::OBJECT:
@@ -192,11 +193,11 @@ abstract class TypeHelper
             case Types::SMALLINT:
                 return static::$shortTypes ? 'int' : 'integer';
             case Types::BIGINT:
-                // The PHP int is not big enough to handle this int
-                // So it could be returned as either string or float
+                // In PHP, int is not big enough
                 // In PHP, float, real and double is equivalent
+                // So it could be returned as either string or float
                 //return 'real';
-                return 'string|float|' . (static::$shortTypes ? 'int' : 'integer');
+                return 'float|' . (static::$shortTypes ? 'int' : 'integer');
             case Types::FLOAT:
             case Types::DECIMAL:
                 return 'float';

@@ -74,7 +74,7 @@ class SchemaUtil extends ConnectionUtilBase
     protected function init()
     {
         parent::init();
-        
+
         TypeHelper::$shortTypes = $this->config('short_types', true);
     }
 

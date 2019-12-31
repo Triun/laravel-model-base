@@ -2,6 +2,7 @@
 
 namespace Triun\ModelBase\Modifiers;
 
+use Doctrine\DBAL\Types\Types;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Helpers\TypeHelper;
 use Triun\ModelBase\Lib\ModifierBase;
@@ -70,7 +71,19 @@ class TableModifier extends ModifierBase
                 case 'float':
                 case 'double':
                 default:
-                    $type = 'string';
+                    $type   = 'string';
+                    $column = $this->table()->getColumn($name);
+                    switch ($column->dbType) {
+                        case Types::BIGINT:
+                            $column->castType   = 'string';
+                            $column->phpDocType = 'string|int';
+                            break;
+                        case Types::FLOAT:
+                        case Types::DECIMAL:
+                            $column->castType   = 'string';
+                            $column->phpDocType = 'string|float';
+                            break;
+                    }
             }
         }
 
