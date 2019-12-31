@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.11] - 2019-12-31
+
+`Fix`
+
+- Body extra line when the class is empty.
+
 ## [v6.0.10] - 2019-12-31
 
 `Added`
@@ -223,7 +229,8 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.10...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v6.0.11...HEAD
+[v6.0.11]: https://github.com/Triun/laravel-model-base/compare/v6.0.10...v6.0.11
 [v6.0.10]: https://github.com/Triun/laravel-model-base/compare/v6.0.9...v6.0.10
 [v6.0.9]: https://github.com/Triun/laravel-model-base/compare/v6.0.8...v6.0.9
 [v6.0.8]: https://github.com/Triun/laravel-model-base/compare/v6.0.7...v6.0.8

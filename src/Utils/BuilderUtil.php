@@ -116,15 +116,18 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getBody(Skeleton $skeleton)
     {
-        return implode(
-            PHP_EOL . PHP_EOL,
-            array_merge(
-                [$this->getTraits($skeleton->traits())],
-                array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
-                array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
-                array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
-            )
+        $parts = array_merge(
+            [$this->getTraits($skeleton->traits())],
+            array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
+            array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
+            array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
         );
+
+        if (count($parts) === 0) {
+            return PHP_EOL;
+        }
+
+        return PHP_EOL . implode(PHP_EOL . PHP_EOL, $parts) . PHP_EOL;
     }
 
     /**

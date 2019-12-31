@@ -11,6 +11,4 @@ namespace DummyNamespace;
 {{phpdoc}}
  */
 {{abstract}}class DummyClass extends DummyExtendsClass{{implements}}
-{
-{{body}}
-}
+{{{body}}}
