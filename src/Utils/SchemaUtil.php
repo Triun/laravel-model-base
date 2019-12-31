@@ -392,6 +392,23 @@ class SchemaUtil extends ConnectionUtilBase
      */
     private function convertToPhpDoc(Column $column): string
     {
+        $type = $this->getToPhpDocBaseType($column);
+
+        if ($column->nullable) {
+            return 'null|' . $type;
+        }
+
+        return $type;
+    }
+
+    /**
+     * @param \Triun\ModelBase\Definitions\Column $column
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function getToPhpDocBaseType(Column $column): string
+    {
         if ($column->isDate === null) {
             throw new Exception('Not defined if the column is date or not.');
         }
