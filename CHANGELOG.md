@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v6.0.8] - 2019-12-30
+
+`Fixed`
+
+- BIGINT to string|float|int in phpDoc.
+
 ## [v6.0.7] - 2019-12-30
 
 `Fixed`

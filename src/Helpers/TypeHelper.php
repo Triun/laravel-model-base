@@ -192,8 +192,11 @@ abstract class TypeHelper
             case Types::SMALLINT:
                 return static::$shortTypes ? 'int' : 'integer';
             case Types::BIGINT:
+                // The PHP int is not big enough to handle this int
+                // So it could be returned as either string or float
+                // In PHP, float, real and double is equivalent
                 //return 'real';
-                return 'string|' . static::$shortTypes ? 'int' : 'integer';
+                return 'string|float|' . (static::$shortTypes ? 'int' : 'integer');
             case Types::FLOAT:
             case Types::DECIMAL:
                 return 'float';
