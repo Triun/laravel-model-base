@@ -16,7 +16,11 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-## [v6.0.8] - 2019-12-30
+## [v6.0.8] - 2019-12-31
+
+`Changed`
+
+- Normalise value types `real` and `double` as `float`.
 
 `Fixed`
 

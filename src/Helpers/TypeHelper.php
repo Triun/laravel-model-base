@@ -84,13 +84,14 @@ abstract class TypeHelper
             case Types::INTEGER:
             case Types::SMALLINT:
                 return static::$shortTypes ? 'int' : 'integer';
-            case Types::BIGINT:
-                return 'real';
-            case Types::FLOAT:
-                return 'float';
+            // real and double, in PHP, is equivalent to float
             case Types::DECIMAL: // decimal:<digits>
                 //return 'decimal';
-                return 'double';
+                //return 'double';
+            case Types::BIGINT:
+                //return 'real';
+            case Types::FLOAT:
+                return 'float';
             case Types::BOOLEAN:
                 return static::$shortTypes ? 'bool' : 'boolean';
             case Types::OBJECT:
