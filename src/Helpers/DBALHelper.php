@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Triun\ModelBase\Helpers;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
@@ -27,9 +26,12 @@ abstract class DBALHelper
         ],
     ];
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public static function getSchema(Connection $conn): AbstractSchemaManager
     {
-        return $conn->getDriver()->getSchemaManager($conn);
+        return $conn->getDriver()->getSchemaManager($conn, $conn->getDatabasePlatform());
     }
 
     /**
@@ -44,7 +46,7 @@ abstract class DBALHelper
      * @param bool       $realLength  (default true)
      * @param bool       $realTinyInt (default true)
      *
-     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function tableColumnsFixes(
         Connection $conn,
@@ -90,8 +92,8 @@ abstract class DBALHelper
     /**
      * Use Small Int if it's a Boolean with more than 1 bit.
      *
-     * @throws DBALException
-     * @see \Doctrine\DBAL\DBALException::unknownColumnType()
+     * @throws \Doctrine\DBAL\Exception
+     * @see \Doctrine\DBAL\Exception::unknownColumnType()
      */
     private static function fixSmallInt(Column $column, ?int $length): void
     {
@@ -109,14 +111,14 @@ abstract class DBALHelper
     }
 
     /**
-     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     private static function getPlatformColumns(Connection $conn, string $tableName): array
     {
         $sql = self::getSchema($conn)->getDatabasePlatform()->getListTableColumnsSQL($tableName);
 
         $platformColumns = [];
-        foreach ($conn->fetchAll($sql) as $tableColumn) {
+        foreach ($conn->fetchAllAssociative($sql) as $tableColumn) {
             $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
 
             $dbType                 = strtolower($tableColumn['type']);
@@ -142,7 +144,7 @@ abstract class DBALHelper
      * @param array                 $driversMappings (default {@see DBALHelper::DEFAULT_DRIVER_MAPPINGS})
      *
      * @return AbstractSchemaManager
-     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function platformMapping(
         AbstractSchemaManager $schema,

@@ -66,6 +66,8 @@ class SchemaUtil extends ConnectionUtilBase
 
     /**
      * Retrieve doctrine scheme manager for the given connection.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function schema(): AbstractSchemaManager
     {
