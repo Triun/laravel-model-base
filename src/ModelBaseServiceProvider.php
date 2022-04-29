@@ -3,32 +3,20 @@
 namespace Triun\ModelBase;
 
 use Illuminate\Support\ServiceProvider;
-use Triun\ModelBase\Console\MakeCommand;
 use Triun\ModelBase\Console\MakeBulkCommand;
+use Triun\ModelBase\Console\MakeCommand;
 
-/**
- * Class ModelBaseServiceProvider
- *
- * @package Triun\ModelBase
- */
 class ModelBaseServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
      */
-    protected $defer = true;
+    protected bool $defer = true;
 
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-//        $viewPath = __DIR__.'/../resources/views';
-//        $this->loadViewsFrom($viewPath, 'model-base');
+        //$viewPath = __DIR__.'/../resources/views';
+        //$this->loadViewsFrom($viewPath, 'model-base');
 
         $configPath = realpath(
             dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
@@ -44,10 +32,8 @@ class ModelBaseServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $configPath = __DIR__ . '/../config/model-base.php';
         $this->mergeConfigFrom($configPath, 'model-base');
@@ -73,10 +59,8 @@ class ModelBaseServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'command.make.model-base',

@@ -40,7 +40,7 @@
         "illuminate/filesystem": "^9.0",
         "illuminate/database": "^9.0",
         "illuminate/config": "^9.0",
-        "doctrine/dbal": "^2.5",
+        "doctrine/dbal": "^3.3",
         "triun/diff": "^1.0"
     },
     "require-dev": {
@@ -48,7 +48,11 @@
         "squizlabs/php_codesniffer": "^3.4",
         "laravel/framework": "^9.0",
         "laravel/lumen-framework": "^9.0",
-        "orchestra/testbench": "^4.0"
+        "orchestra/testbench": "^7.0",
+        "nunomaduro/collision": "^6.2",
+        "phpstan/phpstan": "^1.6",
+        "phpcompatibility/php-compatibility": "*",
+        "nunomaduro/larastan": "^2.1"
     },
     "suggest": {
         "triun/laravel-model-validable": "Model validation and rules generator modifier"
@@ -59,9 +63,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {
@@ -69,13 +73,19 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ],
+        "php-compatibility-install": "vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
         "test-mysql": "vendor/bin/phpunit --configuration phpunit_mysql.xml",
         "test-pgsql": "vendor/bin/phpunit --configuration phpunit_pgsql.xml",
         "test-sqlite": "vendor/bin/phpunit --configuration phpunit_sqlite.xml",
         "test-ci-mysql": "vendor/bin/phpunit --configuration phpunit_mysql.xml --coverage-clover build/coverage.xml",
         "test-ci-pgsql": "vendor/bin/phpunit --configuration phpunit_pgsql.xml --coverage-clover build/coverage.xml",
         "test-ci-sqlite": "vendor/bin/phpunit --configuration phpunit_sqlite.xml --coverage-clover build/coverage.xml",
-        "standards": "vendor/bin/phpcs --standard=phpcs.xml"
+        "standards": "vendor/bin/phpcs --standard=phpcs.xml",
+        "php-compatibility": "vendor/bin/phpcs --standard=phpcs-php-compatibility.xml",
+        "test-static": "vendor/bin/phpstan analyse -c phpstan.dist.neon --no-progress"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

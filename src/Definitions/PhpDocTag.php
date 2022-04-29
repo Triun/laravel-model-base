@@ -2,42 +2,14 @@
 
 namespace Triun\ModelBase\Definitions;
 
-/**
- * Class PhpDocTag
- *
- * @package Triun\ModelBase\Definitions
- */
 class PhpDocTag
 {
-    /**
-     * @var string
-     */
-    protected $name;
+    protected ?string $name;
+    public ?string $tag = null;
+    public ?string $type = null;
+    public ?string $description = null;
 
-    /**
-     * @var string
-     */
-    public $tag;
-
-    /**
-     * @var string
-     */
-    public $type;
-
-    /**
-     * @var string
-     */
-    public $description;
-
-    /**
-     * PhpDocTag constructor.
-     *
-     * @param string $name
-     * @param string $tag
-     * @param string $type
-     * @param string $description
-     */
-    public function __construct($name, $tag = null, $type = null, $description = null)
+    public function __construct(string $name, ?string $tag = null, ?string $type = null, ?string $description = null)
     {
         $this->name = $name;
         $this->tag = $tag;
@@ -45,18 +17,12 @@ class PhpDocTag
         $this->description = $description;
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasName()
+    public function hasName(): bool
     {
-        return $this->name !== null;
+        return null !== $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }

@@ -1,10 +1,11 @@
 <?php
 
+namespace Tests;
+
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 /**
- * Class MutatorSkipeableTest
- *
  * @see \Triun\ModelBase\AddOns\MutatorSkipeable
  */
 class MutatorSkipeableTest extends TestCase
@@ -14,21 +15,21 @@ class MutatorSkipeableTest extends TestCase
      *
      * @var string
      */
-    protected $original = 'Some title';
+    protected string $original = 'Some title';
 
     /**
      * Expected mutation when set.
      *
      * @var string
      */
-    protected $setterMutator = 'Native title';
+    protected string $setterMutator = 'Native title';
 
     /**
-     * Expected mutation when get.
+     * Expected mutation when got.
      *
      * @var string
      */
-    protected $getterMutator = 'Formatted title';
+    protected string $getterMutator = 'Formatted title';
 
     /**
      * @test
@@ -201,12 +202,12 @@ class MutatorSkipeableTest extends TestCase
     {
         $model = $this->getPost();
 
-        $carbon = \Carbon\Carbon::now();
+        $carbon = Carbon::now();
 
         $format = $model->run_getDateFormat();
 //        $datetime = $carbon->toDateTimeString();
         $datetime = $carbon->format($format);
-        $carbon = new Carbon\Carbon($datetime); // In 7.1 it gets microseconds (ex; 2017-01-16T09:35:07.720258+0800)
+        $carbon   = new Carbon($datetime); // In 7.1 it gets microseconds (ex; 2017-01-16T09:35:07.720258+0800)
 
         $model->run_setAttributeWithoutMutator('updated_at', $carbon);
 
@@ -219,7 +220,7 @@ class MutatorSkipeableTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            \Carbon\Carbon::class,
+            Carbon::class,
             $model->getAttributeValueWithoutMutator('updated_at')
         );
 
@@ -234,11 +235,11 @@ class MutatorSkipeableTest extends TestCase
      *
      * @return Post
      */
-    protected function getPost()
+    protected function getPost(): Post
     {
         $post = new Post();
 
-        $post->title = 'Some title';
+        $post->title    = 'Some title';
         $post->metadata = [
             'foo' => 'bar',
         ];
@@ -251,10 +252,10 @@ class MutatorSkipeableTest extends TestCase
 /**
  * Class Post
  *
- * @property string         $title
- * @property array|object   $metadata
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property string       $title
+ * @property array|object $metadata
+ * @property Carbon       $created_at
+ * @property Carbon       $updated_at
  */
 class Post extends \Illuminate\Database\Eloquent\Model
 {
@@ -272,7 +273,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
     /**
      * @return string
      */
-    public function run_getDateFormat()
+    public function run_getDateFormat(): string
     {
         return $this->getDateFormat();
     }
@@ -281,12 +282,12 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Set a given attribute on the model, without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return $this
      */
-    public function run_setAttributeWithoutMutator($key, $value)
+    public function run_setAttributeWithoutMutator(string $key, mixed $value): static
     {
         return $this->setAttributeWithoutMutator($key, $value);
     }
@@ -295,11 +296,11 @@ class Post extends \Illuminate\Database\Eloquent\Model
      * Get a plain attribute (not a relationship), without using the mutator.
      * Add phone type functionality.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
-    public function run_getAttributeValueWithoutMutator($key)
+    public function run_getAttributeValueWithoutMutator(string $key): mixed
     {
         return $this->getAttributeValueWithoutMutator($key);
     }
@@ -307,7 +308,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
     /**
      * @return string
      */
-    public function getTitleAttribute()
+    public function getTitleAttribute(): string
     {
         return str_replace(['Native', 'Some'], 'Formatted', $this->attributes['title']);
     }

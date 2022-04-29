@@ -2,23 +2,13 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Property;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class DatesModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class DatesModifier extends ModifierBase
 {
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         // Set date format if set.
         $this->setProperty($skeleton, 'dateFormat', $this->config('dateFormat'));
@@ -45,14 +35,10 @@ class DatesModifier extends ModifierBase
         }
     }
 
-    /**
-     * @param string                                $name
-     * @param \Triun\ModelBase\Definitions\Property $dates
-     */
-    protected function addToDates($name, Property $dates)
+    protected function addToDates(string $name, Property $dates): void
     {
         // Add to dates array
-        if (array_search($name, $dates->value) === false) {
+        if (!in_array($name, $dates->value)) {
             $dates->value[] = $name;
         }
     }

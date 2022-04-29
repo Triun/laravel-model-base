@@ -2,22 +2,12 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class ConnectionModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class ConnectionModifier extends ModifierBase
 {
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $skeleton->property('connection')->setValue($this->connection()->getName());
     }

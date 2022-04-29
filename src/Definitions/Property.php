@@ -2,57 +2,25 @@
 
 namespace Triun\ModelBase\Definitions;
 
-/**
- * Class Property
- *
- * @package Triun\ModelBase\Definitions
- */
 class Property
 {
-    /**
-     * @var string
-     */
-    public $name;
+    public string $name;
 
     /**
      * @var string[]
      */
-    public $modifiers;
+    public array $modifiers;
+    public int $modifiers_id;
+    public mixed $default;
+    public mixed $value;
+    public string $docComment;
 
-    /**
-     * @var int
-     */
-    public $modifiers_id;
-
-    /**
-     * @var mixed
-     */
-    public $default;
-
-    /**
-     * @var mixed
-     */
-    public $value;
-
-    /**
-     * @var string
-     */
-    public $docComment;
-
-    /**
-     * @return bool
-     */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->value !== $this->default;
     }
 
-    /**
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setValue($value)
+    public function setValue($value): static
     {
         $this->value = $value;
 

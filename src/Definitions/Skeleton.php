@@ -3,116 +3,96 @@
 namespace Triun\ModelBase\Definitions;
 
 use InvalidArgumentException;
-use Triun\ModelBase\Utils\SkeletonUtil;
+use JetBrains\PhpStorm\ArrayShape;
 use Triun\ModelBase\Exception\SkeletonUseAliasException;
 use Triun\ModelBase\Exception\SkeletonUseNameException;
+use Triun\ModelBase\Utils\SkeletonUtil;
 
-/**
- * Class Skeleton
- *
- * @package Triun\ModelBase\Definitions
- */
 class Skeleton
 {
     /**
      * Name for the class, included namespace.
-     *
-     * @var string
      */
-    public $className;
+    public string $className;
 
-    /**
-     * @var bool
-     */
-    public $isAbstract = false;
+    public bool $isAbstract = false;
 
     /**
      * Which class extends.
-     *
-     * @var string
      */
-    public $extends;
+    public string $extends;
 
     /**
      * Which classes should be imported.
      *
      * @var string[]
      */
-    protected $uses = [];
+    protected array $uses = [];
 
     /**
      * Which interfaces implements.
      *
      * @var string[]
      */
-    protected $interfaces = [];
+    protected array $interfaces = [];
 
     /**
      * Which traits uses.
      *
      * @var string[]
      */
-    protected $traits = [];
+    protected array $traits = [];
 
-    /**
-     * @var string
-     */
-    public $phpDocComment;
+    public string $phpDocComment;
 
     /**
      * Class PhpDoc tags
      *
      * @var PhpDocTag[]
      */
-    protected $phpDocTags = [];
+    protected array $phpDocTags = [];
 
     /**
      * Model Base Skeleton constants.
      *
-     * @var \Triun\ModelBase\Definitions\Constant[]
+     * @var Constant[]
      */
-    protected $constants = [];
+    protected array $constants = [];
 
     /**
      * Model Base Skeleton properties.
      *
-     * @var \Triun\ModelBase\Definitions\Property[]
+     * @var Property[]
      */
-    protected $properties = [];
+    protected array $properties = [];
 
     /**
      * Model Base Skeleton methods.
      *
-     * @var \Triun\ModelBase\Definitions\Method[]
+     * @var Method[]
      */
-    protected $methods = [];
+    protected array $methods = [];
 
     /**
      * Get the full namespace name.
-     *
-     * @return string
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return trim(implode('\\', array_slice(explode('\\', $this->className), 0, -1)), '\\');
     }
 
     /**
      * Get the class "basename".
-     *
-     * @return string
      */
-    protected function getClassBasename()
+    protected function getClassBasename(): string
     {
         return class_basename($this->className);
     }
 
     /**
      * Get the extends class "basename".
-     *
-     * @return string
      */
-    protected function getExtendsBasename()
+    protected function getExtendsBasename(): string
     {
         return class_basename($this->className);
     }
@@ -120,7 +100,7 @@ class Skeleton
     /**
      * @return string[]
      */
-    public function uses()
+    public function uses(): array
     {
         // return $this->uses;
         $uses = [];
@@ -160,7 +140,7 @@ class Skeleton
         return $uses;
     }
 
-    protected function usesCompilationAppend(&$uses, array $names)
+    protected function usesCompilationAppend(&$uses, array $names): void
     {
         foreach ($names as $name => $alias) {
             if (isset($uses[$alias])) {
@@ -182,7 +162,7 @@ class Skeleton
     /**
      * @return string[]
      */
-    public function interfaces()
+    public function interfaces(): array
     {
         return $this->interfaces;
     }
@@ -190,112 +170,77 @@ class Skeleton
     /**
      * @return string[]
      */
-    public function traits()
+    public function traits(): array
     {
         return $this->traits;
     }
 
     /**
-     * @return \Triun\ModelBase\Definitions\PhpDocTag[]
+     * @return PhpDocTag[]
      */
-    public function phpDocTags()
+    public function phpDocTags(): array
     {
         return $this->phpDocTags;
     }
 
     /**
-     * @return \Triun\ModelBase\Definitions\Constant[]
+     * @return Constant[]
      */
-    public function constants()
+    public function constants(): array
     {
         return $this->constants;
     }
 
     /**
-     * @return \Triun\ModelBase\Definitions\Property[]
+     * @return Property[]
      */
-    public function properties()
+    public function properties(): array
     {
         return $this->properties;
     }
 
     /**
-     * @return \Triun\ModelBase\Definitions\Method[]
+     * @return Method[]
      */
-    public function methods()
+    public function methods(): array
     {
         return $this->methods;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasUse($key)
+    public function hasUse(string $key): bool
     {
         return isset($this->uses[$key])
-            || ($this->extends === $key)
-            || isset($this->interfaces[$key])
-            || isset($this->traits[$key]);
+               || ($this->extends === $key)
+               || isset($this->interfaces[$key])
+               || isset($this->traits[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasInterface($key)
+    public function hasInterface(string $key): bool
     {
         return isset($this->interfaces[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasTrait($key)
+    public function hasTrait(string $key): bool
     {
         return isset($this->traits[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasPhpDocTag($key)
+    public function hasPhpDocTag(string $key): bool
     {
         return isset($this->phpDocTags[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasConstant($key)
+    public function hasConstant(string $key): bool
     {
         return isset($this->constants[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasProperty($key)
+    public function hasProperty(string $key): bool
     {
         return isset($this->properties[$key]);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasMethod($key)
+    public function hasMethod(string $key): bool
     {
         return isset($this->methods[$key]);
     }
@@ -303,12 +248,9 @@ class Skeleton
     /**
      * Get phpDocTag.
      *
-     * @param  string $key
-     *
-     * @return  \Triun\ModelBase\Definitions\PhpDocTag|null
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function phpDocTag($key)
+    public function phpDocTag(string $key): ?PhpDocTag
     {
         if (!$this->hasPhpDocTag($key)) {
             throw new InvalidArgumentException("PhpDocTag $key not defined");
@@ -318,14 +260,9 @@ class Skeleton
     }
 
     /**
-     * Get constant.
-     *
-     * @param  string $key
-     *
-     * @return  \Triun\ModelBase\Definitions\Constant|null
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function constant($key)
+    public function constant(string $key): ?Constant
     {
         if (!$this->hasConstant($key)) {
             throw new InvalidArgumentException("Constant $key not defined");
@@ -335,14 +272,9 @@ class Skeleton
     }
 
     /**
-     * Get property.
-     *
-     * @param  string $key
-     *
-     * @return null|Property
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function property($key)
+    public function property(string $key): ?Property
     {
         if (!$this->hasProperty($key)) {
             throw new InvalidArgumentException("Property $key not defined");
@@ -352,14 +284,9 @@ class Skeleton
     }
 
     /**
-     * Get method.
-     *
-     * @param  string $key
-     *
-     * @return  \Triun\ModelBase\Definitions\Method|null
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function method($key)
+    public function method(string $key): ?Method
     {
         if (!$this->hasMethod($key)) {
             throw new InvalidArgumentException("Method $key not defined");
@@ -368,15 +295,7 @@ class Skeleton
         return $this->methods[$key];
     }
 
-    /**
-     * Add Use.
-     *
-     * @param  string      $className
-     * @param  string|null $alias
-     *
-     * @return $this
-     */
-    public function addUse($className, $alias = null)
+    public function addUse(string $className, ?string $alias = null): static
     {
         // $this->uses[$className] = $alias?: basename($className);
         $this->appendClass($this->uses, $className, $alias, 'object');
@@ -384,15 +303,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Add Interface to be implemented.
-     *
-     * @param  string      $interfaceName
-     * @param  string|null $alias
-     *
-     * @return $this
-     */
-    public function addInterface($interfaceName, $alias = null)
+    public function addInterface(string $interfaceName, ?string $alias = null): static
     {
         if (!interface_exists($interfaceName)) {
             throw new InvalidArgumentException("$interfaceName is not a valid interface");
@@ -406,15 +317,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Add Trait.
-     *
-     * @param  string      $traitName
-     * @param  string|null $alias
-     *
-     * @return $this
-     */
-    public function addTrait($traitName, $alias = null)
+    public function addTrait(string $traitName, string $alias = null): static
     {
         if (!trait_exists($traitName)) {
             throw new InvalidArgumentException("$traitName is not a valid trait");
@@ -427,22 +330,12 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Add Class to class collection.
-     *
-     * @param  array       $array
-     * @param  string      $name
-     * @param  string|null $alias
-     * @param  string      $type
-     *
-     * @return $this
-     */
-    protected function appendClass(array &$array, $name, $alias = null, $type = 'class')
+    protected function appendClass(array &$array, string $name, ?string $alias = null, string $type = 'class'): static
     {
-        if (strstr($name, ' as ')) {
-            $name = explode(' as ', $name);
+        if (str_contains($name, ' as ')) {
+            $name  = explode(' as ', $name);
             $alias = trim($name[1]);
-            $name = trim($name[0]);
+            $name  = trim($name[0]);
         } elseif ($alias === null) {
             $alias = class_basename($name);
         }
@@ -456,14 +349,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Add phpDoc Tag.
-     *
-     * @param  \Triun\ModelBase\Definitions\PhpDocTag $value
-     *
-     * @return $this
-     */
-    public function addPhpDocTag(PhpDocTag $value)
+    public function addPhpDocTag(PhpDocTag $value): static
     {
         // If the tag doesn't have names...
         if ($value->getName() === null && in_array($value->tag, ['mixin'])) {
@@ -481,14 +367,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Set Constant.
-     *
-     * @param  \Triun\ModelBase\Definitions\Constant $value
-     *
-     * @return $this
-     */
-    public function addConstant(Constant $value)
+    public function addConstant(Constant $value): static
     {
         if (isset($this->constants[$value->name])) {
             throw new InvalidArgumentException("The constant {$value->name} already exists");
@@ -499,14 +378,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Set Property.
-     *
-     * @param  \Triun\ModelBase\Definitions\Property $value
-     *
-     * @return $this
-     */
-    public function addProperty(Property $value)
+    public function addProperty(Property $value): static
     {
         if (isset($this->properties[$value->name])) {
             throw new InvalidArgumentException("The property {$value->name} already exists");
@@ -517,14 +389,7 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Set Method.
-     *
-     * @param  \Triun\ModelBase\Definitions\Method $value
-     *
-     * @return $this
-     */
-    public function addMethod(Method $value)
+    public function addMethod(Method $value): static
     {
         if (isset($this->methods[$value->name])) {
             $item = $this->methods[$value->name];
@@ -534,7 +399,7 @@ class Skeleton
                 //dump($value->value);
                 // TODO: Another way to catch this issue.
                 echo "The method {$value->name} already exists."
-                    . " Please, update it instead of try to create it again." . PHP_EOL;
+                     . " Please, update it instead of try to create it again." . PHP_EOL;
                 /*throw new InvalidArgumentException(
                     "The method {$value->name} already exists. Please, update it instead of try to create it again."
                 );*/
@@ -561,42 +426,21 @@ class Skeleton
         return $this;
     }
 
-    /**
-     * Unset Constant.
-     *
-     * @param  string $key
-     *
-     * @return $this
-     */
-    public function removeConstant($key)
+    public function removeConstant(string $key): static
     {
         unset($this->constants[$key]);
 
         return $this;
     }
 
-    /**
-     * Unset Property.
-     *
-     * @param  string $key
-     *
-     * @return $this
-     */
-    public function removeProperty($key)
+    public function removeProperty(string $key): static
     {
         unset($this->methods[$key]);
 
         return $this;
     }
 
-    /**
-     * Unset Method.
-     *
-     * @param  string $key
-     *
-     * @return $this
-     */
-    public function removeMethod($key)
+    public function removeMethod(string $key): static
     {
         unset($this->methods[$key]);
 
@@ -606,7 +450,7 @@ class Skeleton
     /**
      * @return Constant[]
      */
-    public function dirtyConstants()
+    public function dirtyConstants(): array
     {
         return array_filter($this->constants, function ($value) {
             /* @var $value Constant */
@@ -617,7 +461,7 @@ class Skeleton
     /**
      * @return Property[]
      */
-    public function dirtyProperties()
+    public function dirtyProperties(): array
     {
         return array_filter($this->properties, function ($value) {
             /* @var $value Property */
@@ -628,20 +472,18 @@ class Skeleton
     /**
      * @return Method[]
      */
-    public function dirtyMethods()
+    public function dirtyMethods(): array
     {
         return array_filter($this->methods, function ($value) {
-            /* @var $value Property */
+            /* @var $value Method */
             return $value->isDirty();
         });
     }
 
     /**
      * Get the skeleton as an array, with the model base constants, properties and methods.
-     *
-     * @return  array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'constants'  => $this->constants,
@@ -652,10 +494,8 @@ class Skeleton
 
     /**
      * Get the values of the skeleton object.
-     *
-     * @return  array
      */
-    public function defaults()
+    public function defaults(): array
     {
         return [
             'constants'  => array_map(function ($value) {
@@ -670,10 +510,8 @@ class Skeleton
 
     /**
      * Get the values of the skeleton object.
-     *
-     * @return  array
      */
-    public function values()
+    public function values(): array
     {
         return [
             'constants'  => array_map(function ($value) {
@@ -688,10 +526,8 @@ class Skeleton
 
     /**
      * Get the dirty items.
-     *
-     * @return  array
      */
-    public function dirty()
+    public function dirty(): array
     {
         return [
             'constants'  => array_filter($this->constants, function ($value) {

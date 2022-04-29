@@ -2,46 +2,33 @@
 
 namespace Triun\ModelBase\Modifiers;
 
+use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Types\Types;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Helpers\TypeHelper;
 use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class TableModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class TableModifier extends ModifierBase
 {
     /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     *
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $this->setTableName($skeleton);
         $this->setPrimaryKey($skeleton);
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     */
-    protected function setTableName(Skeleton $skeleton)
+    protected function setTableName(Skeleton $skeleton): void
     {
         // TODO TEST: See how to get out laravel prefix. ($this->_conn->getTablePrefix())
         $skeleton->property('table')->setValue($this->table()->getName());
     }
 
     /**
-     * @param Skeleton $skeleton
-     *
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function setPrimaryKey($skeleton)
+    protected function setPrimaryKey(Skeleton $skeleton): void
     {
         $name         = null;
         $type         = null;

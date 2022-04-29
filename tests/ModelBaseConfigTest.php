@@ -1,8 +1,9 @@
 <?php
 
-/**
- * Class ModelBaseConfigTest
- */
+namespace Tests;
+
+use Illuminate\Support\Facades\Config;
+
 class ModelBaseConfigTest extends TestCase
 {
     /**
@@ -15,14 +16,14 @@ class ModelBaseConfigTest extends TestCase
      *
      * @var string
      */
-    protected $exists = 'namespace';
+    protected string $exists = 'namespace';
 
     /**
      * An attribute name that we know that doesn't exists.
      *
      * @var string
      */
-    protected $notExists = 'some_not_existent_key';
+    protected string $notExists = 'some_not_existent_key';
 
     /**
      * Test static::getConfig()
@@ -206,7 +207,7 @@ class ModelBaseConfigTest extends TestCase
      */
     public function it_can_retrieve_the_modifiers()
     {
-        $connection  = $this->getConnection();
+        $connection  = $this->getTestingConnection();
         $unprotected = new ConfigUnprotected($connection);
         $default     = $unprotected->getProperty('modifiers');
 
@@ -235,7 +236,7 @@ class ModelBaseConfigTest extends TestCase
      */
     public function it_can_generate_a_class_name()
     {
-        $connection  = $this->getConnection();
+        $connection  = $this->getTestingConnection();
         $unprotected = new ConfigUnprotected($connection);
 
         // To singular
@@ -357,7 +358,7 @@ class ConfigUnprotected extends \Triun\ModelBase\ModelBaseConfig
         string $suffix,
         array $tableRenames,
         array $tablePrefixes
-    ) {
+    ): string {
         return $this->getClassName($tableName, $namespace, $prefix, $suffix, $tableRenames, $tablePrefixes);
     }
 }

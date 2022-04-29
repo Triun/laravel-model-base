@@ -3,12 +3,10 @@
 language: php
 
 php:
-  # aliased to a recent 7.2.x version
-  - '7.2'
-  # aliased to a recent 7.3.x version
-  - '7.3'
-  # aliased to a recent 7.3.x version
-  - '7.4'
+  # aliased to a recent 8.0.x version
+  - '8.0'
+  # aliased to a recent 8.1.x version
+  - '8.1'
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
@@ -47,4 +45,6 @@ before_script:
 # use the $DB env variable to determine the phpunit.xml to use
 script:
   - vendor/bin/phpcs --standard=phpcs.xml
+  - vendor/bin/phpcs --standard=phpcs-php-compatibility.xml
+  - vendor/bin/phpstan analyse -c phpstan.dist.neon --no-progress
   - vendor/bin/phpunit --configuration phpunit_$DB.xml --coverage-text

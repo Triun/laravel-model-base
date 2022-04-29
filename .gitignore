@@ -7,6 +7,9 @@ build/
 #phpunit
 .phpunit.result.cache
 
+# phpstan
+phpstan.neon
+
 # phpStorm
 .idea
 

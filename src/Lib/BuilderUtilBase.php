@@ -2,40 +2,23 @@
 
 namespace Triun\ModelBase\Lib;
 
-use App;
-use File;
 use Exception;
-use ReflectionClass;
-
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
-use Symfony\Component\Console\Style\SymfonyStyle;
-
+use ReflectionClass;
+use RuntimeException;
+use Symfony\Component\Console\Output\OutputInterface;
 use Triun\Diff\Diff;
-use Triun\ModelBase\ModelBaseConfig;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\ModelBaseConfig;
 use Triun\ModelBase\Util;
 
-/**
- * Class BuilderUtilBase
- *
- * @package Triun\ModelBase\Lib
- */
 abstract class BuilderUtilBase extends UtilBase
 {
     const TAB = '    ';
 
-    /**
-     * @var \Illuminate\Console\Command
-     */
-    protected $command;
+    protected Command $command;
 
-    /**
-     * ModelBaseUtil constructor.
-     *
-     * @param \Triun\ModelBase\ModelBaseConfig $config
-     * @param \Illuminate\Console\Command      $command
-     */
     public function __construct(ModelBaseConfig $config, Command $command)
     {
         parent::__construct($config);
@@ -43,14 +26,7 @@ abstract class BuilderUtilBase extends UtilBase
         $this->command = $command;
     }
 
-    /**
-     * Get stub file location.
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    public function getStub($file = 'class.stub')
+    public function getStub(string $file = 'class.stub'): string
     {
         return __DIR__ . '/../../resources/stubs/' . $file;
     }
@@ -58,47 +34,38 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Get the destination class path for the model.
      *
-     * @param string $className
-     *
-     * @return string
      * @throws Exception
      */
-    protected function getClassNamePath($className)
+    protected function getClassNamePath(string $className): string
     {
         if (empty($className)) {
             throw new Exception('Class name is empty');
         }
 
-        $name = str_replace(App::getNamespace(), '', $className);
+        $name = str_replace(app()->getNamespace(), '', $className);
 
         // TODO: Composer loader compatibility.
-        return App::path() . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $name) . '.php';
+        return app()->path() . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $name) . '.php';
     }
 
     /**
-     * @param string                                $path
-     * @param string                                $name
-     * @param string                                $content
-     * @param bool                                  $override
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
      * @return bool|int The method returns the number of bytes that were written to the file, or false on failure.
      * @throws Exception
      */
-    protected function save($path, $name, $content, $override, $skeleton)
+    protected function save(string $path, string $name, string $content, bool $override, Skeleton $skeleton): bool|int
     {
-        $exists = File::exists($path);
+        $exists = app('file')->exists($path);
 
         if ($exists) {
             // Verify changes
-            $actual = File::get($path);
+            $actual = app('file')->get($path);
             if ($actual === $content) {
                 $this->muted("{$name} identical");
 
                 return Diff::UNMODIFIED;
             }
 
-            $this->command->line($path . ' updates:', null, OutputStyle::VERBOSITY_VERBOSE);
+            $this->command->line($path . ' updates:', null, OutputInterface::VERBOSITY_VERBOSE);
             $compare = $this->compare($actual, $content);
             if ($this->command->getOutput()->isVerbose()) {
                 $this->command->getOutput()->newLine();
@@ -119,7 +86,7 @@ abstract class BuilderUtilBase extends UtilBase
 
         $this->makeDirectory($path);
 
-        $size = File::put($path, $content);
+        $size = app('file')->put($path, $content);
 
         if (!($size > 0)) {
             throw new Exception("{$name} save error: Returned $size bytes");
@@ -130,15 +97,9 @@ abstract class BuilderUtilBase extends UtilBase
         return $size;
     }
 
-    /**
-     * @param string      $path
-     * @param bool|string $override
-     *
-     * @return bool
-     */
-    protected function safe($path, $override = Util::CONFIRM)
+    protected function safe(string $path, bool|string $override = Util::CONFIRM): bool
     {
-        if (!File::exists($path)) {
+        if (!app('file')->exists($path)) {
             return true;
         }
 
@@ -146,13 +107,14 @@ abstract class BuilderUtilBase extends UtilBase
             return $this->command->confirm("The file $path already exists. Do you want to override it?");
         }
 
+        if (!is_bool($override)) {
+            throw new RuntimeException('Only boolean or the string confirm are allowed as override options');
+        }
+
         return $override;
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     */
-    protected function verifyExtension($skeleton)
+    protected function verifyExtension(Skeleton $skeleton): void
     {
         $reflection = new ReflectionClass($skeleton->className);
 
@@ -165,13 +127,7 @@ abstract class BuilderUtilBase extends UtilBase
         }
     }
 
-    /**
-     * @param $string1
-     * @param $string2
-     *
-     * @return int
-     */
-    protected function compare($string1, $string2)
+    protected function compare(string $string1, string $string2): int
     {
         $result = Diff::UNMODIFIED;
 
@@ -203,22 +159,15 @@ abstract class BuilderUtilBase extends UtilBase
 
     /**
      * Build the directory for the class if necessary.
-     *
-     * @param  string $path
      */
-    protected function makeDirectory(string $path)
+    protected function makeDirectory(string $path): void
     {
-        if (!File::isDirectory(dirname($path))) {
-            File::makeDirectory(dirname($path), 0777, true, true);
+        if (!app('file')->isDirectory(dirname($path))) {
+            app('file')->makeDirectory(dirname($path), 0777, true, true);
         }
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
-     * @return array
-     */
-    protected function getPHPDoc(Skeleton $skeleton)
+    protected function getPHPDoc(Skeleton $skeleton): array
     {
         $stub = " * @dummy_tag dummy_type dummy_name dummy_description";
 
@@ -234,7 +183,7 @@ abstract class BuilderUtilBase extends UtilBase
             }
             $tags[$item->tag]->max_type_length = max($tags[$item->tag]->max_type_length, strlen($item->type));
             $tags[$item->tag]->max_name_length = max($tags[$item->tag]->max_name_length, strlen($name));
-            $tags[$item->tag]->items[$name] = $item;
+            $tags[$item->tag]->items[$name]    = $item;
         }
 
         // Order by key
@@ -264,7 +213,7 @@ abstract class BuilderUtilBase extends UtilBase
              * @var \Triun\ModelBase\Definitions\PhpDocTag $item
              */
             foreach ($info->items as $name => $item) {
-                $replace = [
+                $replace  = [
                     'dummy_tag'         => $tag,
                     'dummy_type'        => str_pad($item->type, $info->max_type_length),
                     'dummy_name'        => $item->hasName() ? str_pad($item->getName(), $info->max_name_length) : '',
@@ -279,13 +228,8 @@ abstract class BuilderUtilBase extends UtilBase
 
     /**
      * Write a string as success output.
-     *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      */
-    public function success($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function success(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
@@ -298,15 +242,9 @@ abstract class BuilderUtilBase extends UtilBase
 
     /**
      * Write a string as error output.
-     *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      */
-    public function error($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function error(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
-        /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
         if ($output->isVerbose() && $output->getVerbosity() >= $verbosity) {
             $output->error($string);
@@ -317,13 +255,8 @@ abstract class BuilderUtilBase extends UtilBase
 
     /**
      * Write a string as trace output.
-     *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      */
-    public function trace($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function trace(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
         if ($this->command->getOutput()->isVerbose()) {
             $this->muted($string, $verbosity);
@@ -332,15 +265,9 @@ abstract class BuilderUtilBase extends UtilBase
 
     /**
      * Write a string as warning output.
-     *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      */
-    public function warning($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function warning(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
-        /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->command->getOutput();
         if ($output->isVerbose() && $output->getVerbosity() >= $verbosity) {
             $output->warning($string);
@@ -353,13 +280,9 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as info output.
      *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      * @link https://symfony.com/doc/current/console/coloring.html
      */
-    public function info($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function info(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
         if ($this->command->getOutput()->getVerbosity() >= $verbosity) {
             $this->command->getOutput()->writeln('<fg=cyan;options=bold>' . $string . '</>'); // black bg
@@ -369,13 +292,9 @@ abstract class BuilderUtilBase extends UtilBase
     /**
      * Write a string as muted output.
      *
-     * @param  string $string
-     * @param  int    $verbosity
-     *
-     * @return void
      * @link https://symfony.com/doc/current/console/coloring.html
      */
-    public function muted($string, $verbosity = SymfonyStyle::OUTPUT_NORMAL)
+    public function muted(string $string, int $verbosity = OutputInterface::OUTPUT_NORMAL): void
     {
         $this->command->line($string, null, $verbosity);
         // $this->command->getOutput()->writeln('<fg=white;options=bold>'.$string.'</>'); // white bg

@@ -2,69 +2,42 @@
 
 namespace Triun\ModelBase;
 
+use Illuminate\Database\Connection;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-
+use Illuminate\Support\Str;
 use Triun\ModelBase\Modifiers;
 
-/**
- * Class ModelBaseConfig
- *
- * @package Triun\ModelBase
- */
 class ModelBaseConfig
 {
-    /**
-     * Config file.
-     */
-    const CONFIG_FILE = 'model-base';
-
-    /**
-     * @var string
-     */
-    const WILDCARD_CONNECTION_STUD = '{{Connection}}';
-
-    /**
-     * @var string
-     */
-    const WILDCARD_DRIVER_STUD = '{{Driver}}';
+    private const CONFIG_FILE = 'model-base';
+    private const WILDCARD_CONNECTION_STUD = '{{Connection}}';
+    private const WILDCARD_DRIVER_STUD = '{{Driver}}';
 
     /**
      * @var string[]
      */
-    protected $modifiers = [
-
+    protected array $modifiers = [
         // Connection
         Modifiers\ConnectionModifier::class,
-
         // Table
         Modifiers\TableModifier::class,
-
         // Timestamps
         Modifiers\TimestampsModifier::class,
-
         // Dates
         Modifiers\DatesModifier::class,
-
         // Soft Deletes
         Modifiers\SoftDeletesModifier::class,
-
         // Attributes
         Modifiers\AttributesModifier::class,
-
         // CamelToSnake Attributes
         Modifiers\CamelToSnakeModifier::class,
-
         // For custom aliases
         Modifiers\ColumnAliasModifier::class,
-
         // PhpDoc tags
         Modifiers\PhpDocModifier::class,
-
         // PhpDoc tags
         Modifiers\AuthModifier::class,
-
         // Relations
         // Input transformations
         // ValueObjects
@@ -76,87 +49,43 @@ class ModelBaseConfig
      * - config parameters in constructor.
      * - laravel config (/config/model-base.php).
      * - default config (../config/model-base.php).
-     *
-     * @var array
      */
-    protected $items = [];
+    protected array $items = [];
+    protected Connection $connection;
 
-    /**
-     * @var \Illuminate\Database\Connection
-     */
-    protected $connection;
-
-    /**
-     * ModelBaseConfig constructor.
-     *
-     * @param \Illuminate\Database\Connection $connection
-     */
-    public function __construct($connection)
+    public function __construct(Connection $connection)
     {
         $this->items = array_merge(
-            $this->loadConfig(static::CONFIG_FILE),
-            $this->loadConfig(static::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
-            $this->loadConfig(static::CONFIG_FILE . '.connections.' . $connection->getName())
-            // $this->loadConfig(static::CONFIG_FILE.'.tables.'.$tableName),
-            // $this->loadConfig(static::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
+            $this->loadConfig(self::CONFIG_FILE),
+            $this->loadConfig(self::CONFIG_FILE . '.drivers.' . $connection->getDriverName()),
+            $this->loadConfig(self::CONFIG_FILE . '.connections.' . $connection->getName())
+            // $this->loadConfig(self::CONFIG_FILE.'.tables.'.$tableName),
+            // $this->loadConfig(self::CONFIG_FILE.'.connections.'.$connection->getName().'.tables.'.$tableName),
         );
 
         $this->connection = $connection;
     }
 
-    /**
-     * @param $name
-     *
-     * @return array|mixed
-     */
-    protected function loadConfig($name)
+    protected function loadConfig($name): mixed
     {
         return Config::has($name) ? Config::get($name) : [];
     }
 
     /**
      * Determine if the given configuration value exists.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return Arr::has($this->items, $key);
     }
 
     /**
      * Get the specified configuration value.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         return Arr::get($this->items, $key, $default);
     }
-
-    /**
-     * Set a given configuration value.
-     *
-     * @param array|string $key
-     * @param mixed        $value
-     *
-     * @return void
-     */
-    /*public function set($key, $value = null)
-    {
-        if (is_array($key)) {
-            foreach ($key as $innerKey => $innerValue) {
-                Arr::set($this->items, $innerKey, $innerValue);
-            }
-        } else {
-            Arr::set($this->items, $key, $value);
-        }
-    }*/
 
     /**
      * fnmatch separated by |
@@ -168,10 +97,8 @@ class ModelBaseConfig
      * @param string|string[] $rules
      * @param string          $value
      * @param bool            $case_sensitive
-     *
-     * @return bool
      */
-    public function match($rules, $value, $case_sensitive = false)
+    public function match(array|string $rules, string $value, bool $case_sensitive = false): bool
     {
         //return fnmatch($rules, $value);
 
@@ -202,19 +129,15 @@ class ModelBaseConfig
      *
      * @return string[]
      */
-    public function modifiers()
+    public function modifiers(): array
     {
         return array_merge($this->modifiers, $this->get('modifiers'));
     }
 
     /**
      * Generate the class name from the table name and the config data given.
-     *
-     * @param string $tableName
-     *
-     * @return string
      */
-    public function getBaseClassName($tableName)
+    public function getBaseClassName(string $tableName): string
     {
         return $this->getClassName(
             $tableName,
@@ -226,12 +149,7 @@ class ModelBaseConfig
         );
     }
 
-    /**
-     * @param string $tableName
-     *
-     * @return string
-     */
-    public function getModelClassName($tableName)
+    public function getModelClassName(string $tableName): string
     {
         return $this->getClassName(
             $tableName,
@@ -243,12 +161,7 @@ class ModelBaseConfig
         );
     }
 
-    /**
-     * @param string $className
-     *
-     * @return string
-     */
-    public function getAddOnClassName($className)
+    public function getAddOnClassName(string $className): string
     {
         return $this->getClassName(
             class_basename($className),
@@ -277,28 +190,21 @@ class ModelBaseConfig
         string $suffix,
         array $tableRenames,
         array $tablePrefixes
-    ) {
+    ): string {
         $name = Str::studly($this->renameTableName($tableName, $tableRenames, $tablePrefixes));
 
         return str_replace([
-            static::WILDCARD_CONNECTION_STUD,
-            static::WILDCARD_DRIVER_STUD,
+            self::WILDCARD_CONNECTION_STUD,
+            self::WILDCARD_DRIVER_STUD,
         ], [
             Str::studly($this->connection->getName()),
             Str::studly($this->connection->getDriverName()),
         ], $namespace . '\\' . $prefix . $name . $suffix);
     }
 
-    /**
-     * @param string $tableName
-     * @param array  $tableRenames
-     * @param array  $tablePrefixes
-     *
-     * @return string
-     */
-    protected function renameTableName(string $tableName, array $tableRenames, array $tablePrefixes)
+    protected function renameTableName(string $tableName, array $tableRenames, array $tablePrefixes): string
     {
-        if (is_array($tableRenames) && isset($tableRenames[$tableName])) {
+        if (isset($tableRenames[$tableName])) {
             return trim($tableRenames[$tableName]);
         }
 

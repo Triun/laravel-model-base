@@ -15,27 +15,27 @@ use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\ConnectionUtilBase;
 use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class SkeletonUtil
- *
- * @package Triun\ModelBase\Utils
- */
 class SkeletonUtil extends ConnectionUtilBase
 {
     /**
      * Generate skeleton from table
      *
-     * @param \Doctrine\DBAL\Schema\Table                  $table
-     * @param string                                       $className
-     * @param string|\Triun\ModelBase\Definitions\Skeleton $extends
-     * @param string[]                                     $modifiers
-     * @param bool                                         $isAbstract
+     * @param \Doctrine\DBAL\Schema\Table                       $table
+     * @param string|null                                       $className
+     * @param \Triun\ModelBase\Definitions\Skeleton|string|null $extends
+     * @param string[]                                          $modifiers
+     * @param bool                                              $isAbstract
      *
      * @return Skeleton
      * @throws Exception
      */
-    public function make(Table $table, $className = null, $extends = null, $modifiers = [], bool $isAbstract = false)
-    {
+    public function make(
+        Table $table,
+        ?string $className = null,
+        Skeleton|string|null $extends = null,
+        array $modifiers = [],
+        bool $isAbstract = false
+    ): Skeleton {
         // New empty Skeleton
         $skeleton = new Skeleton;
 
@@ -55,12 +55,7 @@ class SkeletonUtil extends ConnectionUtilBase
         return $skeleton;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return \Triun\ModelBase\Definitions\Constant
-     */
-    public function makeConstant($name)
+    public function makeConstant(string $name): Constant
     {
         $item = new Constant;
 
@@ -69,14 +64,11 @@ class SkeletonUtil extends ConnectionUtilBase
         return $item;
     }
 
-    /**
-     * @param string  $name
-     * @param integer $modifiers_id
-     *
-     * @return \Triun\ModelBase\Definitions\Property
-     */
-    public function makeProperty($name, $modifiers_id = ReflectionProperty::IS_PUBLIC, $docComment = null)
-    {
+    public function makeProperty(
+        string $name,
+        int $modifiers_id = ReflectionProperty::IS_PUBLIC,
+        ?string $docComment = null
+    ): Property {
         $item = new Property;
 
         $item->name         = $name;
@@ -87,34 +79,20 @@ class SkeletonUtil extends ConnectionUtilBase
         return $item;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return \Triun\ModelBase\Definitions\Method
-     */
-    public function makeMethod($name, $stub = null, $replace = [])
+    public function makeMethod(string $name, ?string $stub = null, array $replace = []): Method
     {
         $item = new Method;
 
         $item->name = $name;
 
-        if ($stub !== null) {
+        if (null !== $stub) {
             $item->value = str_replace(array_keys($replace), array_values($replace), $stub);
         }
 
         return $item;
     }
 
-    /**
-     * Set constant value.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string                                $name
-     * @param mixed                                 $value
-     *
-     * @return $this
-     */
-    public function setConstant($skeleton, $name, $value)
+    public function setConstant(Skeleton $skeleton, string $name, mixed $value): static
     {
         // If it is already a Constant, just save it.
         if ($value instanceof Constant) {
@@ -134,24 +112,13 @@ class SkeletonUtil extends ConnectionUtilBase
         return $this;
     }
 
-    /**
-     * Set property value.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string                                $name
-     * @param mixed                                 $value
-     * @param int                                   $modifiers_id
-     * @param null                                  $docComment
-     *
-     * @return $this
-     */
     public function setProperty(
-        $skeleton,
-        $name,
-        $value,
-        $modifiers_id = ReflectionProperty::IS_PUBLIC,
-        $docComment = null
-    ) {
+        Skeleton $skeleton,
+        string $name,
+        mixed $value,
+        int $modifiers_id = ReflectionProperty::IS_PUBLIC,
+        ?string $docComment = null
+    ): static {
         // If it is already a Property, just save it.
         if ($value instanceof Property) {
             $skeleton->addProperty($value);
@@ -170,23 +137,14 @@ class SkeletonUtil extends ConnectionUtilBase
         return $this;
     }
 
-    /**
-     * Set method value.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string                                $name
-     * @param string                                $value
-     *
-     * @return $this
-     */
-    public function setMethod($skeleton, $name, $value)
+    public function setMethod(Skeleton $skeleton, string $name, string|Method $value): static
     {
         // If it is already a Method, just save it.
         if ($value instanceof Method) {
             $value = $this->makeMethod($name);
         }
 
-        // If doesn't exists, create a new one.
+        // If it doesn't exist, create a new one.
         if (!$skeleton->hasMethod($name)) {
             $skeleton->addMethod($value);
         }
@@ -200,12 +158,9 @@ class SkeletonUtil extends ConnectionUtilBase
     /**
      * Make a default skeleton from a class given.
      *
-     * @param \Triun\ModelBase\Definitions\Skeleton        $skeleton
-     * @param string|\Triun\ModelBase\Definitions\Skeleton $extendClassName
-     *
      * @throws Exception
      */
-    public static function extend(Skeleton $skeleton, $extendClassName, $overwrite = false)
+    public static function extend(Skeleton $skeleton, Skeleton|string $extendClassName, bool $overwrite = false): void
     {
         if ($skeleton->extends !== null && !$overwrite) {
             throw new Exception("The skeleton {$skeleton->className} already extends {$skeleton->extends}");
@@ -226,14 +181,10 @@ class SkeletonUtil extends ConnectionUtilBase
             //
         }*/
 
-        return static::loadReflection($skeleton, $extendClassName);
+        static::loadReflection($skeleton, $extendClassName);
     }
 
-    /**
-     * @param Skeleton $skeleton
-     * @param string   $className
-     */
-    public static function loadReflection(Skeleton $skeleton, $className)
+    public static function loadReflection(Skeleton $skeleton, string $className): void
     {
         // Generate reflextion class...
         try {
@@ -290,11 +241,7 @@ class SkeletonUtil extends ConnectionUtilBase
         }
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Method $method
-     * @param string                              $code
-     */
-    public static function appendToMethod(Method $method, $code)
+    public static function appendToMethod(Method $method, string $code): void
     {
         if ($method->value === null) {
             static::loadMethodValue($method);
@@ -326,30 +273,23 @@ class SkeletonUtil extends ConnectionUtilBase
         $method->value = substr($method->value, 0, $lastLine) . PHP_EOL . $code . substr($method->value, $lastLine);
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Method $method
-     */
-    public static function loadMethodValue(Method $method)
+    public static function loadMethodValue(Method $method): void
     {
         // The \ReflectionMethod class doesn't return the content of the function, so we have to get it from
         // the original file.
+
+        $fileContent = static::getFileContent(
+            $method->getFileName(),
+            $method->getStartLine() - 1,
+            $method->getEndLine()
+        );
+
         $method->default = $method->value = '    '
                                             . $method->getDocComment() . PHP_EOL
-                                            . static::getFileContent(
-                $method->getFileName(),
-                $method->getStartLine() - 1,
-                $method->getEndLine()
-            );
+                                            . $fileContent;
     }
 
-    /**
-     * @param string  $file
-     * @param integer $startLine
-     * @param integer $endLine
-     *
-     * @return string
-     */
-    public static function getFileContent($file, $startLine, $endLine)
+    public static function getFileContent(string $file, int $startLine, int $endLine): string
     {
         static $cached = [];
 
@@ -364,12 +304,8 @@ class SkeletonUtil extends ConnectionUtilBase
 
     /**
      * Parse the name and format according to the root namespace.
-     *
-     * @param string $name
-     *
-     * @return string
      */
-    public static function parseName($name)
+    public static function parseName(string $name): string
     {
         if (Str::contains($name, '/')) {
             $name = str_replace('/', '\\', $name);

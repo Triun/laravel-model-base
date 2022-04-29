@@ -13,29 +13,22 @@ use Triun\ModelBase\Helpers\DBALHelper;
 use Triun\ModelBase\Helpers\TypeHelper;
 use Triun\ModelBase\Lib\ConnectionUtilBase;
 
-/**
- * Class SchemaUtil
- *
- * @package Triun\ModelBase\Utils
- */
 class SchemaUtil extends ConnectionUtilBase
 {
     /**
-     * @var callback[]|callable[]
+     * @var callable[]
      */
-    private static $table_callbacks = [];
+    private static array $table_callbacks = [];
 
     /**
-     * @var callback[]|callable[]
+     * @var callable[]
      */
-    private static $column_callbacks = [];
+    private static array $column_callbacks = [];
 
     /**
-     * @param callback|callable $callback
-     *
      * @throws Exception
      */
-    public static function registerTableCallback($callback)
+    public static function registerTableCallback(callable $callback): void
     {
         if (!is_callable($callback)) {
             throw new Exception('Table Callback not callable');
@@ -45,11 +38,9 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param callback|callable $callback
-     *
      * @throws Exception
      */
-    public static function registerColumnCallback($callback)
+    public static function registerColumnCallback(callable $callback): void
     {
         if (!is_callable($callback)) {
             throw new Exception('Column Callback not callable');
@@ -59,19 +50,14 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param callback|callable $callback
-     *
      * @throws Exception
      */
-    public static function registerCastCallback($callback)
+    public static function registerCastCallback(callable $callback): void
     {
         TypeHelper::registerCastCallback($callback);
     }
 
-    /**
-     * Initialize Util
-     */
-    protected function init()
+    protected function init(): void
     {
         parent::init();
 
@@ -80,9 +66,6 @@ class SchemaUtil extends ConnectionUtilBase
 
     /**
      * Retrieve doctrine scheme manager for the given connection.
-     *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function schema(): AbstractSchemaManager
     {
@@ -95,13 +78,9 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
-     * @param string                                      $tableName
-     *
      * @return DBALColumn[]
-     * @throws \Doctrine\DBAL\DBALException
      */
-    private function getDoctrineColumns(AbstractSchemaManager $schema, string $tableName)
+    private function getDoctrineColumns(AbstractSchemaManager $schema, string $tableName): array
     {
         $doctrineColumns = $schema->listTableColumns($tableName);
 
@@ -123,7 +102,7 @@ class SchemaUtil extends ConnectionUtilBase
     /**
      * @return string[]
      */
-    public function getTableExceptions()
+    public function getTableExceptions(): array
     {
         return $this->config()->get('bulk.except', ['migrations']);
     }
@@ -132,11 +111,11 @@ class SchemaUtil extends ConnectionUtilBase
      * Return an array of the tables names, from the connection given, excluding the exceptions set in the
      * configuration file.
      *
-     * @param string[] $except Tables exceptions.
+     * @param string[]|null $except Tables exceptions.
      *
-     * @return \string[]
+     * @return string[]
      */
-    public function getTableNames($except = null)
+    public function getTableNames(?array $except = null): array
     {
         if ($except === null) {
             $except = $this->getTableExceptions();
@@ -146,7 +125,7 @@ class SchemaUtil extends ConnectionUtilBase
         foreach ($this->conn->getDoctrineSchemaManager()->listTableNames() as $row) {
             $row   = (array)$row;
             $table = array_shift($row);
-            if (array_search($table, $except) === false) {
+            if (!in_array($table, $except)) {
                 $tables[] = $table;
             }
         }
@@ -154,47 +133,37 @@ class SchemaUtil extends ConnectionUtilBase
         return $tables;
     }
 
-    /**
-     * @param string $tableName
-     *
-     * @return bool
-     */
-    public function hasTable($tableName)
+    public function hasTable(string $tableName): bool
     {
         return $this->conn->getSchemaBuilder()->hasTable($tableName);
         //return $this->_conn->affectingStatement("SHOW TABLES LIKE ?", [$tableName]);
     }
 
     /**
-     * @param string $tableName
-     *
-     * @return \Triun\ModelBase\Definitions\Table
-     * @throws \Exception
+     * @throws Exception
      */
-    public function table($tableName)
+    public function table(string $tableName): Table
     {
         return $this->listTableDetails($tableName);
     }
 
     /**
-     * @param string $tableName
-     *
-     * @return \Triun\ModelBase\Definitions\Table
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function listTableDetails($tableName)
+    public function listTableDetails(string $tableName): Table
     {
         //$table = $this->schema()->listTableDetails($tableName);
 
         $schema  = $this->schema();
         $columns = $this->listTableColumns($schema, $tableName);
 
-        $foreignKeys = $schema->getDatabasePlatform()->supportsForeignKeyConstraints() ?
+        $uniqueConstraints = []; // TODO: New to implement
+        $foreignKeys       = $schema->getDatabasePlatform()->supportsForeignKeyConstraints() ?
             $schema->listTableForeignKeys($tableName) : [];
-        $indexes     = $schema->listTableIndexes($tableName);
+        $indexes           = $schema->listTableIndexes($tableName);
 
-        $table = new Table($tableName, $columns, $indexes, $foreignKeys, false, []);
+        $table = new Table($tableName, $columns, $indexes, $uniqueConstraints, $foreignKeys, []);
 
         // Table callbacks
         foreach (self::$table_callbacks as $callback) {
@@ -205,13 +174,10 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
-     * @param string                                      $tableName
-     *
-     * @return \Triun\ModelBase\Definitions\Column[]
-     * @throws \Exception
+     * @return Column[]
+     * @throws Exception
      */
-    private function listTableColumns(AbstractSchemaManager $schema, $tableName)
+    private function listTableColumns(AbstractSchemaManager $schema, string $tableName): array
     {
         $columns = [];
         foreach ($this->getDoctrineColumns($schema, $tableName) as $key => $doctrineColumn) {
@@ -252,12 +218,7 @@ class SchemaUtil extends ConnectionUtilBase
         return $columns;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    private function snakeCase($name)
+    private function snakeCase(string $name): string
     {
         static $rename;
 
@@ -273,11 +234,6 @@ class SchemaUtil extends ConnectionUtilBase
         return Str::snake($name);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string|null
-     */
     private function aliasName(string $name): ?string
     {
         static $rules;
@@ -334,13 +290,8 @@ class SchemaUtil extends ConnectionUtilBase
 
     /**
      * Remove a given substring at the beginning of a given string.
-     *
-     * @param string       $haystack
-     * @param string|array $needles
-     *
-     * @return string
      */
-    private function removePrefix(string $haystack, $needles): string
+    private function removePrefix(string $haystack, array|string $needles): string
     {
         foreach ((array)$needles as $needle) {
             if ($needle != '' && $needle !== $haystack && substr($haystack, 0, strlen($needle)) === (string)$needle) {
@@ -353,13 +304,8 @@ class SchemaUtil extends ConnectionUtilBase
 
     /**
      * Remove a given substring at the end of a given string.
-     *
-     * @param string       $haystack
-     * @param string|array $needles
-     *
-     * @return string
      */
-    private function removeSuffix(string $haystack, $needles): string
+    private function removeSuffix(string $haystack, array|string $needles): string
     {
         foreach ((array)$needles as $needle) {
             if ($needle !== $haystack && substr($haystack, -strlen($needle)) === (string)$needle) {
@@ -370,11 +316,6 @@ class SchemaUtil extends ConnectionUtilBase
         return $haystack;
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Column
-     *
-     * @return bool
-     */
     public function isDate(Column $column): bool
     {
         if (true !== $this->config('dates', true)) {
@@ -385,9 +326,6 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param \Triun\ModelBase\Definitions\Column $column
-     *
-     * @return string
      * @throws Exception
      */
     private function convertToPhpDoc(Column $column): string
@@ -402,9 +340,6 @@ class SchemaUtil extends ConnectionUtilBase
     }
 
     /**
-     * @param \Triun\ModelBase\Definitions\Column $column
-     *
-     * @return string
      * @throws Exception
      */
     private function getToPhpDocBaseType(Column $column): string

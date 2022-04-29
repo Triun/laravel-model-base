@@ -2,22 +2,12 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class AttributesModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class AttributesModifier extends ModifierBase
 {
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         // ConnectionModifier
         // connection:      null
@@ -66,12 +56,7 @@ class AttributesModifier extends ModifierBase
         $this->setProperty($skeleton, 'snakeAttributes', $this->config('snakeAttributes'));
     }
 
-    /**
-     * Apply eloquent hidden attributes.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    protected function hidden(Skeleton $skeleton)
+    protected function hidden(Skeleton $skeleton): void
     {
         $fields = [];
 
@@ -87,14 +72,9 @@ class AttributesModifier extends ModifierBase
         $skeleton->property('hidden')->setValue($fields);
     }
 
-    /**
-     * Apply eloquent fillable.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function fillable(Skeleton $skeleton)
+    public function fillable(Skeleton $skeleton): void
     {
-        if (array_search($this->table()->getName(), $this->config('fillable.tables', [])) === false) {
+        if (!in_array($this->table()->getName(), $this->config('fillable.tables', []))) {
             return;
         }
 
@@ -111,12 +91,7 @@ class AttributesModifier extends ModifierBase
         $skeleton->property('fillable')->setValue($fields);
     }
 
-    /**
-     * Apply eloquent casting.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    protected function casts(Skeleton $skeleton)
+    protected function casts(Skeleton $skeleton): void
     {
         $cast = $skeleton->property('casts');
 

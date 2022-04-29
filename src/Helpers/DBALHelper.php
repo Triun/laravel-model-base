@@ -5,23 +5,17 @@ declare(strict_types=1);
 namespace Triun\ModelBase\Helpers;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use InvalidArgumentException;
 
-/**
- * Class DBALHelper
- *
- * @package Triun\ModelBase\Helpers
- */
 abstract class DBALHelper
 {
     /**
      * Recommended configuration for the driver mappings
-     *
-     * @var array
      */
     const DEFAULT_DRIVER_MAPPINGS = [
         'mysql' => [
@@ -33,29 +27,24 @@ abstract class DBALHelper
         ],
     ];
 
-    /**
-     * @param \Doctrine\DBAL\Connection $conn
-     *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-     */
     public static function getSchema(Connection $conn): AbstractSchemaManager
     {
         return $conn->getDriver()->getSchemaManager($conn);
     }
 
     /**
-     * This method will, depending of the configuration, fix or not, the length of the columns and the tinyint.
+     * This method will, depending on the configuration, fix or not, the length of the columns and the tinyint.
      *
      * Doctrine, by default, uses boolean for tinyint, no matters if the length is bigger than 1.
      * It also uses the maximum database length, instead of the used one.
      *
-     * @param \Doctrine\DBAL\Connection      $conn
-     * @param \Doctrine\DBAL\Schema\Column[] $columns
-     * @param string                         $tableName
-     * @param bool                           $realLength  (default true)
-     * @param bool                           $realTinyInt (default true)
+     * @param Connection $conn
+     * @param Column[]   $columns
+     * @param string     $tableName
+     * @param bool       $realLength  (default true)
+     * @param bool       $realTinyInt (default true)
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public static function tableColumnsFixes(
         Connection $conn,
@@ -63,12 +52,12 @@ abstract class DBALHelper
         string $tableName,
         bool $realLength = true,
         bool $realTinyInt = true
-    ) {
+    ): void {
         if (true !== $realLength && true !== $realTinyInt) {
             return;
         }
 
-        $platformColumns = static::getPlatformColumns($conn, $tableName);
+        $platformColumns = self::getPlatformColumns($conn, $tableName);
 
         foreach ($columns as $column) {
             if (!isset($platformColumns[$column->getName()])) {
@@ -78,18 +67,13 @@ abstract class DBALHelper
 
             $raw = $platformColumns[$column->getName()];
 
-            static::fixRealLength($column, $raw['length']);
-            static::fixSmallInt($column, $raw['length']);
+            self::fixRealLength($column, $raw['length']);
+            self::fixSmallInt($column, $raw['length']);
         }
     }
 
     /**
      * Set the real length
-     *
-     * @param \Doctrine\DBAL\Schema\Column $column
-     * @param int|null                     $length
-     *
-     * @return void
      */
     private static function fixRealLength(Column $column, ?int $length): void
     {
@@ -106,11 +90,7 @@ abstract class DBALHelper
     /**
      * Use Small Int if it's a Boolean with more than 1 bit.
      *
-     * @param \Doctrine\DBAL\Schema\Column $column
-     * @param int|null                     $length
-     *
-     * @return void
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @see \Doctrine\DBAL\DBALException::unknownColumnType()
      */
     private static function fixSmallInt(Column $column, ?int $length): void
@@ -129,15 +109,11 @@ abstract class DBALHelper
     }
 
     /**
-     * @param \Doctrine\DBAL\Connection $conn
-     * @param string                    $tableName
-     *
-     * @return array
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
-    private static function getPlatformColumns(Connection $conn, string $tableName)
+    private static function getPlatformColumns(Connection $conn, string $tableName): array
     {
-        $sql = static::getSchema($conn)->getDatabasePlatform()->getListTableColumnsSQL($tableName);
+        $sql = self::getSchema($conn)->getDatabasePlatform()->getListTableColumnsSQL($tableName);
 
         $platformColumns = [];
         foreach ($conn->fetchAll($sql) as $tableColumn) {
@@ -161,13 +137,12 @@ abstract class DBALHelper
     /**
      * Apply platform mapping types from the config file
      *
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
-     * @param array|null                                  $defaultMappings (default [])
-     * @param array|null                                  $driversMappings (default
-     *                                                                     {@see DBALHelper::DEFAULT_DRIVER_MAPPINGS})
+     * @param AbstractSchemaManager $schema
+     * @param array                 $defaultMappings (default [])
+     * @param array                 $driversMappings (default {@see DBALHelper::DEFAULT_DRIVER_MAPPINGS})
      *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-     * @throws \Doctrine\DBAL\DBALException
+     * @return AbstractSchemaManager
+     * @throws DBALException
      */
     public static function platformMapping(
         AbstractSchemaManager $schema,

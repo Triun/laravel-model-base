@@ -1,0 +1,7 @@
+includes:
+    - phpstan.dist.neon
+
+parameters:
+    parallel:
+        # https://github.com/phpstan/phpstan/issues/2982#issuecomment-596588261
+        maximumNumberOfProcesses: 4

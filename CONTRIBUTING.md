@@ -27,6 +27,11 @@ To test if your contribution passes the standard, you can use the command:
 
 Which should give you no output, indicating that there are no coding standard errors.
 
+## Other tests
+
+```bash
+php -d memory_limit=-1 vendor/bin/phpstan analyse
+```
 
 ## Unit testing
 

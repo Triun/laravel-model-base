@@ -4,40 +4,30 @@ declare(strict_types=1);
 
 namespace Triun\ModelBase\Helpers;
 
+use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\DBAL\Schema\Column;
 use Exception;
 use Illuminate\Database\Connection;
 use Triun\ModelBase\ModelBaseConfig;
 
-/**
- * Class TypeHelper
- *
- * @package Triun\ModelBase\Helpers
- */
 abstract class TypeHelper
 {
     /**
-     * @var callback[]|callable[]
+     * @var callable[]
      */
-    private static $cast_callbacks = [];
+    private static array $cast_callbacks = [];
 
     /**
      * true:  `int`,     `bool`
      * false: `integer`, `boolean`
-     *
-     * @var bool
      */
-    public static $shortTypes = true;
+    public static bool $shortTypes = true;
 
     /**
-     * @param callback|callable $callback
-     *
-     * @return void
      * @throws Exception
      */
-    public static function registerCastCallback($callback): void
+    public static function registerCastCallback(callable $callback): void
     {
         if (!is_callable($callback)) {
             throw new Exception('Cast Callback not callable');
@@ -47,9 +37,6 @@ abstract class TypeHelper
     }
 
     /**
-     * @param \Doctrine\DBAL\Types\Type $type
-     *
-     * @return string
      * @throws Exception
      */
     public static function getDbType(Type $type): string
@@ -65,10 +52,6 @@ abstract class TypeHelper
      * decimal:<digits> -> decimal
      * date:<datetime_format> -> custom_datetime
      * datetime:<datetime_format> -> custom_datetime
-     *
-     * @param \Doctrine\DBAL\Types\Type $type
-     *
-     * @return string|null
      *
      * @link https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html
      * @link https://laravel.com/docs/5.8/eloquent-mutators#attribute-casting
@@ -98,7 +81,6 @@ abstract class TypeHelper
                 return 'object';
             case Types::ARRAY:
             case Types::SIMPLE_ARRAY:
-            case Types::JSON_ARRAY: // deprecated. Keeping for backwards compatibility.
                 //return 'collection';
                 return 'array';
             case Types::JSON:
@@ -123,12 +105,6 @@ abstract class TypeHelper
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\Column $column
-     * @param string                       $tableName
-     * @param ModelBaseConfig              $config
-     * @param Connection                   $conn
-     *
-     * @return string
      * @throws Exception
      */
     public static function getLaravelCastType(
@@ -173,9 +149,6 @@ abstract class TypeHelper
      * "string"|"integer"|"int"|"boolean"|"bool"|"float"|"double"|"object"|"mixed"|"array"|"resource"|"scalar"
      * |"void"|"null"|"callback"|"false"|"true"|"self"
      *
-     * @param \Doctrine\DBAL\Types\Type $type
-     *
-     * @return string
      * @throws Exception
      *
      * @link https://docs.phpdoc.org/references/phpdoc/tags/property.html
@@ -207,7 +180,6 @@ abstract class TypeHelper
                 return 'object';
             case Types::ARRAY:
             case Types::SIMPLE_ARRAY:
-            case Types::JSON_ARRAY: // deprecated. Keeping for backwards compatibility.
                 return 'array';
             case Types::JSON:
                 //return 'json';
@@ -233,11 +205,6 @@ abstract class TypeHelper
         }
     }
 
-    /**
-     * @param \Doctrine\DBAL\Types\Type $type
-     *
-     * @return bool
-     */
     public static function isDateTime(Type $type): bool
     {
         switch ($type->getName()) {
