@@ -4,7 +4,9 @@ namespace Triun\ModelBase\Utils;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column as DBALColumn;
+use Doctrine\DBAL\Types\Types;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Triun\ModelBase\Definitions\Column;
@@ -15,6 +17,28 @@ use Triun\ModelBase\Lib\ConnectionUtilBase;
 
 class SchemaUtil extends ConnectionUtilBase
 {
+    /**
+     * @see \Doctrine\DBAL\Schema\MySQLSchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\PostgreSQLSchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\SQLServerSchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\SqliteSchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\OracleSchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\DB2SchemaManager::_getPortableTableColumnDefinition()
+     * @see \Doctrine\DBAL\Schema\AbstractSchemaManager::_getPortableTableColumnDefinition()
+     */
+    private const SCHEMA_COMMON = [
+        'length',
+        'unsigned',
+        'fixed',
+        'default',
+        'notnull',
+        'scale',
+        'precision',
+        'autoincrement',
+        'comment',
+        //'platformOptions', only DB2SchemaManager
+    ];
+
     /**
      * @var callable[]
      */
@@ -183,7 +207,14 @@ class SchemaUtil extends ConnectionUtilBase
     {
         $columns = [];
         foreach ($this->getDoctrineColumns($schema, $tableName) as $key => $doctrineColumn) {
-            $column = new Column($doctrineColumn->getName(), $doctrineColumn->getType(), $doctrineColumn->toArray());
+            $column = new Column(
+                $doctrineColumn->getName(),
+                $doctrineColumn->getType(),
+                Arr::only($doctrineColumn->toArray(), self::SCHEMA_COMMON),
+            );
+
+            // We are not including platform options such as `charset`, `collation` or `jsonb`,
+            // because we don't need them
 
             // snake_name and StudyName
             $column->snakeName  = $this->snakeCase($column->getName());

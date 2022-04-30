@@ -3,8 +3,6 @@
 namespace Triun\ModelBase\Utils;
 
 use Exception;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Method;
@@ -17,8 +15,6 @@ class BuilderUtil extends BuilderUtilBase
 {
     /**
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
      * @throws Throwable
      */
     public function build(
@@ -34,13 +30,9 @@ class BuilderUtil extends BuilderUtilBase
         return $this->save($path, $skeleton->className, $content, $override, $skeleton);
     }
 
-    /**
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
-     */
     protected function getContents(Skeleton $skeleton, string $stub): string
     {
-        $content = app('file')->get($this->getStub($stub));
+        $content = file_get_contents($this->getStub($stub));
 
         $replace = [
             //'dummy_cmd' => $this->name,
@@ -131,13 +123,9 @@ class BuilderUtil extends BuilderUtilBase
 //        return static::TAB.'const '.$constant->name.' = '.$this->value2File($constant->value).';';
     }
 
-    /**
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
-     */
     protected function formatProperty(Property $property): string|array
     {
-        $content = app('file')->get($this->getStub('property.stub'));
+        $content = file_get_contents($this->getStub('property.stub'));
 
         $replace = [
             '// DummyPhpDoc'  => $property->docComment,

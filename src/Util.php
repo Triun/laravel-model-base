@@ -168,7 +168,7 @@ class Util
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
      * @throws Throwable
      */
-    protected function build(Skeleton $skeleton, string &$path): int
+    protected function build(Skeleton $skeleton, ?string &$path): int
     {
         return $this->builderUtil()->build($skeleton, $this->config->get('override', 'confirm'), $path);
     }
@@ -176,13 +176,10 @@ class Util
     /**
      * Build the php class object for the model and save it.
      *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string                                $path
-     *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
-     * @throws Exception
+     * @throws Throwable
      */
-    protected function buildModel(Skeleton $skeleton, string &$path): int
+    protected function buildModel(Skeleton $skeleton, ?string &$path): int
     {
         return $this->builderUtil()->build($skeleton, $this->config->get('model.override', 'confirm'), $path);
     }

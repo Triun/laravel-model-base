@@ -20,7 +20,7 @@ class Skeleton
     /**
      * Which class extends.
      */
-    public string $extends;
+    public ?string $extends = null;
 
     /**
      * Which classes should be imported.

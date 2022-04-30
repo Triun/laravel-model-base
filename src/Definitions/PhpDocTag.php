@@ -9,7 +9,7 @@ class PhpDocTag
     public ?string $type = null;
     public ?string $description = null;
 
-    public function __construct(string $name, ?string $tag = null, ?string $type = null, ?string $description = null)
+    public function __construct(?string $name, ?string $tag = null, ?string $type = null, ?string $description = null)
     {
         $this->name = $name;
         $this->tag = $tag;

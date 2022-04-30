@@ -54,11 +54,11 @@ abstract class BuilderUtilBase extends UtilBase
      */
     protected function save(string $path, string $name, string $content, bool $override, Skeleton $skeleton): bool|int
     {
-        $exists = app('file')->exists($path);
+        $exists = file_exists($path);
 
         if ($exists) {
             // Verify changes
-            $actual = app('file')->get($path);
+            $actual = file_get_contents($path);
             if ($actual === $content) {
                 $this->muted("{$name} identical");
 
@@ -86,7 +86,7 @@ abstract class BuilderUtilBase extends UtilBase
 
         $this->makeDirectory($path);
 
-        $size = app('file')->put($path, $content);
+        $size = file_put_contents($path, $content);
 
         if (!($size > 0)) {
             throw new Exception("{$name} save error: Returned $size bytes");
@@ -99,7 +99,7 @@ abstract class BuilderUtilBase extends UtilBase
 
     protected function safe(string $path, bool|string $override = Util::CONFIRM): bool
     {
-        if (!app('file')->exists($path)) {
+        if (!file_exists($path)) {
             return true;
         }
 
@@ -162,8 +162,8 @@ abstract class BuilderUtilBase extends UtilBase
      */
     protected function makeDirectory(string $path): void
     {
-        if (!app('file')->isDirectory(dirname($path))) {
-            app('file')->makeDirectory(dirname($path), 0777, true, true);
+        if (!is_dir(dirname($path))) {
+            mkdir(dirname($path), 0777, true);
         }
     }
 

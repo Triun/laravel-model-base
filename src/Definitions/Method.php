@@ -18,9 +18,9 @@ class Method
      * @var string[]
      */
     public array $modifiers;
-    public int $modifiers_id;
-    public mixed $default;
-    public mixed $value;
+    public ?int $modifiers_id = null;
+    public mixed $default = null;
+    public mixed $value = null;
     public string $docComment;
 
     public function isDirty(): bool

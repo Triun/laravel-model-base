@@ -5,8 +5,6 @@ namespace Triun\ModelBase\Lib;
 use Exception;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
 use RuntimeException;
 use Triun\ModelBase\Definitions\Skeleton;
@@ -79,13 +77,10 @@ abstract class ModifierBase
         return __DIR__ . '/../../resources/stubs/' . $file;
     }
 
-    /**
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
-     */
     public function getFile(string $path): string
     {
-        return app('file')->get($path);
+        return file_get_contents($path);
+        //return app('file')->get($path);
     }
 
     /**
@@ -126,20 +121,18 @@ abstract class ModifierBase
     }
 
     /**
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
      * @throws Exception
      */
     protected function saveAddOn(string $class, string $newClass): void
     {
         $fromPath = $this->getClassNamePath($class);
 
-        if (!app('file')->exists($fromPath)) {
+        if (!file_exists($fromPath)) {
             throw new RuntimeException("The addon class $class doesn't exists.");
         }
 
         $toPath = $this->getAppClassNamePath($newClass);
-        $exists = app('file')->exists($toPath);
+        $exists = file_exists($toPath);
 
         // If exists but we do not have override permissions
         if ($exists && !$this->config('addons.override')) {
@@ -147,20 +140,20 @@ abstract class ModifierBase
         }
 
         // Substitute class name in file content
-        $content = $this->getNewAddOnContent(app('file')->get($fromPath), $class, $newClass);
+        $content = $this->getNewAddOnContent(file_get_contents($fromPath), $class, $newClass);
 
         // If exists, but the content is no changed
-        if ($exists && $content === app('file')->get($toPath)) {
+        if ($exists && $content === file_get_contents($toPath)) {
             return;
         }
 
         echo "Save Addon: $fromPath -> $toPath" . PHP_EOL;
 
-        if (!app('file')->isDirectory(dirname($toPath))) {
-            app('file')->makeDirectory(dirname($toPath), 0777, true, true);
+        if (!is_dir(dirname($toPath))) {
+            mkdir(dirname($toPath), 0777, true);
         }
 
-        app('file')->put($toPath, $content);
+        file_put_contents($toPath, $content);
     }
 
     protected function getNewAddOnContent(string $content, string $class, string $newClass): string|array

@@ -94,7 +94,7 @@ class TimestampsModifier extends ModifierBase
         return null;
     }
 
-    protected function hasColumn(string $name): bool
+    protected function hasColumn(?string $name): bool
     {
         return $this->table()->hasColumn($name);
     }
