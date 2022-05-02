@@ -15,7 +15,7 @@ Before going through the rest of this documentation, please take some time to re
 We recommend the official php docker image:
 
 ```bash
-docker run -it --rm -p 8080:80 -v "$(pwd):/opt/app" -w '/opt/app' --name php-7-4-model-base-dev php:7.4 bash
+docker run -it --rm -v "$(pwd):/opt/app" -w '/opt/app' --name php-7-4-model-base-dev php:7.4 bash
 ```
 
 ## Dependencies
