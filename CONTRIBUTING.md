@@ -4,12 +4,18 @@ Before you contribute code to Laravel-Model-Base, please make sure it conforms t
 
 If you do this, you can run the following commands to check if everything is ready to submit.
 
+## Guidelines of interest
+
+Before going through the rest of this documentation, please take some time to read:
+- Documentation for [Orchestral Testbench](https://github.com/orchestral/testbench) package, that can be found on the [packages.tools/testbench](https://packages.tools/testbench)
+- [Package Development](https://laravel.com/docs/9.x/packages) section of Laravel's own documentation.
+
 ## Local environment
 
 We recommend the official php docker image:
 
 ```bash
-docker run -it --rm -p 8080:80 -v "$(pwd):/opt/app" -w '/opt/app' --name php-7-4-model-base-dev php:7.4 bash
+docker run -it --rm -p 8080:80 -v "$(pwd):/opt/app" -w '/opt/app' --name php-8-1-model-base-dev php:8.1 bash
 ```
 
 ## Dependencies
@@ -46,10 +52,10 @@ To test if your contribution passes the standard, you can use the command:
 
 Which should give you no output, indicating that there are no coding standard errors.
 
-## Other tests
+## Static Analysis
 
 ```bash
-php -d memory_limit=-1 vendor/bin/phpstan analyse
+php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.dist.neon
 ```
 
 ## Unit testing
