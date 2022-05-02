@@ -4,6 +4,12 @@ Before you contribute code to Laravel-Model-Base, please make sure it conforms t
 
 If you do this, you can run the following commands to check if everything is ready to submit.
 
+## Guidelines of interest
+
+Before going through the rest of this documentation, please take some time to read:
+- Documentation for [Orchestral Testbench](https://github.com/orchestral/testbench) package, that can be found on the [packages.tools/testbench](https://packages.tools/testbench)
+- [Package Development](https://laravel.com/docs/9.x/packages) section of Laravel's own documentation.
+
 ## Local environment
 
 We recommend the official php docker image:
