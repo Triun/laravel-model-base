@@ -331,15 +331,17 @@ class SkeletonUtil extends ConnectionUtilBase
      */
     public static function loadMethodValue(Method $method)
     {
+        $fileContent = static::getFileContent(
+            $method->getFileName(),
+            $method->getStartLine() - 1,
+            $method->getEndLine()
+        );
+
         // The \ReflectionMethod class doesn't return the content of the function, so we have to get it from
         // the original file.
         $method->default = $method->value = '    '
                                             . $method->getDocComment() . PHP_EOL
-                                            . static::getFileContent(
-                $method->getFileName(),
-                $method->getStartLine() - 1,
-                $method->getEndLine()
-            );
+                                            . $fileContent;
     }
 
     /**
