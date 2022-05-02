@@ -4,101 +4,53 @@ namespace Triun\ModelBase\Definitions;
 
 use Triun\ModelBase\Utils\SkeletonUtil;
 
-/**
- * Class Method
- *
- * @package Triun\ModelBase\Definitions
- */
 class Method
 {
-    /**
-     * @var string
-     */
-    public $file;
+    public string $file;
 
     /**
      * @var integer[]
      */
-    public $line;
-
-    /**
-     * @var string
-     */
-    public $name;
+    public array $line;
+    public string $name;
 
     /**
      * @var string[]
      */
-    public $modifiers;
+    public array $modifiers;
+    public ?int $modifiers_id = null;
+    public mixed $default = null;
+    public mixed $value = null;
+    public string $docComment;
 
-    /**
-     * @var int
-     */
-    public $modifiers_id;
-
-    /**
-     * @var mixed
-     */
-    public $default;
-
-    /**
-     * @var mixed
-     */
-    public $value;
-
-    /**
-     * @var string
-     */
-    public $docComment;
-
-    /**
-     * @return bool
-     */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->value !== $this->default;
     }
 
-    /**
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setValue($value)
+    public function setValue(mixed $value): static
     {
         $this->value = $value;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->file;
     }
 
-    /**
-     * @return int
-     */
-    public function getStartLine()
+    public function getStartLine(): int
     {
         return $this->line[0];
     }
 
-    /**
-     * @return int
-     */
-    public function getEndLine()
+    public function getEndLine(): int
     {
         return $this->line[1];
     }
 
-    /**
-     * @return string
-     */
-    public function getDocComment()
+    public function getDocComment(): string
     {
         return $this->docComment;
     }
@@ -106,17 +58,15 @@ class Method
     /**
      * Load method content from the original file.
      */
-    public function load()
+    public function load(): void
     {
         SkeletonUtil::loadMethodValue($this);
     }
 
     /**
      * Append code at the end of the method.
-     *
-     * @param string $code
      */
-    public function append($code)
+    public function append(string $code): void
     {
         SkeletonUtil::appendToMethod($this, $code);
     }

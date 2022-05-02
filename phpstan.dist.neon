@@ -1,0 +1,17 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+    # 0 is the loosest and 9 is the strictest
+    level: 1
+    paths:
+        - config
+        - src
+        - tests
+    #excludePaths:
+         #- /*/*/FileToBeExcluded.php
+    #reportUnmatchedIgnoredErrors: false # Temporarely fix
+
+    # nunomaduro/larastan custom config parameters
+    # @see https://github.com/nunomaduro/larastan/blob/master/docs/custom-config-paramaters.md
+
+    #ignoreErrors:

@@ -1,9 +1,12 @@
 <?php
 
-/**
- * Class TestCase
- */
-abstract class TestCase extends Orchestra\Testbench\TestCase
+namespace Tests;
+
+use Exception;
+use Illuminate\Database\Connection;
+use Illuminate\Support\Facades\Schema;
+
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Default connection name for the tests.
@@ -15,11 +18,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
      */
     const DEFAULT_MIGRATION = true;
 
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -34,11 +32,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         }
     }
 
-    /**
-     * Clean up the testing environment before the next test.
-     *
-     * @return void
-     */
     protected function tearDown(): void
     {
         if (static::DEFAULT_MIGRATION) {
@@ -48,51 +41,27 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         parent::tearDown();
     }
 
-    /**
-     * Get package providers.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
-     */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [\Triun\ModelBase\ModelBaseServiceProvider::class];
     }
 
-    /**
-     * Define environment setup.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', static::TEST_CONNECTION);
         $app['config']->set('database.connections.' . static::TEST_CONNECTION, $this->getDefaultDatabaseConfig());
     }
 
-    /**
-     * Get application timezone.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return string|null
-     */
-    protected function getApplicationTimezone($app)
+    protected function getApplicationTimezone($app): ?string
     {
         return 'Asia/Kuala_Lumpur';
     }
 
     /**
-     * Retrieve the default database configuration.
-     *
-     * @return array
      * @throws Exception
      */
-    private function getDefaultDatabaseConfig()
+    private function getDefaultDatabaseConfig(): array
     {
         switch (env('DB_TEST_DRIVER', null)) {
             case 'sqlite':
@@ -138,9 +107,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         }
     }
 
-    /**
-     * Migrate up
-     */
     protected function migrateUp()
     {
         Schema::create('users', function (\Illuminate\Database\Schema\Blueprint $table) {
@@ -158,44 +124,27 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         });
     }
 
-    /**
-     * Migrate down
-     */
-    protected function migrateDown()
+    protected function migrateDown(): void
     {
         Schema::drop('users');
         Schema::drop('posts');
     }
 
-    /**
-     * Retrieve a connection instance.
-     *
-     * @param string $connection
-     *
-     * @return \Illuminate\Database\Connection
-     */
-    protected function getConnection($connection = 'testing')
+    protected function getTestingConnection(string $connection = 'testing'): Connection
     {
-        return DB::connection($connection);
+        return $this->getConnection($connection);
     }
 
-    /**
-     * @param string $connection
-     *
-     * @return \Triun\ModelBase\ModelBaseConfig
-     */
-    protected function getConfig($connection = 'testing')
+    protected function getConfig(string $connection = 'testing'): \Triun\ModelBase\ModelBaseConfig
     {
-        return new \Triun\ModelBase\ModelBaseConfig($this->getConnection($connection));
+        return new \Triun\ModelBase\ModelBaseConfig($this->getTestingConnection($connection));
     }
 
-    /**
-     * @param string $connection
-     *
-     * @return \Triun\ModelBase\Utils\SchemaUtil
-     */
-    protected function getSchemaUtil($connection = 'testing')
+    protected function getSchemaUtil(string $connection = 'testing'): \Triun\ModelBase\Utils\SchemaUtil
     {
-        return new \Triun\ModelBase\Utils\SchemaUtil($this->getConnection($connection), $this->getConfig($connection));
+        return new \Triun\ModelBase\Utils\SchemaUtil(
+            $this->getTestingConnection($connection),
+            $this->getConfig($connection)
+        );
     }
 }

@@ -2,34 +2,24 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
-use Triun\ModelBase\Definitions\Skeleton;
-use Triun\ModelBase\Definitions\Property;
-
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
+use Triun\ModelBase\Definitions\Property;
+use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
 /**
- * Class UserModifier
- *
- * @package Triun\ModelBase\Modifiers
- *
- * @link    https://laravel.com/docs/5.5/authentication
- * @link    https://github.com/laravel/laravel/blob/master/app/User.php
+ * @link https://laravel.com/docs/5.5/authentication
+ * @link https://github.com/laravel/laravel/blob/master/app/User.php
  */
 class AuthModifier extends ModifierBase
 {
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $default = [
+    protected array $default = [
         'Authenticatable'  => true,
         'Authorizable'     => true,
         'CanResetPassword' => true,
@@ -37,12 +27,7 @@ class AuthModifier extends ModifierBase
         'fillable'         => ['name', 'email', 'password'],
     ];
 
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $params = $this->params();
 
@@ -74,10 +59,7 @@ class AuthModifier extends ModifierBase
         }
     }
 
-    /**
-     * @return array|null
-     */
-    public function params()
+    public function params(): ?array
     {
         $table = $this->table()->getName();
 
@@ -95,14 +77,10 @@ class AuthModifier extends ModifierBase
         return null;
     }
 
-    /**
-     * @param string                                $name
-     * @param \Triun\ModelBase\Definitions\Property $property
-     */
-    protected function addToArrayProperty($name, Property $property)
+    protected function addToArrayProperty(string $name, Property $property): void
     {
         // Add to dates array
-        if (array_search($name, $property->value) === false) {
+        if (!in_array($name, $property->value)) {
             $property->value[] = $name;
         }
     }

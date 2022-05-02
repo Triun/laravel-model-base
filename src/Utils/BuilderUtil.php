@@ -2,8 +2,8 @@
 
 namespace Triun\ModelBase\Utils;
 
-use App;
-use File;
+use Exception;
+use Throwable;
 use Triun\ModelBase\Definitions\Constant;
 use Triun\ModelBase\Definitions\Method;
 use Triun\ModelBase\Definitions\Property;
@@ -11,24 +11,18 @@ use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\BuilderUtilBase;
 use Triun\ModelBase\Util;
 
-/**
- * Class BuilderUtil
- *
- * @package Triun\ModelBase\Utils
- */
 class BuilderUtil extends BuilderUtilBase
 {
     /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param bool|string                           $override
-     * @param string                                $path
-     * @param string                                $stub
-     *
      * @return int The method returns the number of bytes that were written to the file, or false on failure.
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function build(Skeleton $skeleton, $override = Util::CONFIRM, &$path = null, $stub = 'class.stub')
-    {
+    public function build(
+        Skeleton $skeleton,
+        bool|string $override = Util::CONFIRM,
+        ?string &$path = null,
+        string $stub = 'class.stub'
+    ): int {
         $path = $this->getSkeletonPath($skeleton);
 
         $content = $this->getContents($skeleton, $stub);
@@ -36,16 +30,9 @@ class BuilderUtil extends BuilderUtilBase
         return $this->save($path, $skeleton->className, $content, $override, $skeleton);
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param string                                $stub
-     *
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    protected function getContents(Skeleton $skeleton, $stub)
+    protected function getContents(Skeleton $skeleton, string $stub): string
     {
-        $content = File::get($this->getStub($stub));
+        $content = file_get_contents($this->getStub($stub));
 
         $replace = [
             //'dummy_cmd' => $this->name,
@@ -53,7 +40,7 @@ class BuilderUtil extends BuilderUtilBase
             '{{phpdoc}}' => implode(PHP_EOL, $this->getPHPDoc($skeleton)),
 
             'DummyNamespace'     => $skeleton->getNamespace(),
-            'DummyRootNamespace' => App::getNamespace(),
+            'DummyRootNamespace' => app()->getNamespace(),
             'DummyClass'         => class_basename($skeleton->className),
 
             'DummyExtendsNamespace' => $skeleton->extends,
@@ -71,12 +58,9 @@ class BuilderUtil extends BuilderUtilBase
     /**
      * Get the destination class path.
      *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
-     * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getSkeletonPath(Skeleton $skeleton)
+    public function getSkeletonPath(Skeleton $skeleton): string
     {
         return $this->getClassNamePath($skeleton->className);
     }
@@ -84,23 +68,16 @@ class BuilderUtil extends BuilderUtilBase
     /**
      * Get all the use in the header, before declaring the object.
      *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
      * @return string[]
      */
-    protected function getUses(Skeleton $skeleton)
+    protected function getUses(Skeleton $skeleton): array
     {
         return array_map(function ($value) {
             return 'use ' . ltrim($value, '\\') . ';';
         }, $skeleton->uses());
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
-     * @return string
-     */
-    protected function getImplements(Skeleton $skeleton)
+    protected function getImplements(Skeleton $skeleton): string
     {
         if (count($skeleton->interfaces()) > 0) {
             return ' implements ' . implode(', ', $skeleton->interfaces());
@@ -109,12 +86,7 @@ class BuilderUtil extends BuilderUtilBase
         return '';
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     *
-     * @return string
-     */
-    protected function getBody(Skeleton $skeleton)
+    protected function getBody(Skeleton $skeleton): string
     {
         $traits = $this->getTraits($skeleton->traits());
 
@@ -134,10 +106,8 @@ class BuilderUtil extends BuilderUtilBase
 
     /**
      * @param string[] $traits
-     *
-     * @return string|null
      */
-    protected function getTraits($traits): ?string
+    protected function getTraits(array $traits): ?string
     {
         if (count($traits) === 0) {
             return null;
@@ -146,27 +116,16 @@ class BuilderUtil extends BuilderUtilBase
         return static::TAB . 'use ' . implode(', ', $traits) . ';';
     }
 
-    /**
-     * @param Constant $constant
-     *
-     * @return string
-     */
-    protected function formatConstant(Constant $constant)
+    protected function formatConstant(Constant $constant): string
     {
         // TODO: Add phpDoc
         return static::TAB . 'const ' . $constant->name . ' = ' . var_export54($constant->value, true) . ';';
 //        return static::TAB.'const '.$constant->name.' = '.$this->value2File($constant->value).';';
     }
 
-    /**
-     * @param Property $property
-     *
-     * @return mixed
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    protected function formatProperty(Property $property)
+    protected function formatProperty(Property $property): string|array
     {
-        $content = File::get($this->getStub('property.stub'));
+        $content = file_get_contents($this->getStub('property.stub'));
 
         $replace = [
             '// DummyPhpDoc'  => $property->docComment,
@@ -179,12 +138,7 @@ class BuilderUtil extends BuilderUtilBase
         return str_replace(array_keys($replace), array_values($replace), $content);
     }
 
-    /**
-     * @param Method $method
-     *
-     * @return string
-     */
-    protected function formatMethod(Method $method)
+    protected function formatMethod(Method $method): string
     {
         return $method->value;
     }
@@ -199,7 +153,7 @@ if (!function_exists('var_export54')) {
      *
      * @return string
      */
-    function var_export54($value, $tabs = 1, $tabulateKeys = true, $TAB = '    ')
+    function var_export54(mixed $value, int $tabs = 1, bool $tabulateKeys = true, string $TAB = '    '): string
     {
         switch (gettype($value)) {
             case 'array':

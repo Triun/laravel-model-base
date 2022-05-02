@@ -7,29 +7,16 @@ namespace Triun\ModelBase\Modifiers;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class CustomModelOptionsModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class CustomModelOptionsModifier extends ModifierBase
 {
-    /**
-     * @var array
-     */
-    private $default = [
+    private array $default = [
         'interfaces' => [],
         'traits'     => [],
         'uses'       => [],
         'phpDocTags' => [],
     ];
 
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $config = $this->getConfig();
 
@@ -64,9 +51,6 @@ class CustomModelOptionsModifier extends ModifierBase
         }
     }
 
-    /**
-     * @return array
-     */
     private function getConfig(): array
     {
         $tableName = $this->table()->getName();

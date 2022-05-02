@@ -2,41 +2,23 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Triun\ModelBase\Lib\ModifierBase;
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Triun\ModelBase\AddOns\MutatorSkipeable;
 use Triun\ModelBase\Definitions\Column;
 use Triun\ModelBase\Definitions\Skeleton;
-use Triun\ModelBase\AddOns\MutatorSkipeable;
+use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class CamelToSnakeModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class CamelToSnakeModifier extends ModifierBase
 {
-    /**
-     * @var string
-     */
-    protected $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
+    protected string $getAttributeMethod_stub = 'getter-setter-attributes/getAttributeMethod.stub';
+    protected string $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
+    protected bool $trait_added = false;
 
     /**
-     * @var string
+     * @throws FileNotFoundException
      */
-    protected $setAttributeMethod_stub = 'getter-setter-attributes/setAttributeMethod.stub';
-
-    /**
-     * @var boolean
-     */
-    protected $trait_added = false;
-
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         // Only if snakeAttributes is true.
         if (!$skeleton->property('snakeAttributes')->value) {
@@ -47,19 +29,16 @@ class CamelToSnakeModifier extends ModifierBase
             $name = $column->getName();
             // It may get the namespace... in that case, use $column->toArray()['name'] instead.
             if ($name !== strtolower($name)) {
-                $this->addSnakeMuttators($skeleton, $column);
+                $this->addSnakeMutators($skeleton, $column);
             }
         }
     }
 
     /**
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param \Triun\ModelBase\Definitions\Column   $column
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     * @throws \Exception
+     * @throws FileNotFoundException
+     * @throws Exception
      */
-    public function addSnakeMuttators(Skeleton $skeleton, Column $column)
+    public function addSnakeMutators(Skeleton $skeleton, Column $column): void
     {
         $name = $column->getName();
         $snake = $column->snakeName;
@@ -97,10 +76,9 @@ class CamelToSnakeModifier extends ModifierBase
     }
 
     /**
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    protected function getAttributeMethod()
+    protected function getAttributeMethod(): string
     {
         static $content;
 
@@ -112,10 +90,9 @@ class CamelToSnakeModifier extends ModifierBase
     }
 
     /**
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    protected function setAttributeMethod()
+    protected function setAttributeMethod(): string
     {
         static $content;
 

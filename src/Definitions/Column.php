@@ -4,90 +4,48 @@ namespace Triun\ModelBase\Definitions;
 
 use Doctrine\DBAL\Schema\Column as DoctrineColumn;
 
-/**
- * Class Column
- *
- * @package Triun\ModelBase\Definitions
- */
 class Column extends DoctrineColumn
 {
-    /**
-     * @var string
-     */
-    public $publicName;
-
-    /**
-     * @var string
-     */
-    public $snakeName;
-
-    /**
-     * @var string
-     */
-    public $studName;
-
-    /**
-     * @var string
-     */
-    public $alias;
-
-    /**
-     * @var string
-     */
-    public $aliasSnakeName;
-
-    /**
-     * @var string
-     */
-    public $aliasStudName;
+    public string $publicName;
+    public string $snakeName;
+    public string $studName;
+    public string $alias;
+    public string $aliasSnakeName;
+    public string $aliasStudName;
 
     /**
      * The DB type of this column. Possible DB types vary according to the type of DBMS.
-     *
-     * @var string
      */
-    public $dbType;
+    public string $dbType;
 
     /**
      * phpDoc property type.
-     *
-     * @var string
      */
-    public $phpDocType;
+    public string $phpDocType;
 
     /**
      * Laravel casting type of this column. Possible PHP types include:
      * integer, real, float, double, string, boolean, object, array, collection, date, datetime, and timestamp.
-     *
-     * @var string
      */
-    public $laravelType;
+    public string $laravelType;
 
     /**
      * Laravel php type returned by Eloquent.
-     *
-     * @var string
      */
-    public $castType;
+    public string $castType;
 
     /**
      * Whether if the column is a date or not.
-     *
-     * @var bool
      */
-    public $isDate;
+    public bool $isDate;
 
     /**
      * Whether if the column is unsigned or not.
-     *
-     * @var bool
      */
-    public $unsigned;
+    public bool $unsigned;
 
     /**
      * Whether if the column is nullable or not.
-     *
-     * @var bool
      */
-    public $nullable;
+    public bool $nullable;
 }

@@ -2,17 +2,12 @@
 
 namespace Triun\ModelBase\Console;
 
-use DB;
+use Exception;
 use Triun\ModelBase\Util;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-/**
- * Class MakeCommand
- *
- * @package Triun\ModelBase\Console
- */
 class MakeCommand extends GeneratorCommand
 {
     /**
@@ -31,35 +26,28 @@ class MakeCommand extends GeneratorCommand
 
     /**
      * Get stub file location for the model.
-     *
-     * @param string $file
-     *
-     * @return string
      */
-    public function getStub($file = 'class.stub')
+    public function getStub(string $file = 'class.stub'): string
     {
         return __DIR__ . '/stubs/' . $file;
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
         $this->prerequisites();
 
-        $tableName = $this->argument('table');
-        $connection = DB::connection($this->option('connection'));
+        $tableName  = $this->argument('table');
+        $connection = app('db')->connection($this->option('connection'));
 
         $util = new Util($connection, $this);
 
         $util->make($tableName);
     }
 
-    protected function prerequisites()
+    protected function prerequisites(): void
     {
         if (!interface_exists('Doctrine\DBAL\Driver')) {
             $this->error($this->name . ' requires Doctrine DBAL; install "doctrine/dbal".');
@@ -67,10 +55,7 @@ class MakeCommand extends GeneratorCommand
         }
     }
 
-    /**
-     * @return array
-     */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
@@ -82,12 +67,7 @@ class MakeCommand extends GeneratorCommand
         );
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['table', InputArgument::REQUIRED, 'The name of the table'],

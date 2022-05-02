@@ -6,16 +6,14 @@ use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 
 /**
- * Class Table
- *
- * @package Triun\ModelBase\Definitions
+ * Notice: this is used so that we can work in our Colum class instead of the DBAL one.
  */
 class Table extends DoctrineTable
 {
     /**
-     * @return \Triun\ModelBase\Definitions\Column[]
+     * @return Column[]
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return parent::getColumns();
     }
@@ -23,14 +21,14 @@ class Table extends DoctrineTable
     /**
      * Returns the Column with the given name.
      *
-     * @param string $columnName The column name.
+     * @param string $name The column name.
      *
-     * @return \Triun\ModelBase\Definitions\Column
+     * @return Column
      *
      * @throws SchemaException If the column does not exist.
      */
-    public function getColumn($columnName)
+    public function getColumn($name): Column
     {
-        return parent::getColumn($columnName);
+        return parent::getColumn($name);
     }
 }

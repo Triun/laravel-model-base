@@ -1,8 +1,9 @@
 <?php
 
-/**
- * Class TestCaseTest
- */
+namespace Tests;
+
+use Illuminate\Support\Facades\Config;
+
 class TestCaseTest extends TestCase
 {
 
@@ -13,7 +14,7 @@ class TestCaseTest extends TestCase
      */
     public function config_facade_is_loaded()
     {
-        $this->assertEquals('testing', \Config::get('database.default'));
+        $this->assertEquals('testing', Config::get('database.default'));
     }
 
     /**
@@ -45,7 +46,7 @@ class TestCaseTest extends TestCase
      */
     public function it_gets_the_connection()
     {
-        $connection = $this->getConnection();
+        $connection = $this->getTestingConnection();
         $this->assertInstanceOf(\Illuminate\Database\Connection::class, $connection);
         $this->assertEquals(static::TEST_CONNECTION, $connection->getName());
         $this->assertEquals(env('DB_TEST_DRIVER'), $connection->getDriverName());

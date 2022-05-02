@@ -11,29 +11,17 @@ use Triun\ModelBase\Definitions\PhpDocTag;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class PhpDocModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class PhpDocModifier extends ModifierBase
 {
     /**
      * @var string[]
      */
-    protected $defaultMixing = [
+    protected array $defaultMixing = [
         '\\Illuminate\\Database\\Query\\Builder',
         '\\Illuminate\\Database\\Eloquent\\Builder',
     ];
 
-    /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     *
-     * @throws \ReflectionException
-     */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $BuilderReflectionClass = new ReflectionClass(Builder::class);
 
@@ -44,11 +32,8 @@ class PhpDocModifier extends ModifierBase
 
     /**
      * Add properties tags.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
-     * @param \ReflectionClass                      $BuilderReflectionClass
      */
-    protected function columnsPhpDoc(Skeleton $skeleton, ReflectionClass $BuilderReflectionClass)
+    protected function columnsPhpDoc(Skeleton $skeleton, ReflectionClass $BuilderReflectionClass): void
     {
         $columns      = $this->table()->getColumns();
         $descriptions = $this->getDescriptions($columns);
@@ -64,7 +49,7 @@ class PhpDocModifier extends ModifierBase
     }
 
     /**
-     * @param \Triun\ModelBase\Definitions\Column[] $columns
+     * @param Column[] $columns
      *
      * @return string[]
      */
@@ -84,11 +69,6 @@ class PhpDocModifier extends ModifierBase
         return $descriptions;
     }
 
-    /**
-     * @param \Triun\ModelBase\Definitions\Column $column
-     *
-     * @return string
-     */
     private function columnsPhpDocCommentType(Column $column): string
     {
         $comment = $column->dbType;
@@ -134,10 +114,8 @@ class PhpDocModifier extends ModifierBase
 
     /**
      * Add `mixin` phpDoc tags.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton $skeleton
      */
-    protected function mixinPhpDoc(Skeleton $skeleton)
+    protected function mixinPhpDoc(Skeleton $skeleton): void
     {
         $mixins = array_merge($this->config('mixin', []), $this->defaultMixing);
 

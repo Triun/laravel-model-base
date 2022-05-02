@@ -2,7 +2,8 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Types\Types;
 use Triun\ModelBase\Lib\ModifierBase;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Definitions\Property;
@@ -10,30 +11,17 @@ use Triun\ModelBase\Definitions\PhpDocTag;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class SoftDeletesModifier
- *
- * @package Triun\ModelBase\Modifiers
- *
- * @see     https://laravel.com/docs/5.3/eloquent#soft-deleting
+ * @see https://laravel.com/docs/9.x/eloquent#soft-deleting
  */
 class SoftDeletesModifier extends ModifierBase
 {
-    /**
-     * Constant name.
-     */
     const NAME = 'DELETED_AT';
-
-    /**
-     * Deleted default column name value.
-     */
     const DEFAULT_VALUE = 'deleted_at';
 
     /**
      * Scopes added by soft deletes that should be also added to PhpDoc.
-     *
-     * @var array
      */
-    protected $scopes = [
+    protected array $scopes = [
         // Cannot make non static method Model->forceDelete() static
         // 'forceDelete',
         'restore',
@@ -43,13 +31,9 @@ class SoftDeletesModifier extends ModifierBase
     ];
 
     /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     *
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         // Check if softDeletes is enabled in the config file
         if ($this->config('softDeletes', true) !== true) {
@@ -71,14 +55,11 @@ class SoftDeletesModifier extends ModifierBase
     }
 
     /**
-     * Generate a timestamp in the skeleton with the replace values given by $field.
+     * Generate a timestamp in the skeleton with the replacement values given by $field.
      *
-     * @param Skeleton $skeleton
-     *
-     * @return mixed|null
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function findDelete(Skeleton $skeleton)
+    protected function findDelete(Skeleton $skeleton): mixed
     {
         // Force use
 
@@ -118,50 +99,31 @@ class SoftDeletesModifier extends ModifierBase
     /**
      * Whether the column could be a boolean deleted column or not.
      *
-     * @param $columnName
-     *
-     * @return bool
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function isValidColumn($columnName)
+    protected function isValidColumn(string $columnName): bool
     {
         return $this->hasColumn($columnName) && $this->columnIsTimestamp($columnName);
     }
 
-    /**
-     * Check if the column exists.
-     *
-     * @param $columnName
-     *
-     * @return bool
-     */
-    protected function hasColumn($columnName)
+    protected function hasColumn(string $columnName): bool
     {
         return $this->table()->hasColumn($columnName);
     }
 
     /**
-     * Check if the column is boolean.
-     *
-     * @param $columnName
-     *
-     * @return bool
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function columnIsTimestamp($columnName)
+    protected function columnIsTimestamp($columnName): bool
     {
         // echo '+ deleted_at is '.$this->table()->getColumn($columnName)->getType()->getName().PHP_EOL;
-        return $this->table()->getColumn($columnName)->getType()->getName() === Type::DATETIME;
+        return $this->table()->getColumn($columnName)->getType()->getName() === Types::DATETIME_IMMUTABLE;
     }
 
-    /**
-     * @param string                                $name
-     * @param \Triun\ModelBase\Definitions\Property $dates
-     */
-    protected function addToDates($name, Property $dates)
+    protected function addToDates(string $name, Property $dates): void
     {
         // Add to dates array
-        if (array_search($name, $dates->value) === false) {
+        if (!in_array($name, $dates->value)) {
             $dates->value[] = $name;
         }
     }
@@ -169,7 +131,7 @@ class SoftDeletesModifier extends ModifierBase
     /**
      * @param Skeleton $skeleton
      */
-    protected function addPHPDoc(Skeleton $skeleton)
+    protected function addPHPDoc(Skeleton $skeleton): void
     {
         foreach ($this->scopes as $method) {
             $skeleton->addPhpDocTag(new PhpDocTag(

@@ -2,17 +2,14 @@
 
 namespace Triun\ModelBase\Console;
 
-use DB;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Filesystem\Filesystem;
 use Triun\ModelBase\Util;
 use Illuminate\Database\Connection;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-/**
- * Class MakeBulkCommand
- *
- * @package Triun\ModelBase\Console
- */
 class MakeBulkCommand extends GeneratorCommand
 {
     /**
@@ -29,15 +26,12 @@ class MakeBulkCommand extends GeneratorCommand
      */
     protected $description = 'Create a new Eloquent Base model class, for each table, from a connection given.';
 
-    /**
-     * @var \Triun\ModelBase\Util
-     */
-    protected $util;
+    protected Util $util;
 
     /**
      * @var string[]
      */
-    protected $tables;
+    protected array $tables;
 
     /**
      * Configure command.
@@ -54,35 +48,21 @@ class MakeBulkCommand extends GeneratorCommand
             );
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * Used to remove the argument `name` defined in parent.
-     *
-     * @return array
-     */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [];
     }
 
     /**
      * Get stub file location for the model.
-     *
-     * @param string $file
-     *
-     * @return string
      */
-    public function getStub($file = 'class.stub')
+    public function getStub(string $file = 'class.stub'): string
     {
         return __DIR__ . '/stubs/' . $file;
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return bool|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
@@ -102,7 +82,7 @@ class MakeBulkCommand extends GeneratorCommand
             );
         } else {
             foreach ($connections as $connection) {
-                $this->runConnection(DB::connection($connection));
+                $this->runConnection(app('db')->connection($connection));
             }
         }
 
@@ -114,7 +94,7 @@ class MakeBulkCommand extends GeneratorCommand
      *
      * @return string[]
      */
-    protected function getConnectionNames()
+    protected function getConnectionNames(): array
     {
         $connections = $this->option('connection');
 
@@ -128,11 +108,11 @@ class MakeBulkCommand extends GeneratorCommand
     }
 
     /**
-     * @param \Illuminate\Database\Connection $connection
+     * @param Connection $connection
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function runConnection(Connection $connection)
+    protected function runConnection(Connection $connection): void
     {
         $this->output->title('Bulk Model Base generation for ' . $connection->getName());
 
@@ -141,7 +121,7 @@ class MakeBulkCommand extends GeneratorCommand
 
         $this->loadTables();
 
-        $bases = [];
+        $bases  = [];
         $models = [];
         foreach ($this->tables as $tableName) {
             $this->section($tableName);
@@ -163,7 +143,7 @@ class MakeBulkCommand extends GeneratorCommand
     /**
      * Verify that the app accomplish the pre-requisites.
      */
-    protected function prerequisites()
+    protected function prerequisites(): void
     {
         if (!interface_exists('Doctrine\DBAL\Driver')) {
             $this->error($this->name . ' requires Doctrine DBAL; install "doctrine/dbal".');
@@ -174,7 +154,7 @@ class MakeBulkCommand extends GeneratorCommand
     /**
      * Load tables to be used.
      */
-    protected function loadTables()
+    protected function loadTables(): void
     {
         $schemaUtil = $this->util->schemaUtil();
 
@@ -189,12 +169,8 @@ class MakeBulkCommand extends GeneratorCommand
 
     /**
      * Write a string as section output.
-     *
-     * @param  string $string
-     *
-     * @return void
      */
-    public function section($string)
+    public function section(string $string): void
     {
         /** @var \Illuminate\Console\OutputStyle $output */
         $output = $this->getOutput();
@@ -206,28 +182,30 @@ class MakeBulkCommand extends GeneratorCommand
     }
 
     /**
-     * @param string[] $files
+     * @throws BindingResolutionException
      */
-    protected function showExtraBasesModels($files)
+    protected function showExtraBasesModels(array $files): void
     {
-        return $this->showExtraFiles($this->getModelsBasesDirectory(), $files);
+        $this->showExtraFiles($this->getModelsBasesDirectory(), $files);
     }
 
     /**
-     * @param string[] $files
+     * @throws BindingResolutionException
      */
-    protected function showExtraModels($files)
+    protected function showExtraModels(array $files): void
     {
-        return $this->showExtraFiles($this->getModelsDirectory(), $files);
+        $this->showExtraFiles($this->getModelsDirectory(), $files);
     }
 
     /**
      * @param string   $path
      * @param string[] $files
+     *
+     * @throws BindingResolutionException
      */
-    public function showExtraFiles($path, $files)
+    public function showExtraFiles(string $path, array $files): void
     {
-        /** @var \Illuminate\Filesystem\Filesystem $app */
+        /** @var Filesystem $app */
         $file = \Illuminate\Container\Container::getInstance()->make('files');
 
         if (!is_dir($path)) {
@@ -251,36 +229,26 @@ class MakeBulkCommand extends GeneratorCommand
 
     /**
      * Get the destination namespace directory path for the models bases.
-     *
-     * @return string
      */
-    protected function getModelsBasesDirectory()
+    protected function getModelsBasesDirectory(): string
     {
         return $this->getNamespaceDirectory($this->util->config()->get('namespace'));
     }
 
     /**
      * Get the destination namespace directory path for the models bases.
-     *
-     * @return string
      */
-    protected function getModelsDirectory()
+    protected function getModelsDirectory(): string
     {
         return $this->getNamespaceDirectory($this->util->config()->get('model.namespace'));
     }
 
     /**
      * Get the destination namespace directory path for the models bases.
-     *
-     * @param string $namespace
-     *
-     * @return string
      */
-    protected function getNamespaceDirectory($namespace)
+    protected function getNamespaceDirectory(string $namespace): string
     {
-        /** @var \Laravel\Lumen\Application|\Illuminate\Foundation\Application $app */
-        $app = \Illuminate\Container\Container::getInstance()->make('app');
-
+        $app  = app();
         $name = str_replace($app->getNamespace(), '', $namespace);
 
         return $app->path() . '/' . str_replace('\\', '/', $name);

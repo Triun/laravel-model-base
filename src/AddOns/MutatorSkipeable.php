@@ -4,23 +4,13 @@ namespace Triun\ModelBase\AddOns;
 
 use Illuminate\Support\Str;
 
-/**
- * Class MutatorSkipeable
- *
- * @package Triun\ModelBase
- */
 trait MutatorSkipeable
 {
     /**
      * Set a given attribute on the model, without using the mutator.
      * Add phone type functionality.
-     *
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return $this
      */
-    protected function setAttributeWithoutMutator($key, $value)
+    protected function setAttributeWithoutMutator(string $key, mixed $value): static
     {
         if ($value !== null) {
             // If an attribute is listed as a "date", we'll convert it from a DateTime
@@ -50,12 +40,8 @@ trait MutatorSkipeable
     /**
      * Get a plain attribute (not a relationship), without using the mutator.
      * Add phone type functionality.
-     *
-     * @param  string $key
-     *
-     * @return mixed
      */
-    public function getAttributeValueWithoutMutator($key)
+    public function getAttributeValueWithoutMutator(string $key): mixed
     {
         $value = $this->getAttributeFromArray($key);
 

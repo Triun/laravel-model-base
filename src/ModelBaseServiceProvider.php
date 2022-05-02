@@ -3,33 +3,18 @@
 namespace Triun\ModelBase;
 
 use Illuminate\Support\ServiceProvider;
-use Triun\ModelBase\Console\MakeCommand;
 use Triun\ModelBase\Console\MakeBulkCommand;
+use Triun\ModelBase\Console\MakeCommand;
 
-/**
- * Class ModelBaseServiceProvider
- *
- * @package Triun\ModelBase
- */
 class ModelBaseServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
      */
-    protected $defer = true;
+    protected bool $defer = true;
 
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-//        $viewPath = __DIR__.'/../resources/views';
-//        $this->loadViewsFrom($viewPath, 'model-base');
-
         $configPath = realpath(
             dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
         );
@@ -39,48 +24,20 @@ class ModelBaseServiceProvider extends ServiceProvider
             'config'
         );
 
-        $this->mergeConfigFrom($configPath, 'model-base');
+        if ($this->app->runningInConsole()) {
+            $this->commands([MakeCommand::class, MakeBulkCommand::class]);
+        }
     }
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $configPath = __DIR__ . '/../config/model-base.php';
+        $configPath = realpath(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
+        );
+
         $this->mergeConfigFrom($configPath, 'model-base');
-
-        $this->app->singleton(
-            'command.make.model-base',
-            function ($app) {
-                return new MakeCommand($app['files']);
-            }
-        );
-
-        $this->commands('command.make.model-base');
-
-        $this->app->singleton(
-            'command.make.model-base-bulk',
-            function ($app) {
-                return new MakeBulkCommand($app['files']);
-            }
-        );
-
-        $this->commands('command.make.model-base-bulk');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'command.make.model-base',
-            'command.make.model-base-bulk',
-        ];
     }
 }

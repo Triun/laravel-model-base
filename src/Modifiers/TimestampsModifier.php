@@ -2,33 +2,21 @@
 
 namespace Triun\ModelBase\Modifiers;
 
-use Doctrine\DBAL\Types\Type;
-use Triun\ModelBase\Lib\ModifierBase;
+use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Types\Types;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Triun\ModelBase\Definitions\Skeleton;
+use Triun\ModelBase\Lib\ModifierBase;
 
-/**
- * Class TimestampsModifier
- *
- * @package Triun\ModelBase\Modifiers
- */
 class TimestampsModifier extends ModifierBase
 {
-    /**
-     * Stub template.
-     *
-     * @var string
-     */
-    protected $voidTimestamp_stub = 'timestamps/voidTimestamp.stub';
+    protected string $voidTimestamp_stub = 'timestamps/voidTimestamp.stub';
 
     /**
-     * Apply the modifications of the class.
-     *
-     * @param \Triun\ModelBase\Definitions\Skeleton
-     *
-     * @throws \Doctrine\DBAL\Schema\SchemaException
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws SchemaException
+     * @throws FileNotFoundException
      */
-    public function apply(Skeleton $skeleton)
+    public function apply(Skeleton $skeleton): void
     {
         $CREATED_AT = $this->generateTimestamp($skeleton, 'CREATED_AT');
         $UPDATED_AT = $this->generateTimestamp($skeleton, 'UPDATED_AT');
@@ -65,13 +53,9 @@ class TimestampsModifier extends ModifierBase
     /**
      * Generate a timestamp in the skeleton with the replace values given by $field.
      *
-     * @param Skeleton $skeleton
-     * @param          $field
-     *
-     * @return mixed|null
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function generateTimestamp(Skeleton $skeleton, $field)
+    protected function generateTimestamp(Skeleton $skeleton, string $field): mixed
     {
         $const = $skeleton->constant($field);
 
@@ -110,38 +94,25 @@ class TimestampsModifier extends ModifierBase
         return null;
     }
 
-    /**
-     * Check if the column exists.
-     *
-     * @param $name
-     *
-     * @return bool
-     */
-    protected function hasColumn($name)
+    protected function hasColumn(?string $name): bool
     {
         return $this->table()->hasColumn($name);
     }
 
     /**
-     * Check if the column is a timestamp.
-     *
-     * @param $name
-     *
-     * @return bool
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function columnIsTimestamp($name)
+    protected function columnIsTimestamp(string $name): bool
     {
-        return $this->table()->getColumn($name)->getType()->getName() === Type::DATETIME;
+        return $this->table()->getColumn($name)->getType()->getName() === Types::DATETIME_MUTABLE;
     }
 
     /**
      * Retrieve the template.
      *
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    protected function voidTimestamp()
+    protected function voidTimestamp(): string
     {
         return $this->getFile($this->getStub($this->voidTimestamp_stub));
     }
