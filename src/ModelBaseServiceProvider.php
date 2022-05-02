@@ -15,9 +15,6 @@ class ModelBaseServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //$viewPath = __DIR__.'/../resources/views';
-        //$this->loadViewsFrom($viewPath, 'model-base');
-
         $configPath = realpath(
             dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
         );
@@ -27,7 +24,9 @@ class ModelBaseServiceProvider extends ServiceProvider
             'config'
         );
 
-        $this->mergeConfigFrom($configPath, 'model-base');
+        if ($this->app->runningInConsole()) {
+            $this->commands([MakeCommand::class, MakeBulkCommand::class]);
+        }
     }
 
     /**
@@ -35,36 +34,10 @@ class ModelBaseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $configPath = __DIR__ . '/../config/model-base.php';
+        $configPath = realpath(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'model-base.php'
+        );
+
         $this->mergeConfigFrom($configPath, 'model-base');
-
-        $this->app->singleton(
-            'command.make.model-base',
-            function ($app) {
-                return new MakeCommand($app['files']);
-            }
-        );
-
-        $this->commands('command.make.model-base');
-
-        $this->app->singleton(
-            'command.make.model-base-bulk',
-            function ($app) {
-                return new MakeBulkCommand($app['files']);
-            }
-        );
-
-        $this->commands('command.make.model-base-bulk');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     */
-    public function provides(): array
-    {
-        return [
-            'command.make.model-base',
-            'command.make.model-base-bulk',
-        ];
     }
 }
