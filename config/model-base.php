@@ -220,6 +220,7 @@ return [
 
     'snakeAttributes' => true,
     'dates'           => true,
+    'datesProperty'   => false, // deprecated, uses the "casts" property
     'dateFormat'      => null,
     'softDeletes'     => true,
     // See DELETED_AT configuration.

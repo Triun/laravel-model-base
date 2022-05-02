@@ -14,7 +14,8 @@ class DatesModifier extends ModifierBase
         $this->setProperty($skeleton, 'dateFormat', $this->config('dateFormat'));
 
         // Check if dates is enabled in the config file
-        if ($this->config('dates', true) !== true) {
+        // Notice that this property has been deprecated in Laravel 9.x
+        if (true !== $this->config('datesProperty', false)) {
             return;
         }
 
