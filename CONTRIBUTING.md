@@ -77,3 +77,16 @@ In order to give support to older versions, you should test it also with the low
 ```bash
 composer update --prefer-stable --prefer-lowest
 ```
+
+## Test in a local laravel project
+
+You can add into `composer.json`:
+
+```text
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./local/laravel-model-base"
+    }
+  ],
+```
