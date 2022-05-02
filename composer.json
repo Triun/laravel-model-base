@@ -1,6 +1,5 @@
 {
     "name": "triun/laravel-model-base",
-    "version": "6.0.15",
     "description": "Generate Eloquent Model Bases for Laravel",
     "license": "MIT",
     "homepage": "https://github.com/Triun",
