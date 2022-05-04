@@ -9,9 +9,9 @@ class Column extends DoctrineColumn
     public string $publicName;
     public string $snakeName;
     public string $studName;
-    public string $alias;
-    public string $aliasSnakeName;
-    public string $aliasStudName;
+    public ?string $alias = null;
+    public ?string $aliasSnakeName = null;
+    public ?string $aliasStudName = null;
 
     /**
      * The DB type of this column. Possible DB types vary according to the type of DBMS.
