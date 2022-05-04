@@ -3,9 +3,7 @@
 language: php
 
 php:
-  # aliased to a recent 8.0.x version
   - '8.0'
-  # aliased to a recent 8.1.x version
   - '8.1'
 
 # This triggers builds to run on the new TravisCI infrastructure.
@@ -39,12 +37,12 @@ before_script:
   - if [[ "$DB" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS test_laravel_model_base;" -U postgres; fi
   - if [[ "$DB" == "pgsql" ]]; then psql -c "create database test_laravel_model_base;" -U postgres; fi
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test_laravel_model_base;" -uroot; fi
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
+  - travis_retry composer install ${COMPOSER_FLAGS} --no-ansi --no-interaction --no-progress --no-suggest --no-scripts --prefer-dist
 
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
 script:
-  - vendor/bin/phpcs --standard=phpcs.xml
-  - vendor/bin/phpcs --standard=phpcs-php-compatibility.xml
-  - vendor/bin/phpstan analyse -c phpstan.dist.neon --no-progress
-  - vendor/bin/phpunit --configuration phpunit_$DB.xml --coverage-text
+  - ./vendor/bin/phpcs --standard=phpcs.xml
+  - ./vendor/bin/phpcs --config-set installed_paths ./vendor/phpcompatibility/php-compatibility && ./vendor/bin/phpcs --standard=phpcs-php-compatibility.xml
+  - ./vendor/bin/phpstan analyse -c phpstan.ci.neon --no-progress
+  - ./vendor/bin/phpunit --configuration phpunit_$DB.xml --coverage-text
