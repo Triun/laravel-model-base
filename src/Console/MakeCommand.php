@@ -2,7 +2,7 @@
 
 namespace Triun\ModelBase\Console;
 
-use Exception;
+use Throwable;
 use Triun\ModelBase\Util;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,7 +33,7 @@ class MakeCommand extends GeneratorCommand
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function handle()
     {

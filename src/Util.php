@@ -185,7 +185,7 @@ class Util
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function make(string $tableName, ?string &$modelBasePath = null, ?string &$modelPath = null): int
     {

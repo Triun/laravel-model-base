@@ -2,9 +2,9 @@
 
 namespace Triun\ModelBase\Console;
 
-use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Filesystem\Filesystem;
+use Throwable;
 use Triun\ModelBase\Util;
 use Illuminate\Database\Connection;
 use Illuminate\Console\GeneratorCommand;
@@ -62,7 +62,7 @@ class MakeBulkCommand extends GeneratorCommand
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function handle()
     {
@@ -110,7 +110,7 @@ class MakeBulkCommand extends GeneratorCommand
     /**
      * @param Connection $connection
      *
-     * @throws Exception
+     * @throws Throwable
      */
     protected function runConnection(Connection $connection): void
     {
