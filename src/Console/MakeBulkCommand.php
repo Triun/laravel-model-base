@@ -78,7 +78,7 @@ class MakeBulkCommand extends GeneratorCommand
             $this->line(
                 'No default connections specify. ' .
                 'Please, set `bulk.connections` to `null` in your config file to run all configured connections, or ' .
-                'specify one or more connections to run with the option `--connection`.'
+                'specify one or more connections to run with the option `--connection`.',
             );
         } else {
             foreach ($connections as $connection) {
