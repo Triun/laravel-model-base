@@ -39,6 +39,12 @@ class MakeCommand extends GeneratorCommand
     {
         $this->prerequisites();
 
+        $memory_limit = $this->option('memory_limit');
+        if (null !== $memory_limit) {
+            ini_set('memory_limit', $memory_limit);
+        }
+        $this->output->writeln(sprintf('memory_limit: %s', ini_get('memory_limit')));
+
         $tableName  = $this->argument('table');
         $connection = app('db')->connection($this->option('connection'));
 
@@ -63,7 +69,14 @@ class MakeCommand extends GeneratorCommand
                 // ['force', "f", InputOption::VALUE_NONE, 'Force override'],
                 // ['keep', "k", InputOption::VALUE_NONE, 'Keep existent. No override'],
                 ['connection', 'c', InputOption::VALUE_OPTIONAL, 'The connection we want to use'],
-            ]
+                [
+                    'memory_limit',
+                    'm',
+                    InputOption::VALUE_REQUIRED,
+                    'PHP ini memory_limit, sets the maximum amount of memory that a script is allowed to allocate',
+                    config('model-base.bulk.memory_limit', null),
+                ],
+            ],
         );
     }
 

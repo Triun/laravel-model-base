@@ -44,7 +44,14 @@ class MakeBulkCommand extends GeneratorCommand
                 'c',
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'The connection we want to run.',
-                config('model-base.bulk.connections', null)
+                config('model-base.bulk.connections', null),
+            )
+            ->addOption(
+                'memory_limit',
+                'm',
+                InputOption::VALUE_REQUIRED,
+                'PHP ini memory_limit, sets the maximum amount of memory that a script is allowed to allocate',
+                config('model-base.bulk.memory_limit', null),
             );
     }
 
@@ -69,7 +76,11 @@ class MakeBulkCommand extends GeneratorCommand
         // Prerequisites for the command to work.
         $this->prerequisites();
 
-        ini_set('memory_limit', '512M');
+        $memory_limit = $this->option('memory_limit');
+        if (null !== $memory_limit) {
+            ini_set('memory_limit', $memory_limit);
+        }
+        $this->output->writeln(sprintf('memory_limit: %s', ini_get('memory_limit')));
 
         // Connections
         $connections = $this->getConnectionNames();

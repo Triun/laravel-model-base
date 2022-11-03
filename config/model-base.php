@@ -4,6 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | General settings
+    |--------------------------------------------------------------------------
+    |
+    | - memory_limit: PHP memory limit (https://www.php.net/manual/en/ini.core.php#ini.memory-limit),
+    |   which can be set as `null` to get the default ini value, `-1` to make it unlimited (may end up in OOM errors),
+    |   or a custom value such as 4G or 512M. To check the value that would be used if we leave it as `null`, you
+    |   can run `php -i | grep memory_limit`. Notice: it can also be set as a command option.
+    |
+    */
+    'memory_limit' => null, // null, -1, 4G, 512M
+
+    /*
+    |--------------------------------------------------------------------------
     | Connections
     |--------------------------------------------------------------------------
     |
@@ -53,7 +66,7 @@ return [
     | `bulk.connections` (for more information read the config attribute description).
     |
     */
-    'connections' => [],
+    'connections'  => [],
 
     /*
     |--------------------------------------------------------------------------

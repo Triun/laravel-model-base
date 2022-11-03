@@ -16,6 +16,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v9.0.3] - 2022-11-03
+
+`Added`
+
+- New config setting and command options `memory_limit` to set the PHP ini value.
+
 ## [v9.0.2] - 2022-04-04
 
 `Fixed`
