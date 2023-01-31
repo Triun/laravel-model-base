@@ -19,7 +19,12 @@ class Skeleton
     /**
      * Which class extends.
      */
-    public ?string $extends = null;
+    protected ?string $extends = null;
+
+    /**
+     * Extend class alias.
+     */
+    protected ?string $extendsAlias = null;
 
     /**
      * Which classes should be imported.
@@ -97,7 +102,7 @@ class Skeleton
         $uses = [];
 
         // Add the extended
-        $uses[$this->extends] = $this->extends;
+        $uses[$this->extendsAlias()] = $this->extends;
 
         // Add the implements
         $this->usesCompilationAppend($uses, $this->interfaces);
@@ -148,6 +153,16 @@ class Skeleton
                 $uses[$alias] = $name . ' as ' . $alias;
             }
         }
+    }
+
+    public function extends(): string
+    {
+        return $this->extends;
+    }
+
+    public function extendsAlias(): string
+    {
+        return $this->extendsAlias ?? class_basename($this->extends);
     }
 
     /**
@@ -284,6 +299,13 @@ class Skeleton
         }
 
         return $this->methods[$key];
+    }
+
+    public function setExtends(string $className, ?string $alias = null): static
+    {
+        [$this->extends, $this->extendsAlias] = static::splitNameAndAlias($className, $alias);
+
+        return $this;
     }
 
     public function addUse(string $className, ?string $alias = null): static

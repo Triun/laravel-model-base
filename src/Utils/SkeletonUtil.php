@@ -162,8 +162,8 @@ class SkeletonUtil extends ConnectionUtilBase
      */
     public static function extend(Skeleton $skeleton, Skeleton|string $extendClassName, bool $overwrite = false): void
     {
-        if ($skeleton->extends !== null && !$overwrite) {
-            throw new Exception("The skeleton {$skeleton->className} already extends {$skeleton->extends}");
+        if ($skeleton->extends() !== null && !$overwrite) {
+            throw new Exception("The skeleton {$skeleton->className} already extends {$skeleton->extends()}");
         }
 
         if ($extendClassName instanceof Skeleton) {
@@ -175,7 +175,7 @@ class SkeletonUtil extends ConnectionUtilBase
         }
 
         // Save what are we extending it from
-        $skeleton->extends = self::parseName($extendClassName);
+        $skeleton->setExtends(self::parseName($extendClassName));
 
         /*if ($reflectionClass->isSubclassOf('Illuminate\Database\Eloquent\Model')) {
             //

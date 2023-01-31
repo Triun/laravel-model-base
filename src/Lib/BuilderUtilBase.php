@@ -120,10 +120,10 @@ abstract class BuilderUtilBase extends UtilBase
 
         $extensionName = $reflection->getParentClass()->getName();
 
-        if ($extensionName === $skeleton->extends) {
-            $this->trace("{$skeleton->className} extends {$skeleton->extends}.");
+        if ($extensionName === $skeleton->extends()) {
+            $this->trace("{$skeleton->className} extends {$skeleton->extends()}.");
         } else {
-            $this->error("{$skeleton->className} DOES NOT extend {$skeleton->extends}, but $extensionName.");
+            $this->error("{$skeleton->className} DOES NOT extend {$skeleton->extends()}, but $extensionName.");
         }
     }
 
