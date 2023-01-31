@@ -48,7 +48,12 @@ return [
     |               'namespace' => 'App\\Models\\MyConnection1',
     |               'prefix' => '',
     |               'suffix' => '',
+    |               'modifiers' => '',
     |               'save' => true,
+    |           ],
+    |
+    |           'bulk' => [
+    |               'except' => ['migrations', 'some_logs'],
     |           ],
     |       ],
     |   ],
@@ -103,7 +108,7 @@ return [
 
     'namespace' => 'App\\Models\\Bases\\{{Connection}}',
     'extends'   => \Illuminate\Database\Eloquent\Model::class,
-    // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class
+    // 'Eloquent' | \Illuminate\Database\Eloquent\Model::class,
     'prefix'    => '',
     'suffix'    => 'Base',
     'mixin'     => [
@@ -139,6 +144,7 @@ return [
         'namespace' => 'App\\Models\\{{Connection}}',
         'prefix'    => '',
         'suffix'    => '',
+        'modifiers' => [],
         'save'      => true, // true | false
         'override'  => false,
         // true | false | 'confirm' (set to null if you want to prompt a confirmation question).
