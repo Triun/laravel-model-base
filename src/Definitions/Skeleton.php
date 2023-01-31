@@ -289,7 +289,7 @@ class Skeleton
     public function addUse(string $className, ?string $alias = null): static
     {
         // $this->uses[$className] = $alias?: basename($className);
-        $this->appendClass($this->uses, $className, $alias, 'object');
+        $this->appendClass($this->uses, $className, $alias);
 
         return $this;
     }
