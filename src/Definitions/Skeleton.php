@@ -323,13 +323,7 @@ class Skeleton
 
     protected function appendClass(array &$array, string $name, ?string $alias = null, string $type = 'class'): static
     {
-        if (str_contains($name, ' as ')) {
-            $name  = explode(' as ', $name);
-            $alias = trim($name[1]);
-            $name  = trim($name[0]);
-        } elseif ($alias === null) {
-            $alias = class_basename($name);
-        }
+        [$name, $alias] = static::splitNameAndAlias($name, $alias);
 
         if (!isset($array[$name])) {
             $array[$name] = $alias;
@@ -338,6 +332,15 @@ class Skeleton
         }
 
         return $this;
+    }
+
+    protected static function splitNameAndAlias(string $name, ?string $alias = null): array
+    {
+        if (str_contains($name, ' as ')) {
+            return explode(' as ', $name);
+        }
+
+        return [$name, null === $alias ? class_basename($name) : $alias];
     }
 
     public function addPhpDocTag(PhpDocTag $value): static
