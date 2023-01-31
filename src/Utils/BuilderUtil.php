@@ -72,9 +72,13 @@ class BuilderUtil extends BuilderUtilBase
      */
     protected function getUses(Skeleton $skeleton): array
     {
-        return array_map(function ($value) {
-            return 'use ' . ltrim($value, '\\') . ';';
-        }, $skeleton->uses());
+        $uses = [];
+        foreach ($skeleton->uses() as $alias => $class) {
+            $uses[] = 'use ' . ltrim($class, '\\') .
+                      (class_basename($class) === $alias ? '' : ' as ' . $alias) . ';';
+        }
+
+        return $uses;
     }
 
     protected function getImplements(Skeleton $skeleton): string
