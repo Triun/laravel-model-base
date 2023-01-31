@@ -155,12 +155,12 @@ class Skeleton
         }
     }
 
-    public function extends(): string
+    public function extends(): ?string
     {
         return $this->extends;
     }
 
-    public function extendsAlias(): string
+    public function extendsAlias(): ?string
     {
         return $this->extendsAlias ?? class_basename($this->extends);
     }
