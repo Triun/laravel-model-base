@@ -3,7 +3,6 @@
 namespace Triun\ModelBase\Definitions;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use Triun\ModelBase\Exception\SkeletonUseAliasException;
 use Triun\ModelBase\Exception\SkeletonUseNameException;
 use Triun\ModelBase\Utils\SkeletonUtil;
