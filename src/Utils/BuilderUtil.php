@@ -21,7 +21,7 @@ class BuilderUtil extends BuilderUtilBase
         Skeleton $skeleton,
         bool|string $override = Util::CONFIRM,
         ?string &$path = null,
-        string $stub = 'class.stub'
+        string $stub = 'class.stub',
     ): int {
         $path = $this->getSkeletonPath($skeleton);
 
@@ -94,7 +94,7 @@ class BuilderUtil extends BuilderUtilBase
             null === $traits ? [] : [$traits],
             array_map([$this, 'formatConstant'], $skeleton->dirtyConstants()),
             array_map([$this, 'formatProperty'], $skeleton->dirtyProperties()),
-            array_map([$this, 'formatMethod'], $skeleton->dirtyMethods())
+            array_map([$this, 'formatMethod'], $skeleton->dirtyMethods()),
         );
 
         if (count($parts) === 0) {

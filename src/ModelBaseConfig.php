@@ -36,7 +36,7 @@ class ModelBaseConfig
         Modifiers\ColumnAliasModifier::class,
         // PhpDoc tags
         Modifiers\PhpDocModifier::class,
-        // PhpDoc tags
+        // Auth Modifier
         Modifiers\AuthModifier::class,
         // Relations
         // Input transformations

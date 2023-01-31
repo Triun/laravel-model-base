@@ -151,7 +151,7 @@ return [
     |
     | Extra automation for the model generations.
     |
-    | - default.interfaces | tables.{table_name}.interface: Interfaces to be added to the models
+    | - default.interfaces | tables.{table_name}.interfaces: Interfaces to be added to the models
     | - default.traits | tables.{table_name}.traits: Traits to be added to the models
     | - default.uses | tables.{table_name}.uses: Additional uses to be added to the models
     | - default.phpDocTags | tables.{table_name}.phpDocTags: Custom phpDoc values (only type).

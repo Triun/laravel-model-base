@@ -309,7 +309,7 @@ class Skeleton
             throw new InvalidArgumentException("$interfaceName is not a valid interface");
         }
 
-        $this->appendClass($this->interfaces, $interfaceName, $alias, 'interface');
+        $this->appendClass($this->interfaces, $interfaceName, $alias);
 
         // TODO: Get info but don't load the components or it would give an error when trying to set the value.
         //SkeletonUtil::loadReflection($this, $interfaceName);
@@ -323,7 +323,7 @@ class Skeleton
             throw new InvalidArgumentException("$traitName is not a valid trait");
         }
 
-        $this->appendClass($this->traits, $traitName, $alias, 'trait');
+        $this->appendClass($this->traits, $traitName, $alias);
 
         SkeletonUtil::loadReflection($this, $traitName);
 
