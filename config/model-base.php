@@ -493,11 +493,14 @@ return [
     'bulk' => [
         'connections' => null,
         'except'      => [
+            // Laravel
             'migrations',
+            'failed_jobs',
+            // Auth
             'sessions',
             'password_resets',
             'personal_access_tokens',
-            'failed_jobs',
+            // Telescope
             'telescope_entries',
             'telescope_entries_tags',
             'telescope_monitoring',
