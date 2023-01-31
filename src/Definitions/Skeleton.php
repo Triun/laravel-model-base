@@ -321,7 +321,7 @@ class Skeleton
         return $this;
     }
 
-    protected function appendClass(array &$array, string $name, ?string $alias = null, string $type = 'class'): static
+    protected function appendClass(array &$array, string $name, ?string $alias = null): static
     {
         [$name, $alias] = static::splitNameAndAlias($name, $alias);
 
