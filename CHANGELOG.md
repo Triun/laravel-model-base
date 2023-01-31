@@ -16,6 +16,17 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+## [v9.1.0] - 2023-01-31
+
+There are some potential breaking changes in this and the following versions.
+
+`Changed`
+
+- Breaking changes if you are extending classes of this repository. Some methods and properties has changed visibility
+  or its arguments, or may have been removed.
+- Some config defaults has changed, the resulting models may change, but it can be set back as it was if the config on
+  your project is updated accordingly. Do not hesitate to ask for support if you need assistance.
+
 ## [v9.0.3] - 2022-11-03
 
 `Added`
@@ -285,7 +296,9 @@ It can work with `nightly`, but is not compatible with `hhvm`, as it uses differ
 [Accepted]: https://github.com/Triun/laravel-model-base/labels/Accepted
 [Rejected]: https://github.com/Triun/laravel-model-base/labels/Rejected
 
-[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v9.0.2...HEAD
+[Unreleased]: https://github.com/Triun/laravel-model-base/compare/v9.1.0...HEAD
+[v9.1.0]: https://github.com/Triun/laravel-model-base/compare/v9.0.3...v9.1.0
+[v9.0.3]: https://github.com/Triun/laravel-model-base/compare/v9.0.2...v9.0.3
 [v9.0.2]: https://github.com/Triun/laravel-model-base/compare/v9.0.1...v9.0.2
 [v9.0.1]: https://github.com/Triun/laravel-model-base/compare/v9.0.0...v9.0.2
 [v9.0.0]: https://github.com/Triun/laravel-model-base/compare/v6.0.14...v9.0.0
