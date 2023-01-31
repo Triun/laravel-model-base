@@ -41,7 +41,7 @@ class BuilderUtil extends BuilderUtilBase
 
             'DummyNamespace'     => $skeleton->getNamespace(),
             'DummyRootNamespace' => app()->getNamespace(),
-            'DummyClass'         => class_basename($skeleton->className),
+            'DummyClass'         => $skeleton->getClassBasename(),
 
             'DummyExtendsNamespace' => $skeleton->extends,
             'DummyExtendsClass'     => class_basename($skeleton->extends),

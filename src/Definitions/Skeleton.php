@@ -84,15 +84,7 @@ class Skeleton
     /**
      * Get the class "basename".
      */
-    protected function getClassBasename(): string
-    {
-        return class_basename($this->className);
-    }
-
-    /**
-     * Get the extends class "basename".
-     */
-    protected function getExtendsBasename(): string
+    public function getClassBasename(): string
     {
         return class_basename($this->className);
     }

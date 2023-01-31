@@ -49,7 +49,7 @@ class CamelToSnakeModifier extends ModifierBase
 
             $skeleton->addMethod($this->util()->makeMethod('get' . $stud . 'Attribute', $this->getAttributeMethod(), [
                 'DummyNamespace'   => $skeleton->getNamespace(),
-                'DummyClass'       => class_basename($skeleton->className),
+                'DummyClass'       => $skeleton->getClassBasename(),
                 'DummyDescription' => "Snake name getter: $name -> $snake.",
                 'dummyType'        => $phpDoc,
                 'DummyName'        => $stud,
@@ -59,7 +59,7 @@ class CamelToSnakeModifier extends ModifierBase
 
             $skeleton->addMethod($this->util()->makeMethod('set' . $stud . 'Attribute', $this->setAttributeMethod(), [
                 'DummyNamespace'   => $skeleton->getNamespace(),
-                'DummyClass'       => class_basename($skeleton->className),
+                'DummyClass'       => $skeleton->getClassBasename(),
                 'DummyDescription' => "Snake name setter: $name -> $snake.",
                 'dummyType'        => $phpDoc,
                 'DummyName'        => $stud,
