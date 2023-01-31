@@ -3,12 +3,15 @@
 namespace Triun\ModelBase\Modifiers;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Foundation\Auth\User as AuthorizableModel;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Triun\ModelBase\Definitions\Property;
 use Triun\ModelBase\Definitions\Skeleton;
 use Triun\ModelBase\Lib\ModifierBase;
@@ -16,15 +19,18 @@ use Triun\ModelBase\Lib\ModifierBase;
 /**
  * @link https://laravel.com/docs/5.5/authentication
  * @link https://github.com/laravel/laravel/blob/master/app/User.php
+ * @see  \Illuminate\Foundation\Auth\User
  */
 class AuthModifier extends ModifierBase
 {
     protected array $default = [
-        'Authenticatable'  => true,
-        'Authorizable'     => true,
-        'CanResetPassword' => true,
-        'Notifiable'       => true,
-        'fillable'         => ['name', 'email', 'password'],
+        'extendsAuthenticatable' => true,
+        'Authenticatable'        => true,
+        'Authorizable'           => true,
+        'CanResetPassword'       => true,
+        'MustVerifyEmail'        => true,
+        'Notifiable'             => false, // deprecated
+        'fillable'               => ['name', 'email', 'password'],
     ];
 
     public function apply(Skeleton $skeleton): void
@@ -32,22 +38,31 @@ class AuthModifier extends ModifierBase
         $params = $this->params();
 
         if ($params !== null) {
-            if ($params['Authenticatable']) {
-                $skeleton->addTrait(Authenticatable::class);
-                $skeleton->addInterface(AuthenticatableContract::class, 'AuthenticatableContract');
-            }
+            if ($params['extendsAuthenticatable']) {
+                $skeleton->setExtends(AuthorizableModel::class, 'Authenticatable');
+            } else {
+                if ($params['Authenticatable']) {
+                    $skeleton->addTrait(Authenticatable::class);
+                    $skeleton->addInterface(AuthenticatableContract::class, 'AuthenticatableContract');
+                }
 
-            if ($params['Authorizable']) {
-                $skeleton->addTrait(Authorizable::class);
-                $skeleton->addInterface(AuthorizableContract::class, 'AuthorizableContract');
-            }
+                if ($params['Authorizable']) {
+                    $skeleton->addTrait(Authorizable::class);
+                    $skeleton->addInterface(AuthorizableContract::class, 'AuthorizableContract');
+                }
 
-            if ($params['CanResetPassword']) {
-                $skeleton->addTrait(CanResetPassword::class);
-                $skeleton->addInterface(CanResetPasswordContract::class, 'CanResetPasswordContract');
+                if ($params['CanResetPassword']) {
+                    $skeleton->addTrait(CanResetPassword::class);
+                    $skeleton->addInterface(CanResetPasswordContract::class, 'CanResetPasswordContract');
+                }
+
+                if ($params['MustVerifyEmail']) {
+                    $skeleton->addTrait(MustVerifyEmail::class);
+                }
             }
 
             if ($params['Notifiable']) {
+                Log::warning('The option Notifiable is deprecated in auth, use custom_model_options instead.');
                 $skeleton->addTrait(Notifiable::class);
             }
 
