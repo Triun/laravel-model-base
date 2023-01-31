@@ -80,13 +80,24 @@ composer update --prefer-stable --prefer-lowest
 
 ## Test in a local laravel project
 
+You can add the project in a directory `.local` within your project:
+```shell
+mkdir .local && git clone git@github.com:Triun/laravel-model-base.git .local/laravel-model-base
+```
+And add `.local` into your `.gitignore` file.
+
 You can add into `composer.json`:
 
 ```text
   "repositories": [
     {
       "type": "path",
-      "url": "./local/laravel-model-base"
+      "url": "./.local/laravel-model-base"
     }
   ],
+```
+
+In case you find a version issue when debugging, try to change the version as:
+```text
+  "triun/laravel-model-base": "^9.x-dev"
 ```

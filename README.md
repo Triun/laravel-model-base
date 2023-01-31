@@ -25,7 +25,7 @@ The model will be optionally generated too, but in this case, it will never be a
 Require this package with composer using the following command:
 
 ```bash
-composer require triun/laravel-model-base:dev-master
+composer require --dev triun/laravel-model-base
 ```
 
 After updating composer, add the service provider to the providers array in config/app.php
@@ -54,7 +54,7 @@ public function register()
 }
 ```
 
-This will allow your application to load the Laravel IDE Helper on non-production environments.
+This will allow your application to load the Laravel Model Base on non-production environments.
 
 ## Usage
 
@@ -70,7 +70,8 @@ For Bulk creation
 php artisan make:mode-base-bulk [--connection connection_name]
 ```
 
-Note: if the connection is not defined, it would get the default one.
+Note: If you don't set up the connections in the config file (`model-base.bulk.connections`),
+it will try to run all available connections from your database config file (`database.connections`).
 
 ## Customize
 
