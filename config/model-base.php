@@ -279,7 +279,7 @@ return [
         */
 
         'aliases'        => [
-            // If it match, it will skip it.
+            // If it matches, it will skip it.
             'except' => [],
             // If there is a match, none of the following renames rules will be processed.
             'force'  => [],
