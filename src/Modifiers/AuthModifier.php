@@ -30,7 +30,7 @@ class AuthModifier extends ModifierBase
         'CanResetPassword'       => true,
         'MustVerifyEmail'        => true,
         'Notifiable'             => false, // deprecated
-        'fillable'               => ['name', 'email', 'password'],
+        'fillable'               => [], //['name', 'email', 'password'],
     ];
 
     public function apply(Skeleton $skeleton): void
