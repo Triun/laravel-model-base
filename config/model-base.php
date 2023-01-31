@@ -492,7 +492,16 @@ return [
 
     'bulk' => [
         'connections' => null,
-        'except'      => ['migrations', 'sessions'],
+        'except'      => [
+            'migrations',
+            'sessions',
+            'password_resets',
+            'personal_access_tokens',
+            'failed_jobs',
+            'telescope_entries',
+            'telescope_entries_tags',
+            'telescope_monitoring',
+        ],
     ],
 
     /*
