@@ -33,7 +33,7 @@
         ]
     },
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
         "doctrine/dbal": "^3.3",
         "triun/diff": "^1.0"
     },
